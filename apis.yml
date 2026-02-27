@@ -1,0 +1,104 @@
+name: Montran
+description: APIs for Montran payment processing and financial messaging services
+image: https://www.montran.com/logo.png
+url: https://www.montran.com
+created: '2025'
+modified: '2025'
+tags:
+- payments
+- financial services
+- messaging
+- ISO 20022
+- SWIFT
+- banking
+apis:
+- name: Montran Payment API
+  description: API for processing domestic and international payment transactions
+  image: https://www.montran.com/images/payment-api.png
+  humanURL: https://www.montran.com/payment-api
+  baseURL: https://api.montran.com/v1/payments
+  tags:
+  - payments
+  - transactions
+  - ISO 20022
+  properties:
+  - type: Documentation
+    url: https://developer.montran.com/docs/payment-api
+  - type: OpenAPI
+    url: https://api.montran.com/v1/payments/openapi.json
+  - type: Authentication
+    url: https://developer.montran.com/docs/authentication
+  - type: Sandbox
+    url: https://sandbox.montran.com/v1/payments
+  contact:
+  - FN: API Support
+    email: api-support@montran.com
+    url: https://www.montran.com/support
+- name: Montran Messaging API
+  description: API for financial messaging and communication services
+  image: https://www.montran.com/images/messaging-api.png
+  humanURL: https://www.montran.com/messaging-api
+  baseURL: https://api.montran.com/v1/messages
+  tags:
+  - messaging
+  - SWIFT
+  - ISO 20022
+  - financial messaging
+  properties:
+  - type: Documentation
+    url: https://developer.montran.com/docs/messaging-api
+  - type: OpenAPI
+    url: https://api.montran.com/v1/messages/openapi.json
+  - type: Authentication
+    url: https://developer.montran.com/docs/authentication
+  - type: Sandbox
+    url: https://sandbox.montran.com/v1/messages
+  contact:
+  - FN: API Support
+    email: api-support@montran.com
+    url: https://www.montran.com/support
+- name: Montran Validation API
+  description: API for validating payment messages and account information
+  image: https://www.montran.com/images/validation-api.png
+  humanURL: https://www.montran.com/validation-api
+  baseURL: https://api.montran.com/v1/validation
+  tags:
+  - validation
+  - compliance
+  - verification
+  properties:
+  - type: Documentation
+    url: https://developer.montran.com/docs/validation-api
+  - type: OpenAPI
+    url: https://api.montran.com/v1/validation/openapi.json
+  - type: Authentication
+    url: https://developer.montran.com/docs/authentication
+  contact:
+  - FN: API Support
+    email: api-support@montran.com
+    url: https://www.montran.com/support
+common:
+- type: Portal
+  url: https://developer.montran.com
+- type: Documentation
+  url: https://developer.montran.com/docs
+- type: Getting Started
+  url: https://developer.montran.com/getting-started
+- type: Authentication
+  url: https://developer.montran.com/docs/authentication
+- type: Rate Limits
+  url: https://developer.montran.com/docs/rate-limits
+- type: Status
+  url: https://status.montran.com
+- type: Terms of Service
+  url: https://www.montran.com/terms
+- type: Privacy Policy
+  url: https://www.montran.com/privacy
+- type: Support
+  url: https://www.montran.com/support
+- type: Contact
+  url: https://www.montran.com/contact
+maintainers:
+- FN: Montran API Team
+  email: api-team@montran.com
+  url: https://www.montran.com
