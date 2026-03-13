@@ -1,0 +1,1174 @@
+openapi: 3.1.0
+info:
+  title: Montran Global Payments Hub API
+  description: >-
+    The Montran Global Payments Hub (GPH) is a global, highly secure payment
+    solution that consolidates all payment infrastructures into a payment hub
+    supporting multiple banks, branches, countries, currencies, and languages.
+    It processes clearing and settlement transactions including SEPA credit
+    transfers and direct debits, Target2, Fedwire, CHIPS, foreign currency
+    transactions, cross-border payments, remittances, local ACH, RTGS, and
+    cheques. The application is ISO 20022 native and supports all major
+    financial formats such as SWIFT FIN, pain, pacs, and camt messages and
+    local proprietary formats. The GPH supports REST and SOAP APIs, queue-based
+    (IBM MQ, Kafka), and file-based (SFTP) integration protocols.
+  version: 1.0.0
+  contact:
+    name: Montran Corporation
+    url: https://www.montran.com/contact-us/
+  license:
+    name: Proprietary
+    url: https://www.montran.com/terms-conditions/
+  x-logo:
+    url: https://www.montran.com/logo.png
+externalDocs:
+  description: Montran Global Payments Hub Documentation
+  url: https://www.montran.com/solutions/global-payments-hub/
+servers:
+  - url: https://api.montran.com/gph/v1
+    description: Montran Global Payments Hub API Server
+tags:
+  - name: Payments
+    description: Payment initiation, submission, and management operations
+  - name: Credit Transfers
+    description: Credit transfer payment operations including SEPA and cross-border
+  - name: Direct Debits
+    description: Direct debit payment operations
+  - name: Clearing
+    description: Clearing and settlement operations across multiple CSMs
+  - name: Payment Status
+    description: Payment status inquiry and tracking operations
+  - name: Accounts
+    description: Account information and balance inquiry operations
+  - name: Statements
+    description: Account statement and reporting operations
+paths:
+  /payments:
+    get:
+      operationId: listPayments
+      summary: List payments
+      description: >-
+        Retrieves a list of payments processed through the Global Payments Hub.
+        Supports filtering by payment type, status, currency, date range, and
+        clearing system. Returns payments across all supported clearing and
+        settlement mechanisms including SEPA, Target2, Fedwire, CHIPS, RTGS,
+        ACH, and cross-border payments.
+      tags:
+        - Payments
+      parameters:
+        - $ref: '#/components/parameters/PaymentTypeParam'
+        - $ref: '#/components/parameters/PaymentStatusParam'
+        - $ref: '#/components/parameters/CurrencyParam'
+        - $ref: '#/components/parameters/FromDateParam'
+        - $ref: '#/components/parameters/ToDateParam'
+        - $ref: '#/components/parameters/ClearingSystemParam'
+        - $ref: '#/components/parameters/PageParam'
+        - $ref: '#/components/parameters/PageSizeParam'
+      responses:
+        '200':
+          description: Successfully retrieved list of payments
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentList'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      operationId: initiatePayment
+      summary: Initiate a payment
+      description: >-
+        Initiates a new payment through the Global Payments Hub. Supports
+        credit transfers, direct debits, cross-border payments, and cheques.
+        The payment is automatically routed to the appropriate clearing and
+        settlement system based on the payment type, currency, and
+        destination. Accepts ISO 20022 pain.001 format for credit transfers
+        and pain.008 for direct debits, as well as SWIFT FIN MT103 format.
+      tags:
+        - Payments
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentInitiation'
+      responses:
+        '201':
+          description: Payment successfully initiated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /payments/{paymentId}:
+    get:
+      operationId: getPayment
+      summary: Get payment details
+      description: >-
+        Retrieves the full details of a specific payment including its current
+        status, clearing system assignment, settlement information, and
+        complete audit trail. Returns ISO 20022 pacs.002 status information.
+      tags:
+        - Payments
+      parameters:
+        - $ref: '#/components/parameters/PaymentIdParam'
+      responses:
+        '200':
+          description: Successfully retrieved payment details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentDetail'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /payments/{paymentId}/status:
+    get:
+      operationId: getPaymentStatus
+      summary: Get payment status
+      description: >-
+        Retrieves the current processing status of a payment. Returns status
+        information aligned with ISO 20022 pacs.002 Payment Status Report
+        format, including reason codes for rejected or returned payments.
+      tags:
+        - Payment Status
+      parameters:
+        - $ref: '#/components/parameters/PaymentIdParam'
+      responses:
+        '200':
+          description: Successfully retrieved payment status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentStatus'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /payments/{paymentId}/cancel:
+    post:
+      operationId: cancelPayment
+      summary: Cancel a payment
+      description: >-
+        Requests cancellation of a payment that has not yet been settled.
+        Generates an ISO 20022 camt.056 FIToFIPaymentCancellationRequest
+        message. Cancellation availability depends on the payment status and
+        the clearing system rules.
+      tags:
+        - Payments
+      parameters:
+        - $ref: '#/components/parameters/PaymentIdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentCancellationRequest'
+      responses:
+        '200':
+          description: Cancellation request successfully submitted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentCancellationResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          description: Payment cannot be cancelled in its current state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /credit-transfers:
+    post:
+      operationId: initiateCreditTransfer
+      summary: Initiate a credit transfer
+      description: >-
+        Initiates a credit transfer payment using ISO 20022 pain.001
+        CustomerCreditTransferInitiation format. Supports SEPA credit
+        transfers, Target2 high-value payments, Fedwire transfers, CHIPS
+        payments, and cross-border SWIFT transfers. The system automatically
+        routes the payment to the appropriate clearing mechanism.
+      tags:
+        - Credit Transfers
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreditTransferInitiation'
+      responses:
+        '201':
+          description: Credit transfer successfully initiated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /direct-debits:
+    post:
+      operationId: initiateDirectDebit
+      summary: Initiate a direct debit
+      description: >-
+        Initiates a direct debit collection using ISO 20022 pain.008
+        CustomerDirectDebitInitiation format. Supports SEPA Direct Debit
+        (Core and B2B schemes) and local ACH direct debit schemes.
+      tags:
+        - Direct Debits
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DirectDebitInitiation'
+      responses:
+        '201':
+          description: Direct debit successfully initiated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /clearing/batches:
+    get:
+      operationId: listClearingBatches
+      summary: List clearing batches
+      description: >-
+        Retrieves a list of clearing batches submitted to or received from
+        clearing and settlement mechanisms. Supports filtering by clearing
+        system (SEPA, Target2, Fedwire, CHIPS, local ACH/RTGS), direction
+        (inbound/outbound), and date range.
+      tags:
+        - Clearing
+      parameters:
+        - $ref: '#/components/parameters/ClearingSystemParam'
+        - name: direction
+          in: query
+          description: Filter by clearing direction
+          schema:
+            type: string
+            enum:
+              - inbound
+              - outbound
+        - $ref: '#/components/parameters/FromDateParam'
+        - $ref: '#/components/parameters/ToDateParam'
+        - $ref: '#/components/parameters/PageParam'
+        - $ref: '#/components/parameters/PageSizeParam'
+      responses:
+        '200':
+          description: Successfully retrieved clearing batches
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClearingBatchList'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /clearing/batches/{batchId}:
+    get:
+      operationId: getClearingBatch
+      summary: Get clearing batch details
+      description: >-
+        Retrieves the details of a specific clearing batch including the list
+        of payments contained within it, settlement status, and clearing
+        system acknowledgement information.
+      tags:
+        - Clearing
+      parameters:
+        - name: batchId
+          in: path
+          required: true
+          description: Unique identifier of the clearing batch
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully retrieved clearing batch details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClearingBatch'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /accounts/{accountId}/balance:
+    get:
+      operationId: getAccountBalance
+      summary: Get account balance
+      description: >-
+        Retrieves the current balance of an account including available
+        balance, booked balance, and pending transactions. Aligned with
+        ISO 20022 camt.052 BankToCustomerAccountReport format.
+      tags:
+        - Accounts
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          description: Unique identifier of the account
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully retrieved account balance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountBalance'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /accounts/{accountId}/statements:
+    get:
+      operationId: getAccountStatements
+      summary: Get account statements
+      description: >-
+        Retrieves account statements for a specified date range. Returns
+        statement information aligned with ISO 20022 camt.053
+        BankToCustomerStatement format including all credit and debit
+        entries, opening and closing balances.
+      tags:
+        - Statements
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          description: Unique identifier of the account
+          schema:
+            type: string
+        - $ref: '#/components/parameters/FromDateParam'
+        - $ref: '#/components/parameters/ToDateParam'
+      responses:
+        '200':
+          description: Successfully retrieved account statements
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountStatementList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT-based authentication for API access
+    apiKey:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: API key for service-to-service integration
+  parameters:
+    PaymentIdParam:
+      name: paymentId
+      in: path
+      required: true
+      description: Unique identifier of the payment
+      schema:
+        type: string
+    PaymentTypeParam:
+      name: paymentType
+      in: query
+      description: Filter by payment type
+      schema:
+        type: string
+        enum:
+          - credit-transfer
+          - direct-debit
+          - cheque
+          - cross-border
+          - remittance
+    PaymentStatusParam:
+      name: status
+      in: query
+      description: Filter by payment processing status
+      schema:
+        type: string
+        enum:
+          - pending
+          - validated
+          - submitted
+          - accepted
+          - rejected
+          - settled
+          - returned
+          - cancelled
+    CurrencyParam:
+      name: currency
+      in: query
+      description: Filter by ISO 4217 currency code
+      schema:
+        type: string
+        pattern: ^[A-Z]{3}$
+    ClearingSystemParam:
+      name: clearingSystem
+      in: query
+      description: Filter by clearing and settlement mechanism
+      schema:
+        type: string
+        enum:
+          - SEPA
+          - TARGET2
+          - FEDWIRE
+          - CHIPS
+          - RTGS
+          - ACH
+          - CHAPS
+          - FASTER_PAYMENTS
+          - TIPS
+          - RT1
+    FromDateParam:
+      name: fromDate
+      in: query
+      description: Start date for filtering (ISO 8601 format)
+      schema:
+        type: string
+        format: date
+    ToDateParam:
+      name: toDate
+      in: query
+      description: End date for filtering (ISO 8601 format)
+      schema:
+        type: string
+        format: date
+    PageParam:
+      name: page
+      in: query
+      description: Page number for pagination
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+    PageSizeParam:
+      name: pageSize
+      in: query
+      description: Number of items per page
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 20
+  schemas:
+    PaymentInitiation:
+      type: object
+      description: >-
+        Payment initiation request aligned with ISO 20022 pain.001
+        CustomerCreditTransferInitiation message structure
+      required:
+        - paymentType
+        - debtorAccount
+        - creditorAccount
+        - amount
+        - currency
+      properties:
+        messageId:
+          type: string
+          description: Unique message identification assigned by the initiating party
+        paymentType:
+          type: string
+          description: Type of payment being initiated
+          enum:
+            - credit-transfer
+            - direct-debit
+            - cheque
+            - cross-border
+            - remittance
+        debtorName:
+          type: string
+          description: Name of the debtor (payer)
+        debtorAccount:
+          $ref: '#/components/schemas/AccountIdentification'
+        debtorAgent:
+          $ref: '#/components/schemas/FinancialInstitution'
+        creditorName:
+          type: string
+          description: Name of the creditor (payee)
+        creditorAccount:
+          $ref: '#/components/schemas/AccountIdentification'
+        creditorAgent:
+          $ref: '#/components/schemas/FinancialInstitution'
+        amount:
+          type: number
+          format: double
+          description: Payment amount
+          minimum: 0.01
+        currency:
+          type: string
+          description: ISO 4217 currency code
+          pattern: ^[A-Z]{3}$
+        requestedExecutionDate:
+          type: string
+          format: date
+          description: Requested execution date for the payment
+        endToEndId:
+          type: string
+          description: End-to-end identification assigned by the initiating party
+        remittanceInformation:
+          type: string
+          description: Remittance information or payment reference
+        chargeBearer:
+          type: string
+          description: Specifies which party bears the charges
+          enum:
+            - DEBT
+            - CRED
+            - SHAR
+            - SLEV
+        urgency:
+          type: string
+          description: Payment urgency level
+          enum:
+            - NORMAL
+            - HIGH
+            - EXPRESS
+    CreditTransferInitiation:
+      type: object
+      description: >-
+        Credit transfer initiation request aligned with ISO 20022 pain.001
+        CustomerCreditTransferInitiation
+      required:
+        - debtorAccount
+        - creditorAccount
+        - amount
+        - currency
+      properties:
+        messageId:
+          type: string
+          description: Unique message identification
+        paymentInformationId:
+          type: string
+          description: Payment information identification
+        numberOfTransactions:
+          type: integer
+          description: Number of individual transactions in the message
+        controlSum:
+          type: number
+          format: double
+          description: Total of all individual amounts
+        debtorName:
+          type: string
+          description: Name of the debtor
+        debtorAccount:
+          $ref: '#/components/schemas/AccountIdentification'
+        debtorAgent:
+          $ref: '#/components/schemas/FinancialInstitution'
+        creditorName:
+          type: string
+          description: Name of the creditor
+        creditorAccount:
+          $ref: '#/components/schemas/AccountIdentification'
+        creditorAgent:
+          $ref: '#/components/schemas/FinancialInstitution'
+        amount:
+          type: number
+          format: double
+          description: Instructed amount
+          minimum: 0.01
+        currency:
+          type: string
+          description: ISO 4217 currency code
+          pattern: ^[A-Z]{3}$
+        requestedExecutionDate:
+          type: string
+          format: date
+          description: Requested execution date
+        endToEndId:
+          type: string
+          description: End-to-end identification
+        remittanceInformation:
+          type: string
+          description: Remittance information
+        chargeBearer:
+          type: string
+          enum:
+            - DEBT
+            - CRED
+            - SHAR
+            - SLEV
+        categoryPurpose:
+          type: string
+          description: Category purpose code for the payment
+        serviceLevel:
+          type: string
+          description: Service level code (e.g., SEPA for SEPA payments)
+    DirectDebitInitiation:
+      type: object
+      description: >-
+        Direct debit initiation request aligned with ISO 20022 pain.008
+        CustomerDirectDebitInitiation
+      required:
+        - creditorAccount
+        - debtorAccount
+        - amount
+        - currency
+        - mandateId
+      properties:
+        messageId:
+          type: string
+          description: Unique message identification
+        creditorName:
+          type: string
+          description: Name of the creditor (collector)
+        creditorAccount:
+          $ref: '#/components/schemas/AccountIdentification'
+        creditorAgent:
+          $ref: '#/components/schemas/FinancialInstitution'
+        debtorName:
+          type: string
+          description: Name of the debtor
+        debtorAccount:
+          $ref: '#/components/schemas/AccountIdentification'
+        debtorAgent:
+          $ref: '#/components/schemas/FinancialInstitution'
+        amount:
+          type: number
+          format: double
+          description: Instructed amount
+          minimum: 0.01
+        currency:
+          type: string
+          description: ISO 4217 currency code
+          pattern: ^[A-Z]{3}$
+        requestedCollectionDate:
+          type: string
+          format: date
+          description: Requested collection date
+        mandateId:
+          type: string
+          description: Direct debit mandate identification
+        mandateDateOfSignature:
+          type: string
+          format: date
+          description: Date the mandate was signed
+        sequenceType:
+          type: string
+          description: Sequence type of the direct debit
+          enum:
+            - FRST
+            - RCUR
+            - FNAL
+            - OOFF
+        schemeType:
+          type: string
+          description: Direct debit scheme type
+          enum:
+            - CORE
+            - B2B
+        endToEndId:
+          type: string
+          description: End-to-end identification
+        remittanceInformation:
+          type: string
+          description: Remittance information
+    PaymentResponse:
+      type: object
+      description: Response returned after successful payment initiation
+      properties:
+        paymentId:
+          type: string
+          description: Unique payment identifier assigned by the system
+        messageId:
+          type: string
+          description: Original message identification
+        endToEndId:
+          type: string
+          description: End-to-end identification
+        status:
+          type: string
+          description: Current payment status
+          enum:
+            - RECEIVED
+            - VALIDATED
+            - PENDING
+        clearingSystem:
+          type: string
+          description: Assigned clearing and settlement mechanism
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the payment was created
+    PaymentDetail:
+      type: object
+      description: Detailed payment information including full processing history
+      properties:
+        paymentId:
+          type: string
+          description: Unique payment identifier
+        messageId:
+          type: string
+          description: Message identification
+        paymentType:
+          type: string
+          description: Type of payment
+        status:
+          type: string
+          description: Current payment status
+        debtorName:
+          type: string
+        debtorAccount:
+          $ref: '#/components/schemas/AccountIdentification'
+        debtorAgent:
+          $ref: '#/components/schemas/FinancialInstitution'
+        creditorName:
+          type: string
+        creditorAccount:
+          $ref: '#/components/schemas/AccountIdentification'
+        creditorAgent:
+          $ref: '#/components/schemas/FinancialInstitution'
+        amount:
+          type: number
+          format: double
+        currency:
+          type: string
+        endToEndId:
+          type: string
+        clearingSystem:
+          type: string
+        settlementDate:
+          type: string
+          format: date
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        statusHistory:
+          type: array
+          description: Complete status change history
+          items:
+            $ref: '#/components/schemas/StatusHistoryEntry'
+    PaymentStatus:
+      type: object
+      description: >-
+        Payment status information aligned with ISO 20022 pacs.002
+        FIToFIPaymentStatusReport
+      properties:
+        paymentId:
+          type: string
+          description: Unique payment identifier
+        originalMessageId:
+          type: string
+          description: Original message identification
+        originalEndToEndId:
+          type: string
+          description: Original end-to-end identification
+        status:
+          type: string
+          description: Transaction status
+          enum:
+            - ACCP
+            - ACSC
+            - ACSP
+            - ACTC
+            - ACWC
+            - PDNG
+            - RCVD
+            - RJCT
+            - CANC
+        reasonCode:
+          type: string
+          description: Reason code for rejection or return (ISO 20022 reason codes)
+        reasonDescription:
+          type: string
+          description: Human-readable reason description
+        statusDateTime:
+          type: string
+          format: date-time
+          description: Timestamp of the status update
+    PaymentCancellationRequest:
+      type: object
+      description: >-
+        Payment cancellation request aligned with ISO 20022 camt.056
+        FIToFIPaymentCancellationRequest
+      required:
+        - reason
+      properties:
+        reason:
+          type: string
+          description: Cancellation reason code
+          enum:
+            - DUPL
+            - AGNT
+            - CURR
+            - CUST
+            - UPAY
+            - FRAD
+            - TECH
+        additionalInformation:
+          type: string
+          description: Additional information about the cancellation request
+    PaymentCancellationResponse:
+      type: object
+      description: Response to a payment cancellation request
+      properties:
+        paymentId:
+          type: string
+          description: Payment identifier
+        cancellationStatus:
+          type: string
+          description: Status of the cancellation request
+          enum:
+            - ACCEPTED
+            - PENDING
+            - REJECTED
+        reasonCode:
+          type: string
+          description: Reason code if cancellation was rejected
+        processedAt:
+          type: string
+          format: date-time
+    PaymentList:
+      type: object
+      description: Paginated list of payments
+      properties:
+        payments:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentDetail'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+    ClearingBatch:
+      type: object
+      description: Clearing batch with settlement information
+      properties:
+        batchId:
+          type: string
+          description: Unique batch identifier
+        clearingSystem:
+          type: string
+          description: Clearing and settlement mechanism
+        direction:
+          type: string
+          description: Batch direction
+          enum:
+            - inbound
+            - outbound
+        status:
+          type: string
+          description: Batch processing status
+          enum:
+            - pending
+            - submitted
+            - accepted
+            - settled
+            - rejected
+        numberOfTransactions:
+          type: integer
+          description: Number of transactions in the batch
+        totalAmount:
+          type: number
+          format: double
+          description: Total amount of all transactions
+        currency:
+          type: string
+          description: Currency of the batch
+        settlementDate:
+          type: string
+          format: date
+          description: Settlement date
+        createdAt:
+          type: string
+          format: date-time
+        payments:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentDetail'
+    ClearingBatchList:
+      type: object
+      description: Paginated list of clearing batches
+      properties:
+        batches:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClearingBatch'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+    AccountIdentification:
+      type: object
+      description: Account identification using IBAN or proprietary account number
+      properties:
+        iban:
+          type: string
+          description: International Bank Account Number
+          pattern: ^[A-Z]{2}[0-9]{2}[A-Z0-9]{4,30}$
+        accountNumber:
+          type: string
+          description: Proprietary account number
+        currency:
+          type: string
+          description: Account currency (ISO 4217)
+          pattern: ^[A-Z]{3}$
+    FinancialInstitution:
+      type: object
+      description: Financial institution identification
+      properties:
+        bic:
+          type: string
+          description: Bank Identifier Code (SWIFT/BIC)
+          pattern: ^[A-Z]{4}[A-Z]{2}[A-Z0-9]{2}([A-Z0-9]{3})?$
+        name:
+          type: string
+          description: Name of the financial institution
+        clearingSystemMemberId:
+          type: string
+          description: Clearing system member identification
+    AccountBalance:
+      type: object
+      description: >-
+        Account balance information aligned with ISO 20022 camt.052
+        BankToCustomerAccountReport
+      properties:
+        accountId:
+          type: string
+          description: Account identifier
+        account:
+          $ref: '#/components/schemas/AccountIdentification'
+        balances:
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+                description: Balance type
+                enum:
+                  - CLBD
+                  - ITBD
+                  - OPBD
+                  - PRCD
+                  - XPCD
+                  - ITAV
+              amount:
+                type: number
+                format: double
+                description: Balance amount
+              currency:
+                type: string
+                description: Currency code
+              creditDebitIndicator:
+                type: string
+                enum:
+                  - CRDT
+                  - DBIT
+              dateTime:
+                type: string
+                format: date-time
+                description: Balance date and time
+    AccountStatementList:
+      type: object
+      description: >-
+        Account statement information aligned with ISO 20022 camt.053
+        BankToCustomerStatement
+      properties:
+        accountId:
+          type: string
+          description: Account identifier
+        statements:
+          type: array
+          items:
+            type: object
+            properties:
+              statementId:
+                type: string
+                description: Statement identification
+              fromDate:
+                type: string
+                format: date
+              toDate:
+                type: string
+                format: date
+              openingBalance:
+                type: number
+                format: double
+              closingBalance:
+                type: number
+                format: double
+              currency:
+                type: string
+              entries:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    entryReference:
+                      type: string
+                    amount:
+                      type: number
+                      format: double
+                    currency:
+                      type: string
+                    creditDebitIndicator:
+                      type: string
+                      enum:
+                        - CRDT
+                        - DBIT
+                    status:
+                      type: string
+                      enum:
+                        - BOOK
+                        - PDNG
+                        - INFO
+                    bookingDate:
+                      type: string
+                      format: date
+                    valueDate:
+                      type: string
+                      format: date
+                    bankTransactionCode:
+                      type: string
+                    remittanceInformation:
+                      type: string
+    StatusHistoryEntry:
+      type: object
+      description: A single entry in the payment status history
+      properties:
+        status:
+          type: string
+          description: Payment status at this point
+        timestamp:
+          type: string
+          format: date-time
+          description: When the status changed
+        reasonCode:
+          type: string
+          description: Reason code if applicable
+        description:
+          type: string
+          description: Description of the status change
+    Pagination:
+      type: object
+      description: Pagination information for list responses
+      properties:
+        page:
+          type: integer
+          description: Current page number
+        pageSize:
+          type: integer
+          description: Number of items per page
+        totalItems:
+          type: integer
+          description: Total number of items
+        totalPages:
+          type: integer
+          description: Total number of pages
+    Error:
+      type: object
+      description: Standard error response
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Human-readable error message
+        details:
+          type: array
+          description: Detailed error information
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+                description: Field that caused the error
+              message:
+                type: string
+                description: Error detail message
+  responses:
+    BadRequest:
+      description: Bad request - invalid parameters or malformed request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication required or credentials invalid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: Insufficient permissions for the requested operation
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Requested resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    UnprocessableEntity:
+      description: Request validation failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+security:
+  - bearerAuth: []
+  - apiKey: []

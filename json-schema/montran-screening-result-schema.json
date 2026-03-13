@@ -1,0 +1,155 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://www.montran.com/schemas/screening-result.json",
+  "title": "Montran Screening Result",
+  "description": "The result of a sanctions screening operation performed by Montran's Enhanced Filtering System (EFS). Contains match information from screening against compliance lists such as OFAC, EU, OFSI, Lloyds MIU, and UN sanctions lists.",
+  "type": "object",
+  "required": [
+    "screeningId",
+    "result",
+    "screenedAt"
+  ],
+  "properties": {
+    "screeningId": {
+      "type": "string",
+      "description": "Unique screening operation identifier"
+    },
+    "result": {
+      "type": "string",
+      "description": "Overall screening result",
+      "enum": [
+        "PASS",
+        "HIT",
+        "POSSIBLE_HIT"
+      ]
+    },
+    "screeningType": {
+      "type": "string",
+      "description": "Type of screening performed",
+      "enum": [
+        "transaction",
+        "entity",
+        "batch"
+      ]
+    },
+    "channelId": {
+      "type": "string",
+      "description": "Screening channel used"
+    },
+    "matchCount": {
+      "type": "integer",
+      "description": "Number of matches found",
+      "minimum": 0
+    },
+    "matches": {
+      "type": "array",
+      "description": "Individual match details",
+      "items": {
+        "$ref": "#/$defs/ScreeningMatch"
+      }
+    },
+    "transactionReference": {
+      "type": "string",
+      "description": "Reference to the screened transaction"
+    },
+    "messageFormat": {
+      "type": "string",
+      "description": "Format of the screened message",
+      "enum": [
+        "ISO20022",
+        "SWIFT_FIN",
+        "ISO8583",
+        "NACHA",
+        "PROPRIETARY"
+      ]
+    },
+    "screenedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when screening was performed"
+    },
+    "latencyMs": {
+      "type": "integer",
+      "description": "Screening processing time in milliseconds",
+      "minimum": 0
+    }
+  },
+  "$defs": {
+    "ScreeningMatch": {
+      "type": "object",
+      "description": "Individual match against a sanctions or compliance list entry",
+      "properties": {
+        "matchId": {
+          "type": "string",
+          "description": "Unique match identifier"
+        },
+        "matchedField": {
+          "type": "string",
+          "description": "Transaction field that triggered the match",
+          "enum": [
+            "debtorName",
+            "creditorName",
+            "debtorAddress",
+            "creditorAddress",
+            "debtorCountry",
+            "creditorCountry",
+            "remittanceInformation"
+          ]
+        },
+        "matchedValue": {
+          "type": "string",
+          "description": "Value from the transaction that matched"
+        },
+        "listSource": {
+          "type": "string",
+          "description": "Source of the compliance list",
+          "enum": [
+            "OFAC",
+            "EU",
+            "OFSI",
+            "UN",
+            "LLOYDS_MIU",
+            "CUSTOM"
+          ]
+        },
+        "listName": {
+          "type": "string",
+          "description": "Name of the compliance list"
+        },
+        "listEntryId": {
+          "type": "string",
+          "description": "Entry identifier in the compliance list"
+        },
+        "listedName": {
+          "type": "string",
+          "description": "Name as it appears on the sanctions list"
+        },
+        "matchScore": {
+          "type": "number",
+          "description": "Match confidence score (0-100)",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "matchType": {
+          "type": "string",
+          "description": "Type of matching algorithm that produced the match",
+          "enum": [
+            "EXACT",
+            "FUZZY",
+            "PHONETIC",
+            "PARTIAL"
+          ]
+        },
+        "severity": {
+          "type": "string",
+          "description": "Match severity level",
+          "enum": [
+            "high",
+            "medium",
+            "low"
+          ]
+        }
+      }
+    }
+  }
+}

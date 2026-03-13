@@ -1,0 +1,278 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "montran": "https://www.montran.com/schemas/",
+    "schema": "https://schema.org/",
+    "fibo": "https://spec.edmcouncil.org/fibo/ontology/",
+    "fibo-fnd": "https://spec.edmcouncil.org/fibo/ontology/FND/",
+    "fibo-fbc": "https://spec.edmcouncil.org/fibo/ontology/FBC/",
+    "fibo-sec": "https://spec.edmcouncil.org/fibo/ontology/SEC/",
+    "iso20022": "urn:iso:std:iso:20022:tech:xsd:",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dcterms": "http://purl.org/dc/terms/",
+
+    "Payment": {
+      "@id": "montran:Payment",
+      "@context": {
+        "paymentId": {
+          "@id": "dcterms:identifier",
+          "@type": "xsd:string"
+        },
+        "messageId": {
+          "@id": "montran:messageId",
+          "@type": "xsd:string"
+        },
+        "endToEndId": {
+          "@id": "montran:endToEndId",
+          "@type": "xsd:string"
+        },
+        "transactionId": {
+          "@id": "montran:transactionId",
+          "@type": "xsd:string"
+        },
+        "paymentType": {
+          "@id": "montran:paymentType",
+          "@type": "xsd:string"
+        },
+        "status": {
+          "@id": "montran:paymentStatus",
+          "@type": "xsd:string"
+        },
+        "amount": {
+          "@id": "schema:amount",
+          "@type": "xsd:decimal"
+        },
+        "currency": {
+          "@id": "schema:currency",
+          "@type": "xsd:string"
+        },
+        "debtorName": {
+          "@id": "montran:debtorName",
+          "@type": "xsd:string"
+        },
+        "creditorName": {
+          "@id": "montran:creditorName",
+          "@type": "xsd:string"
+        },
+        "remittanceInformation": {
+          "@id": "montran:remittanceInformation",
+          "@type": "xsd:string"
+        },
+        "clearingSystem": {
+          "@id": "montran:clearingSystem",
+          "@type": "xsd:string"
+        },
+        "requestedExecutionDate": {
+          "@id": "montran:requestedExecutionDate",
+          "@type": "xsd:date"
+        },
+        "settlementDate": {
+          "@id": "montran:settlementDate",
+          "@type": "xsd:date"
+        },
+        "createdAt": {
+          "@id": "dcterms:created",
+          "@type": "xsd:dateTime"
+        },
+        "updatedAt": {
+          "@id": "dcterms:modified",
+          "@type": "xsd:dateTime"
+        }
+      }
+    },
+
+    "Account": {
+      "@id": "fibo-fbc:Account",
+      "@context": {
+        "accountId": {
+          "@id": "dcterms:identifier",
+          "@type": "xsd:string"
+        },
+        "accountType": {
+          "@id": "montran:accountType",
+          "@type": "xsd:string"
+        },
+        "iban": {
+          "@id": "fibo-fbc:IBAN",
+          "@type": "xsd:string"
+        },
+        "accountNumber": {
+          "@id": "fibo-fbc:accountNumber",
+          "@type": "xsd:string"
+        },
+        "currency": {
+          "@id": "schema:currency",
+          "@type": "xsd:string"
+        },
+        "ownerName": {
+          "@id": "schema:name",
+          "@type": "xsd:string"
+        },
+        "status": {
+          "@id": "montran:accountStatus",
+          "@type": "xsd:string"
+        },
+        "createdAt": {
+          "@id": "dcterms:created",
+          "@type": "xsd:dateTime"
+        }
+      }
+    },
+
+    "FinancialInstitution": {
+      "@id": "fibo-fbc:FinancialInstitution",
+      "@context": {
+        "bic": {
+          "@id": "fibo-fbc:BIC",
+          "@type": "xsd:string"
+        },
+        "name": {
+          "@id": "schema:name",
+          "@type": "xsd:string"
+        },
+        "lei": {
+          "@id": "fibo-fbc:LEI",
+          "@type": "xsd:string"
+        },
+        "country": {
+          "@id": "schema:addressCountry",
+          "@type": "xsd:string"
+        },
+        "clearingSystemMemberId": {
+          "@id": "montran:clearingSystemMemberId",
+          "@type": "xsd:string"
+        }
+      }
+    },
+
+    "Transaction": {
+      "@id": "montran:Transaction",
+      "@context": {
+        "transactionId": {
+          "@id": "dcterms:identifier",
+          "@type": "xsd:string"
+        },
+        "amount": {
+          "@id": "schema:amount",
+          "@type": "xsd:decimal"
+        },
+        "currency": {
+          "@id": "schema:currency",
+          "@type": "xsd:string"
+        },
+        "creditDebitIndicator": {
+          "@id": "montran:creditDebitIndicator",
+          "@type": "xsd:string"
+        },
+        "bookingDate": {
+          "@id": "montran:bookingDate",
+          "@type": "xsd:date"
+        },
+        "valueDate": {
+          "@id": "montran:valueDate",
+          "@type": "xsd:date"
+        },
+        "remittanceInformation": {
+          "@id": "montran:remittanceInformation",
+          "@type": "xsd:string"
+        }
+      }
+    },
+
+    "ScreeningResult": {
+      "@id": "montran:ScreeningResult",
+      "@context": {
+        "screeningId": {
+          "@id": "dcterms:identifier",
+          "@type": "xsd:string"
+        },
+        "result": {
+          "@id": "montran:screeningResult",
+          "@type": "xsd:string"
+        },
+        "matchCount": {
+          "@id": "montran:matchCount",
+          "@type": "xsd:integer"
+        },
+        "screenedAt": {
+          "@id": "dcterms:date",
+          "@type": "xsd:dateTime"
+        }
+      }
+    },
+
+    "VirtualAccount": {
+      "@id": "montran:VirtualAccount",
+      "@context": {
+        "accountId": {
+          "@id": "dcterms:identifier",
+          "@type": "xsd:string"
+        },
+        "virtualIban": {
+          "@id": "montran:virtualIban",
+          "@type": "xsd:string"
+        },
+        "physicalAccountId": {
+          "@id": "montran:physicalAccountId",
+          "@type": "xsd:string"
+        },
+        "purpose": {
+          "@id": "montran:accountPurpose",
+          "@type": "xsd:string"
+        },
+        "balance": {
+          "@id": "montran:balance",
+          "@type": "xsd:decimal"
+        }
+      }
+    },
+
+    "ClearingBatch": {
+      "@id": "montran:ClearingBatch",
+      "@context": {
+        "batchId": {
+          "@id": "dcterms:identifier",
+          "@type": "xsd:string"
+        },
+        "clearingSystem": {
+          "@id": "montran:clearingSystem",
+          "@type": "xsd:string"
+        },
+        "numberOfTransactions": {
+          "@id": "montran:numberOfTransactions",
+          "@type": "xsd:integer"
+        },
+        "totalAmount": {
+          "@id": "montran:totalAmount",
+          "@type": "xsd:decimal"
+        },
+        "settlementDate": {
+          "@id": "montran:settlementDate",
+          "@type": "xsd:date"
+        }
+      }
+    },
+
+    "Message": {
+      "@id": "montran:Message",
+      "@context": {
+        "messageId": {
+          "@id": "dcterms:identifier",
+          "@type": "xsd:string"
+        },
+        "format": {
+          "@id": "dcterms:format",
+          "@type": "xsd:string"
+        },
+        "messageType": {
+          "@id": "montran:messageType",
+          "@type": "xsd:string"
+        },
+        "direction": {
+          "@id": "montran:direction",
+          "@type": "xsd:string"
+        }
+      }
+    }
+  }
+}

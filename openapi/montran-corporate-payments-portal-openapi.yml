@@ -1,0 +1,920 @@
+openapi: 3.1.0
+info:
+  title: Montran Corporate Payments Portal API
+  description: >-
+    The Montran Corporate Payments Portal enables corporates to exercise
+    complete control over accounts at their various bank relationships, with
+    the ability to make secure payments over the Internet. It supports SWIFT
+    payments and local clearing delivery through API integration and H2H
+    (Host-to-Host) protocols. Corporates can connect their ERP systems and
+    manually or automatically upload invoices for payments and collections
+    management. The portal provides multi-bank visibility and supports
+    secure payment initiation across multiple currencies and payment types.
+  version: 1.0.0
+  contact:
+    name: Montran Corporation
+    url: https://www.montran.com/contact-us/
+  license:
+    name: Proprietary
+    url: https://www.montran.com/terms-conditions/
+  x-logo:
+    url: https://www.montran.com/logo.png
+externalDocs:
+  description: Montran Corporate Payments Portal Documentation
+  url: https://www.montran.com/solutions/corporate-payments-portal/
+servers:
+  - url: https://api.montran.com/corporate/v1
+    description: Montran Corporate Payments Portal API Server
+tags:
+  - name: Payments
+    description: Corporate payment initiation and management
+  - name: Accounts
+    description: Multi-bank account visibility and management
+  - name: Files
+    description: File upload and processing for batch payments
+  - name: Approvals
+    description: Payment approval workflow management
+  - name: Beneficiaries
+    description: Beneficiary management for recurring payments
+paths:
+  /payments:
+    get:
+      operationId: listCorporatePayments
+      summary: List corporate payments
+      description: >-
+        Retrieves a list of payments initiated through the corporate portal.
+        Supports filtering by payment type, status, bank relationship,
+        currency, and date range. Provides multi-bank payment visibility
+        across all connected bank relationships.
+      tags:
+        - Payments
+      parameters:
+        - name: status
+          in: query
+          description: Filter by payment status
+          schema:
+            type: string
+            enum:
+              - draft
+              - pending_approval
+              - approved
+              - submitted
+              - accepted
+              - rejected
+              - settled
+              - cancelled
+        - name: paymentType
+          in: query
+          description: Filter by payment type
+          schema:
+            type: string
+            enum:
+              - domestic
+              - cross_border
+              - swift
+              - sepa
+              - ach
+        - name: bankId
+          in: query
+          description: Filter by bank relationship
+          schema:
+            type: string
+        - name: currency
+          in: query
+          schema:
+            type: string
+            pattern: ^[A-Z]{3}$
+        - name: fromDate
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: toDate
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: page
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        '200':
+          description: Successfully retrieved payments
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CorporatePaymentList'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      operationId: createCorporatePayment
+      summary: Create a corporate payment
+      description: >-
+        Creates a new payment through the corporate portal. The payment
+        is routed through the appropriate bank relationship and clearing
+        system based on the payment type, destination, and currency.
+        Supports domestic payments, cross-border SWIFT payments, SEPA
+        transfers, and local ACH payments. The payment enters the
+        approval workflow if configured.
+      tags:
+        - Payments
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CorporatePaymentCreate'
+      responses:
+        '201':
+          description: Payment successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CorporatePayment'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /payments/{paymentId}:
+    get:
+      operationId: getCorporatePayment
+      summary: Get payment details
+      description: >-
+        Retrieves the full details of a corporate payment including
+        its approval status, bank submission status, and settlement
+        information.
+      tags:
+        - Payments
+      parameters:
+        - $ref: '#/components/parameters/PaymentIdParam'
+      responses:
+        '200':
+          description: Successfully retrieved payment details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CorporatePayment'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /payments/{paymentId}/approve:
+    post:
+      operationId: approvePayment
+      summary: Approve a payment
+      description: >-
+        Approves a payment that is pending approval. Multi-level approval
+        workflows are supported based on the corporate's configured
+        authorization matrix. Once all required approvals are obtained,
+        the payment is automatically submitted to the bank.
+      tags:
+        - Approvals
+      parameters:
+        - $ref: '#/components/parameters/PaymentIdParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                comment:
+                  type: string
+                  description: Approval comment
+      responses:
+        '200':
+          description: Payment approved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CorporatePayment'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          description: Payment not in approvable state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /payments/{paymentId}/reject:
+    post:
+      operationId: rejectPayment
+      summary: Reject a payment
+      description: >-
+        Rejects a payment that is pending approval. The payment is
+        returned to the initiator with the rejection reason.
+      tags:
+        - Approvals
+      parameters:
+        - $ref: '#/components/parameters/PaymentIdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - reason
+              properties:
+                reason:
+                  type: string
+                  description: Rejection reason
+      responses:
+        '200':
+          description: Payment rejected
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CorporatePayment'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /accounts:
+    get:
+      operationId: listBankAccounts
+      summary: List bank accounts
+      description: >-
+        Retrieves a consolidated view of accounts across all connected
+        bank relationships. Provides multi-bank visibility including
+        account balances, currencies, and bank details.
+      tags:
+        - Accounts
+      parameters:
+        - name: bankId
+          in: query
+          description: Filter by bank relationship
+          schema:
+            type: string
+        - name: currency
+          in: query
+          schema:
+            type: string
+            pattern: ^[A-Z]{3}$
+      responses:
+        '200':
+          description: Successfully retrieved accounts
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BankAccountList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /accounts/{accountId}:
+    get:
+      operationId: getBankAccount
+      summary: Get bank account details
+      description: >-
+        Retrieves detailed information about a specific bank account
+        including current balance, available balance, and recent
+        transaction summary.
+      tags:
+        - Accounts
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          description: Unique account identifier
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully retrieved account details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BankAccount'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /accounts/{accountId}/transactions:
+    get:
+      operationId: listAccountTransactions
+      summary: List account transactions
+      description: >-
+        Retrieves the transaction history for a bank account. Supports
+        date range filtering and pagination.
+      tags:
+        - Accounts
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: fromDate
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: toDate
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: page
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        '200':
+          description: Successfully retrieved transactions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /files:
+    post:
+      operationId: uploadPaymentFile
+      summary: Upload a payment file
+      description: >-
+        Uploads a payment file for batch processing. Supports various file
+        formats for bulk payment initiation including CSV, XML (pain.001),
+        and proprietary ERP export formats. Files are validated and
+        individual payments are extracted and entered into the approval
+        workflow.
+      tags:
+        - Files
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - file
+                - format
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: Payment file to upload
+                format:
+                  type: string
+                  description: File format
+                  enum:
+                    - CSV
+                    - XML_PAIN001
+                    - PROPRIETARY
+                bankId:
+                  type: string
+                  description: Target bank relationship
+      responses:
+        '202':
+          description: File accepted for processing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileUploadResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /files/{fileId}:
+    get:
+      operationId: getFileStatus
+      summary: Get file processing status
+      description: >-
+        Retrieves the processing status of an uploaded payment file
+        including the number of payments extracted, validated, and
+        any errors encountered during processing.
+      tags:
+        - Files
+      parameters:
+        - name: fileId
+          in: path
+          required: true
+          description: Unique identifier of the uploaded file
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully retrieved file status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileStatus'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /beneficiaries:
+    get:
+      operationId: listBeneficiaries
+      summary: List beneficiaries
+      description: >-
+        Retrieves the list of registered payment beneficiaries. Beneficiaries
+        store pre-validated account details for recurring payment recipients.
+      tags:
+        - Beneficiaries
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        '200':
+          description: Successfully retrieved beneficiaries
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BeneficiaryList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      operationId: createBeneficiary
+      summary: Create a beneficiary
+      description: >-
+        Registers a new payment beneficiary with pre-validated account
+        details for use in future payments.
+      tags:
+        - Beneficiaries
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BeneficiaryCreate'
+      responses:
+        '201':
+          description: Beneficiary successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Beneficiary'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    apiKey:
+      type: apiKey
+      in: header
+      name: X-API-Key
+  parameters:
+    PaymentIdParam:
+      name: paymentId
+      in: path
+      required: true
+      description: Unique payment identifier
+      schema:
+        type: string
+  schemas:
+    CorporatePaymentCreate:
+      type: object
+      description: Corporate payment creation request
+      required:
+        - debitAccountId
+        - beneficiaryAccount
+        - amount
+        - currency
+        - paymentType
+      properties:
+        paymentType:
+          type: string
+          enum:
+            - domestic
+            - cross_border
+            - swift
+            - sepa
+            - ach
+        debitAccountId:
+          type: string
+          description: Debit account identifier
+        beneficiaryId:
+          type: string
+          description: Registered beneficiary ID (if using saved beneficiary)
+        beneficiaryName:
+          type: string
+          description: Beneficiary name
+        beneficiaryAccount:
+          type: object
+          properties:
+            iban:
+              type: string
+            accountNumber:
+              type: string
+            bankBic:
+              type: string
+            bankName:
+              type: string
+            country:
+              type: string
+        amount:
+          type: number
+          format: double
+          minimum: 0.01
+        currency:
+          type: string
+          pattern: ^[A-Z]{3}$
+        valueDate:
+          type: string
+          format: date
+        reference:
+          type: string
+          description: Payment reference
+        remittanceInformation:
+          type: string
+        chargeBearer:
+          type: string
+          enum:
+            - OUR
+            - BEN
+            - SHA
+        urgency:
+          type: string
+          enum:
+            - NORMAL
+            - URGENT
+    CorporatePayment:
+      type: object
+      description: Corporate payment details
+      properties:
+        paymentId:
+          type: string
+        paymentType:
+          type: string
+        status:
+          type: string
+          enum:
+            - draft
+            - pending_approval
+            - approved
+            - submitted
+            - accepted
+            - rejected
+            - settled
+            - cancelled
+        debitAccountId:
+          type: string
+        beneficiaryName:
+          type: string
+        beneficiaryAccount:
+          type: object
+          properties:
+            iban:
+              type: string
+            accountNumber:
+              type: string
+            bankBic:
+              type: string
+        amount:
+          type: number
+          format: double
+        currency:
+          type: string
+        valueDate:
+          type: string
+          format: date
+        reference:
+          type: string
+        approvalStatus:
+          type: object
+          properties:
+            requiredApprovals:
+              type: integer
+            currentApprovals:
+              type: integer
+            approvers:
+              type: array
+              items:
+                type: object
+                properties:
+                  userId:
+                    type: string
+                  approvedAt:
+                    type: string
+                    format: date-time
+                  comment:
+                    type: string
+        bankReference:
+          type: string
+          description: Reference assigned by the bank
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    CorporatePaymentList:
+      type: object
+      properties:
+        payments:
+          type: array
+          items:
+            $ref: '#/components/schemas/CorporatePayment'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+    BankAccount:
+      type: object
+      description: Bank account details
+      properties:
+        accountId:
+          type: string
+        iban:
+          type: string
+        accountNumber:
+          type: string
+        currency:
+          type: string
+        bankId:
+          type: string
+        bankName:
+          type: string
+        bankBic:
+          type: string
+        accountName:
+          type: string
+        availableBalance:
+          type: number
+          format: double
+        bookedBalance:
+          type: number
+          format: double
+        lastUpdated:
+          type: string
+          format: date-time
+    BankAccountList:
+      type: object
+      properties:
+        accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/BankAccount'
+    TransactionList:
+      type: object
+      properties:
+        transactions:
+          type: array
+          items:
+            type: object
+            properties:
+              transactionId:
+                type: string
+              amount:
+                type: number
+                format: double
+              currency:
+                type: string
+              creditDebit:
+                type: string
+                enum:
+                  - CRDT
+                  - DBIT
+              bookingDate:
+                type: string
+                format: date
+              valueDate:
+                type: string
+                format: date
+              counterpartyName:
+                type: string
+              reference:
+                type: string
+              remittanceInformation:
+                type: string
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+    FileUploadResponse:
+      type: object
+      properties:
+        fileId:
+          type: string
+        fileName:
+          type: string
+        status:
+          type: string
+          enum:
+            - UPLOADED
+            - PROCESSING
+        uploadedAt:
+          type: string
+          format: date-time
+    FileStatus:
+      type: object
+      properties:
+        fileId:
+          type: string
+        fileName:
+          type: string
+        format:
+          type: string
+        status:
+          type: string
+          enum:
+            - PROCESSING
+            - COMPLETED
+            - COMPLETED_WITH_ERRORS
+            - FAILED
+        totalRecords:
+          type: integer
+        successfulRecords:
+          type: integer
+        failedRecords:
+          type: integer
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              recordNumber:
+                type: integer
+              errorMessage:
+                type: string
+        uploadedAt:
+          type: string
+          format: date-time
+        processedAt:
+          type: string
+          format: date-time
+    BeneficiaryCreate:
+      type: object
+      required:
+        - name
+        - accountIban
+      properties:
+        name:
+          type: string
+          description: Beneficiary name
+        accountIban:
+          type: string
+          description: Beneficiary IBAN
+        accountNumber:
+          type: string
+        bankBic:
+          type: string
+        bankName:
+          type: string
+        country:
+          type: string
+        address:
+          type: string
+    Beneficiary:
+      type: object
+      properties:
+        beneficiaryId:
+          type: string
+        name:
+          type: string
+        accountIban:
+          type: string
+        accountNumber:
+          type: string
+        bankBic:
+          type: string
+        bankName:
+          type: string
+        country:
+          type: string
+        status:
+          type: string
+          enum:
+            - active
+            - inactive
+        createdAt:
+          type: string
+          format: date-time
+    BeneficiaryList:
+      type: object
+      properties:
+        beneficiaries:
+          type: array
+          items:
+            $ref: '#/components/schemas/Beneficiary'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+        pageSize:
+          type: integer
+        totalItems:
+          type: integer
+        totalPages:
+          type: integer
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
+  responses:
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    UnprocessableEntity:
+      description: Validation failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+security:
+  - bearerAuth: []
+  - apiKey: []

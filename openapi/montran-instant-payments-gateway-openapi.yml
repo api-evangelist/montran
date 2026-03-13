@@ -1,0 +1,1378 @@
+openapi: 3.1.0
+info:
+  title: Montran Instant Payments Gateway API
+  description: >-
+    The Montran Instant Payments Gateway (IPG) enables participants in an instant
+    payments ecosystem to support high volumes of instant payments in a high
+    availability 24x7 environment. The gateway complies with PSD2 Open API
+    requirements and offers a unified API based on the ISO 20022 messaging
+    standard. It supports Payment Initiation Service Providers (PISP) for
+    payment initiation and Account Information Service Providers (AISP) for
+    account information access. The system supports credit transfers, request
+    to pay, bulk payments, and QR code-based instant payment initiation. It
+    natively processes ISO 20022 pacs, pain, and camt messages and supports
+    active-active deployment across clouds.
+  version: 1.0.0
+  contact:
+    name: Montran Corporation
+    url: https://www.montran.com/contact-us/
+  license:
+    name: Proprietary
+    url: https://www.montran.com/terms-conditions/
+  x-logo:
+    url: https://www.montran.com/logo.png
+externalDocs:
+  description: Montran Instant Payments Gateway Documentation
+  url: https://www.montran.com/solutions/instant-payments-gateway/
+servers:
+  - url: https://api.montran.com/ipg/v1
+    description: Montran Instant Payments Gateway API Server
+tags:
+  - name: Payment Initiation
+    description: >-
+      PSD2-compliant payment initiation operations for PISP integration.
+      Supports instant credit transfers and request-to-pay flows.
+  - name: Account Information
+    description: >-
+      PSD2-compliant account information operations for AISP integration.
+      Provides account details, balances, and transaction history.
+  - name: Instant Payments
+    description: >-
+      Real-time instant payment processing with guaranteed end-to-end latency
+      of a few seconds
+  - name: Request to Pay
+    description: Request-to-pay initiation and management operations
+  - name: Payment Status
+    description: Real-time payment status inquiry and notification operations
+  - name: Consent
+    description: PSD2 consent management for AISP and PISP access
+paths:
+  /consents:
+    post:
+      operationId: createConsent
+      summary: Create a PSD2 consent
+      description: >-
+        Creates a new PSD2 consent for account access (AISP) or payment
+        initiation (PISP). The consent must be authorized by the payment
+        service user (PSU) before it can be used. Supports Strong Customer
+        Authentication (SCA) flows as required by PSD2.
+      tags:
+        - Consent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConsentRequest'
+      responses:
+        '201':
+          description: Consent successfully created, pending PSU authorization
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConsentResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /consents/{consentId}:
+    get:
+      operationId: getConsent
+      summary: Get consent status
+      description: >-
+        Retrieves the current status and details of a PSD2 consent. Used to
+        check whether the consent has been authorized by the PSU and remains
+        valid for use.
+      tags:
+        - Consent
+      parameters:
+        - $ref: '#/components/parameters/ConsentIdParam'
+      responses:
+        '200':
+          description: Successfully retrieved consent details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConsentResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      operationId: revokeConsent
+      summary: Revoke a consent
+      description: >-
+        Revokes an existing PSD2 consent. Once revoked, the consent can no
+        longer be used for account access or payment initiation.
+      tags:
+        - Consent
+      parameters:
+        - $ref: '#/components/parameters/ConsentIdParam'
+      responses:
+        '204':
+          description: Consent successfully revoked
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /payments/instant:
+    post:
+      operationId: initiateInstantPayment
+      summary: Initiate an instant payment
+      description: >-
+        Initiates a real-time instant payment with guaranteed end-to-end
+        processing latency of a few seconds. The payment is processed using
+        ISO 20022 pacs.008 FIToFICustomerCreditTransfer messaging. Supports
+        credit transfers across instant payment schemes. Returns the payment
+        status synchronously, including confirmation or rejection.
+      tags:
+        - Instant Payments
+        - Payment Initiation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InstantPaymentRequest'
+      responses:
+        '201':
+          description: Instant payment successfully processed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InstantPaymentResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          description: Service temporarily unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /payments/instant/{paymentId}:
+    get:
+      operationId: getInstantPayment
+      summary: Get instant payment details
+      description: >-
+        Retrieves the full details and current status of a specific instant
+        payment. Returns ISO 20022 pacs.002 status information including
+        acceptance or rejection reason codes.
+      tags:
+        - Instant Payments
+        - Payment Status
+      parameters:
+        - $ref: '#/components/parameters/PaymentIdParam'
+      responses:
+        '200':
+          description: Successfully retrieved instant payment details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InstantPaymentDetail'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /payments/instant/{paymentId}/return:
+    post:
+      operationId: returnInstantPayment
+      summary: Return an instant payment
+      description: >-
+        Initiates the return of a previously received instant payment. Uses
+        ISO 20022 pacs.004 PaymentReturn messaging. The return must specify a
+        valid reason code.
+      tags:
+        - Instant Payments
+      parameters:
+        - $ref: '#/components/parameters/PaymentIdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentReturnRequest'
+      responses:
+        '200':
+          description: Payment return successfully initiated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentReturnResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          description: Payment cannot be returned in its current state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /payments/credit-transfer:
+    post:
+      operationId: initiateCreditTransfer
+      summary: Initiate a PISP credit transfer
+      description: >-
+        Initiates a credit transfer payment on behalf of a Payment Service
+        User (PSU) as a Payment Initiation Service Provider (PISP) under
+        PSD2. Requires valid PSU consent. Uses ISO 20022 pain.001
+        CustomerCreditTransferInitiation format.
+      tags:
+        - Payment Initiation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreditTransferRequest'
+      responses:
+        '201':
+          description: Credit transfer successfully initiated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentInitiationResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /payments/request-to-pay:
+    post:
+      operationId: initiateRequestToPay
+      summary: Initiate a request to pay
+      description: >-
+        Initiates a request-to-pay (R2P) message to request payment from a
+        debtor. The debtor receives the request and can accept or reject it.
+        Supports person-to-person, person-to-merchant, and business-to-business
+        use cases. Uses ISO 20022 pain.013 CreditorPaymentActivationRequest.
+      tags:
+        - Request to Pay
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestToPayRequest'
+      responses:
+        '201':
+          description: Request to pay successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestToPayResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /payments/request-to-pay/{requestId}:
+    get:
+      operationId: getRequestToPay
+      summary: Get request-to-pay details
+      description: >-
+        Retrieves the details and current status of a request-to-pay. Shows
+        whether the request has been accepted, rejected, or is still pending.
+      tags:
+        - Request to Pay
+      parameters:
+        - name: requestId
+          in: path
+          required: true
+          description: Unique identifier of the request to pay
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully retrieved request-to-pay details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestToPayDetail'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /payments/bulk:
+    post:
+      operationId: submitBulkPayment
+      summary: Submit a bulk payment
+      description: >-
+        Submits a batch of instant payments for processing. Each payment in
+        the batch is processed individually in real-time. Supports high-volume
+        use cases such as salary payments and batch collections.
+      tags:
+        - Instant Payments
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BulkPaymentRequest'
+      responses:
+        '202':
+          description: Bulk payment accepted for processing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkPaymentResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /accounts:
+    get:
+      operationId: listAccounts
+      summary: List accessible accounts (AISP)
+      description: >-
+        Retrieves a list of payment accounts accessible to the Account
+        Information Service Provider (AISP) under an authorized PSD2 consent.
+        Provides account identification, type, currency, and basic balance
+        information.
+      tags:
+        - Account Information
+      parameters:
+        - name: consentId
+          in: query
+          required: true
+          description: PSD2 consent identifier authorizing access
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully retrieved list of accounts
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /accounts/{accountId}:
+    get:
+      operationId: getAccountDetails
+      summary: Get account details (AISP)
+      description: >-
+        Retrieves detailed information about a specific payment account
+        including account holder name, IBAN, currency, and product type.
+        Requires valid PSD2 AISP consent.
+      tags:
+        - Account Information
+      parameters:
+        - $ref: '#/components/parameters/AccountIdParam'
+        - name: consentId
+          in: query
+          required: true
+          description: PSD2 consent identifier
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully retrieved account details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountDetail'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /accounts/{accountId}/balances:
+    get:
+      operationId: getAccountBalances
+      summary: Get account balances (AISP)
+      description: >-
+        Retrieves the current balances for a specific payment account.
+        Returns available balance, booked balance, and expected balance.
+        Requires valid PSD2 AISP consent.
+      tags:
+        - Account Information
+      parameters:
+        - $ref: '#/components/parameters/AccountIdParam'
+        - name: consentId
+          in: query
+          required: true
+          description: PSD2 consent identifier
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully retrieved account balances
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountBalances'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /accounts/{accountId}/transactions:
+    get:
+      operationId: getAccountTransactions
+      summary: Get account transactions (AISP)
+      description: >-
+        Retrieves a list of transactions for a specific payment account.
+        Supports filtering by date range, booking status, and amount.
+        Requires valid PSD2 AISP consent.
+      tags:
+        - Account Information
+      parameters:
+        - $ref: '#/components/parameters/AccountIdParam'
+        - name: consentId
+          in: query
+          required: true
+          description: PSD2 consent identifier
+          schema:
+            type: string
+        - name: dateFrom
+          in: query
+          description: Start date for transaction filter (ISO 8601)
+          schema:
+            type: string
+            format: date
+        - name: dateTo
+          in: query
+          description: End date for transaction filter (ISO 8601)
+          schema:
+            type: string
+            format: date
+        - name: bookingStatus
+          in: query
+          description: Filter by booking status
+          schema:
+            type: string
+            enum:
+              - booked
+              - pending
+              - both
+        - $ref: '#/components/parameters/PageParam'
+        - $ref: '#/components/parameters/PageSizeParam'
+      responses:
+        '200':
+          description: Successfully retrieved transactions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /accounts/{accountId}/verification:
+    post:
+      operationId: verifyAccountBalance
+      summary: Verify account balance sufficiency
+      description: >-
+        Performs a balance sufficiency check on a payment account. Returns
+        whether the account has sufficient funds for the specified amount
+        without disclosing the actual balance. Used for pre-payment
+        validation.
+      tags:
+        - Account Information
+      parameters:
+        - $ref: '#/components/parameters/AccountIdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BalanceVerificationRequest'
+      responses:
+        '200':
+          description: Balance verification result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BalanceVerificationResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /payments/{paymentId}/status:
+    get:
+      operationId: getPaymentStatus
+      summary: Get payment status
+      description: >-
+        Retrieves the real-time processing status of a payment. Returns
+        ISO 20022 pacs.002 status codes including acceptance, rejection,
+        or settlement confirmation.
+      tags:
+        - Payment Status
+      parameters:
+        - $ref: '#/components/parameters/PaymentIdParam'
+      responses:
+        '200':
+          description: Successfully retrieved payment status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentStatusResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: OAuth 2.0 authorization for PSD2 AISP/PISP access
+      flows:
+        authorizationCode:
+          authorizationUrl: https://auth.montran.com/oauth2/authorize
+          tokenUrl: https://auth.montran.com/oauth2/token
+          scopes:
+            aisp: Account Information Service Provider access
+            pisp: Payment Initiation Service Provider access
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT bearer token authentication
+  parameters:
+    PaymentIdParam:
+      name: paymentId
+      in: path
+      required: true
+      description: Unique identifier of the payment
+      schema:
+        type: string
+    ConsentIdParam:
+      name: consentId
+      in: path
+      required: true
+      description: Unique identifier of the PSD2 consent
+      schema:
+        type: string
+    AccountIdParam:
+      name: accountId
+      in: path
+      required: true
+      description: Unique identifier of the payment account
+      schema:
+        type: string
+    PageParam:
+      name: page
+      in: query
+      description: Page number for pagination
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+    PageSizeParam:
+      name: pageSize
+      in: query
+      description: Number of items per page
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 20
+  schemas:
+    ConsentRequest:
+      type: object
+      description: PSD2 consent creation request
+      required:
+        - consentType
+        - psuId
+      properties:
+        consentType:
+          type: string
+          description: Type of PSD2 consent
+          enum:
+            - AISP
+            - PISP
+        psuId:
+          type: string
+          description: Payment Service User identifier
+        accountIds:
+          type: array
+          description: List of account IDs for AISP consent
+          items:
+            type: string
+        validUntil:
+          type: string
+          format: date
+          description: Expiration date of the consent
+        frequencyPerDay:
+          type: integer
+          description: Maximum number of access requests per day
+          minimum: 1
+        recurringIndicator:
+          type: boolean
+          description: Whether the consent is for recurring access
+    ConsentResponse:
+      type: object
+      description: PSD2 consent details
+      properties:
+        consentId:
+          type: string
+          description: Unique consent identifier
+        consentType:
+          type: string
+          enum:
+            - AISP
+            - PISP
+        status:
+          type: string
+          description: Consent status
+          enum:
+            - received
+            - valid
+            - rejected
+            - expired
+            - revokedByPsu
+            - terminatedByTpp
+        scaRedirectUrl:
+          type: string
+          format: uri
+          description: URL for SCA redirect flow
+        validUntil:
+          type: string
+          format: date
+        createdAt:
+          type: string
+          format: date-time
+    InstantPaymentRequest:
+      type: object
+      description: >-
+        Instant payment initiation request using ISO 20022 pacs.008
+        FIToFICustomerCreditTransfer structure
+      required:
+        - debtorAccount
+        - creditorAccount
+        - amount
+        - currency
+      properties:
+        messageId:
+          type: string
+          description: Unique message identification
+        endToEndId:
+          type: string
+          description: End-to-end identification assigned by the initiating party
+        transactionId:
+          type: string
+          description: Unique transaction identification
+        debtorName:
+          type: string
+          description: Name of the debtor (payer)
+        debtorAccount:
+          $ref: '#/components/schemas/AccountIdentification'
+        debtorAgent:
+          $ref: '#/components/schemas/FinancialInstitution'
+        creditorName:
+          type: string
+          description: Name of the creditor (payee)
+        creditorAccount:
+          $ref: '#/components/schemas/AccountIdentification'
+        creditorAgent:
+          $ref: '#/components/schemas/FinancialInstitution'
+        amount:
+          type: number
+          format: double
+          description: Payment amount
+          minimum: 0.01
+        currency:
+          type: string
+          description: ISO 4217 currency code
+          pattern: ^[A-Z]{3}$
+        remittanceInformation:
+          type: string
+          description: Remittance information or payment reference
+        purpose:
+          type: string
+          description: Purpose code for the payment
+        chargeBearer:
+          type: string
+          enum:
+            - SLEV
+    InstantPaymentResponse:
+      type: object
+      description: Response for an instant payment including real-time status
+      properties:
+        paymentId:
+          type: string
+          description: Unique payment identifier
+        messageId:
+          type: string
+          description: Message identification
+        endToEndId:
+          type: string
+          description: End-to-end identification
+        transactionId:
+          type: string
+          description: Transaction identification
+        status:
+          type: string
+          description: Payment processing status (ISO 20022 status codes)
+          enum:
+            - ACCP
+            - ACSC
+            - ACSP
+            - RJCT
+        reasonCode:
+          type: string
+          description: Rejection reason code if status is RJCT
+        settlementDate:
+          type: string
+          format: date
+          description: Settlement date
+        acceptanceDateTime:
+          type: string
+          format: date-time
+          description: Timestamp of payment acceptance
+    InstantPaymentDetail:
+      type: object
+      description: Full instant payment details
+      properties:
+        paymentId:
+          type: string
+        messageId:
+          type: string
+        endToEndId:
+          type: string
+        transactionId:
+          type: string
+        status:
+          type: string
+          enum:
+            - ACCP
+            - ACSC
+            - ACSP
+            - RJCT
+            - CANC
+            - RTND
+        debtorName:
+          type: string
+        debtorAccount:
+          $ref: '#/components/schemas/AccountIdentification'
+        debtorAgent:
+          $ref: '#/components/schemas/FinancialInstitution'
+        creditorName:
+          type: string
+        creditorAccount:
+          $ref: '#/components/schemas/AccountIdentification'
+        creditorAgent:
+          $ref: '#/components/schemas/FinancialInstitution'
+        amount:
+          type: number
+          format: double
+        currency:
+          type: string
+        remittanceInformation:
+          type: string
+        reasonCode:
+          type: string
+        settlementDate:
+          type: string
+          format: date
+        acceptanceDateTime:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+    CreditTransferRequest:
+      type: object
+      description: >-
+        PSD2 PISP credit transfer request using ISO 20022 pain.001
+        CustomerCreditTransferInitiation
+      required:
+        - consentId
+        - debtorAccount
+        - creditorAccount
+        - amount
+        - currency
+      properties:
+        consentId:
+          type: string
+          description: PSD2 consent identifier authorizing the payment
+        debtorAccount:
+          $ref: '#/components/schemas/AccountIdentification'
+        creditorName:
+          type: string
+          description: Name of the creditor
+        creditorAccount:
+          $ref: '#/components/schemas/AccountIdentification'
+        creditorAgent:
+          $ref: '#/components/schemas/FinancialInstitution'
+        amount:
+          type: number
+          format: double
+          description: Payment amount
+          minimum: 0.01
+        currency:
+          type: string
+          description: ISO 4217 currency code
+          pattern: ^[A-Z]{3}$
+        endToEndId:
+          type: string
+          description: End-to-end identification
+        remittanceInformation:
+          type: string
+          description: Remittance information
+    PaymentInitiationResponse:
+      type: object
+      description: Response for a PISP-initiated payment
+      properties:
+        paymentId:
+          type: string
+          description: Unique payment identifier
+        status:
+          type: string
+          description: Payment initiation status
+          enum:
+            - RCVD
+            - PDNG
+            - ACCP
+            - RJCT
+        scaRedirectUrl:
+          type: string
+          format: uri
+          description: URL for SCA redirect if required
+        createdAt:
+          type: string
+          format: date-time
+    RequestToPayRequest:
+      type: object
+      description: >-
+        Request-to-pay initiation using ISO 20022 pain.013
+        CreditorPaymentActivationRequest
+      required:
+        - creditorAccount
+        - debtorAccount
+        - amount
+        - currency
+      properties:
+        messageId:
+          type: string
+          description: Unique message identification
+        creditorName:
+          type: string
+          description: Name of the creditor (requester)
+        creditorAccount:
+          $ref: '#/components/schemas/AccountIdentification'
+        debtorName:
+          type: string
+          description: Name of the debtor (payer)
+        debtorAccount:
+          $ref: '#/components/schemas/AccountIdentification'
+        amount:
+          type: number
+          format: double
+          description: Requested payment amount
+          minimum: 0.01
+        currency:
+          type: string
+          description: ISO 4217 currency code
+          pattern: ^[A-Z]{3}$
+        expiryDate:
+          type: string
+          format: date-time
+          description: Expiry date/time for the request
+        remittanceInformation:
+          type: string
+          description: Remittance information
+        purpose:
+          type: string
+          description: Purpose of the request
+    RequestToPayResponse:
+      type: object
+      description: Response for a request-to-pay initiation
+      properties:
+        requestId:
+          type: string
+          description: Unique request-to-pay identifier
+        status:
+          type: string
+          enum:
+            - CREATED
+            - SENT
+            - REJECTED
+        createdAt:
+          type: string
+          format: date-time
+    RequestToPayDetail:
+      type: object
+      description: Full request-to-pay details with status
+      properties:
+        requestId:
+          type: string
+        messageId:
+          type: string
+        status:
+          type: string
+          enum:
+            - CREATED
+            - SENT
+            - ACCEPTED
+            - REJECTED
+            - EXPIRED
+            - CANCELLED
+        creditorName:
+          type: string
+        creditorAccount:
+          $ref: '#/components/schemas/AccountIdentification'
+        debtorName:
+          type: string
+        debtorAccount:
+          $ref: '#/components/schemas/AccountIdentification'
+        amount:
+          type: number
+          format: double
+        currency:
+          type: string
+        expiryDate:
+          type: string
+          format: date-time
+        resultingPaymentId:
+          type: string
+          description: Payment ID if the request was accepted and payment initiated
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    PaymentReturnRequest:
+      type: object
+      description: >-
+        Payment return request using ISO 20022 pacs.004 PaymentReturn
+      required:
+        - reasonCode
+      properties:
+        reasonCode:
+          type: string
+          description: Return reason code
+          enum:
+            - AC01
+            - AC04
+            - AC06
+            - AG01
+            - AM05
+            - BE04
+            - DNOR
+            - FOCR
+            - MD01
+            - MS02
+            - RR01
+        additionalInformation:
+          type: string
+          description: Additional return reason information
+    PaymentReturnResponse:
+      type: object
+      description: Response for a payment return
+      properties:
+        returnId:
+          type: string
+          description: Unique return identifier
+        originalPaymentId:
+          type: string
+          description: Original payment identifier
+        status:
+          type: string
+          enum:
+            - PROCESSED
+            - REJECTED
+        processedAt:
+          type: string
+          format: date-time
+    BulkPaymentRequest:
+      type: object
+      description: Bulk payment submission request
+      required:
+        - payments
+      properties:
+        batchId:
+          type: string
+          description: Client-assigned batch identifier
+        numberOfTransactions:
+          type: integer
+          description: Number of payments in the batch
+        controlSum:
+          type: number
+          format: double
+          description: Sum of all payment amounts for validation
+        payments:
+          type: array
+          description: List of instant payment requests
+          items:
+            $ref: '#/components/schemas/InstantPaymentRequest'
+          minItems: 1
+    BulkPaymentResponse:
+      type: object
+      description: Response for a bulk payment submission
+      properties:
+        bulkPaymentId:
+          type: string
+          description: Unique bulk payment identifier
+        batchId:
+          type: string
+          description: Client batch identifier
+        status:
+          type: string
+          enum:
+            - ACCEPTED
+            - PARTIALLY_ACCEPTED
+            - REJECTED
+        acceptedCount:
+          type: integer
+          description: Number of accepted payments
+        rejectedCount:
+          type: integer
+          description: Number of rejected payments
+        paymentResults:
+          type: array
+          items:
+            type: object
+            properties:
+              index:
+                type: integer
+                description: Index of the payment in the original batch
+              paymentId:
+                type: string
+              status:
+                type: string
+                enum:
+                  - ACCP
+                  - RJCT
+              reasonCode:
+                type: string
+    AccountList:
+      type: object
+      description: List of accessible payment accounts
+      properties:
+        accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountDetail'
+    AccountDetail:
+      type: object
+      description: Payment account details
+      properties:
+        accountId:
+          type: string
+          description: Unique account identifier
+        iban:
+          type: string
+          description: International Bank Account Number
+        currency:
+          type: string
+          description: Account currency (ISO 4217)
+        name:
+          type: string
+          description: Account name or description
+        ownerName:
+          type: string
+          description: Name of the account owner
+        product:
+          type: string
+          description: Product name of the account
+        status:
+          type: string
+          enum:
+            - enabled
+            - deleted
+            - blocked
+    AccountBalances:
+      type: object
+      description: Account balance information
+      properties:
+        accountId:
+          type: string
+        balances:
+          type: array
+          items:
+            type: object
+            properties:
+              balanceType:
+                type: string
+                enum:
+                  - closingBooked
+                  - expected
+                  - interimAvailable
+                  - interimBooked
+                  - openingBooked
+              amount:
+                type: number
+                format: double
+              currency:
+                type: string
+              creditDebitIndicator:
+                type: string
+                enum:
+                  - CRDT
+                  - DBIT
+              referenceDate:
+                type: string
+                format: date
+              lastChangeDateTime:
+                type: string
+                format: date-time
+    TransactionList:
+      type: object
+      description: Paginated list of account transactions
+      properties:
+        accountId:
+          type: string
+        transactions:
+          type: object
+          properties:
+            booked:
+              type: array
+              items:
+                $ref: '#/components/schemas/Transaction'
+            pending:
+              type: array
+              items:
+                $ref: '#/components/schemas/Transaction'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+    Transaction:
+      type: object
+      description: A single account transaction
+      properties:
+        transactionId:
+          type: string
+          description: Unique transaction identifier
+        endToEndId:
+          type: string
+        amount:
+          type: number
+          format: double
+        currency:
+          type: string
+        creditDebitIndicator:
+          type: string
+          enum:
+            - CRDT
+            - DBIT
+        bookingDate:
+          type: string
+          format: date
+        valueDate:
+          type: string
+          format: date
+        debtorName:
+          type: string
+        debtorAccount:
+          $ref: '#/components/schemas/AccountIdentification'
+        creditorName:
+          type: string
+        creditorAccount:
+          $ref: '#/components/schemas/AccountIdentification'
+        remittanceInformation:
+          type: string
+        bankTransactionCode:
+          type: string
+    BalanceVerificationRequest:
+      type: object
+      description: Request to verify account balance sufficiency
+      required:
+        - amount
+        - currency
+      properties:
+        amount:
+          type: number
+          format: double
+          description: Amount to verify against the account balance
+          minimum: 0.01
+        currency:
+          type: string
+          description: Currency of the amount
+          pattern: ^[A-Z]{3}$
+    BalanceVerificationResponse:
+      type: object
+      description: Result of account balance verification
+      properties:
+        sufficient:
+          type: boolean
+          description: Whether the account has sufficient funds
+        verifiedAt:
+          type: string
+          format: date-time
+    PaymentStatusResponse:
+      type: object
+      description: >-
+        Payment status aligned with ISO 20022 pacs.002
+        FIToFIPaymentStatusReport
+      properties:
+        paymentId:
+          type: string
+        originalMessageId:
+          type: string
+        originalEndToEndId:
+          type: string
+        status:
+          type: string
+          enum:
+            - ACCP
+            - ACSC
+            - ACSP
+            - ACTC
+            - PDNG
+            - RCVD
+            - RJCT
+            - CANC
+        reasonCode:
+          type: string
+          description: Reason code for rejection
+        statusDateTime:
+          type: string
+          format: date-time
+    AccountIdentification:
+      type: object
+      description: Account identification using IBAN or proprietary identifier
+      properties:
+        iban:
+          type: string
+          description: International Bank Account Number
+          pattern: ^[A-Z]{2}[0-9]{2}[A-Z0-9]{4,30}$
+        accountNumber:
+          type: string
+          description: Proprietary account number
+        currency:
+          type: string
+          description: Account currency (ISO 4217)
+          pattern: ^[A-Z]{3}$
+    FinancialInstitution:
+      type: object
+      description: Financial institution identification
+      properties:
+        bic:
+          type: string
+          description: Bank Identifier Code (SWIFT/BIC)
+          pattern: ^[A-Z]{4}[A-Z]{2}[A-Z0-9]{2}([A-Z0-9]{3})?$
+        name:
+          type: string
+          description: Name of the financial institution
+    Pagination:
+      type: object
+      description: Pagination metadata
+      properties:
+        page:
+          type: integer
+        pageSize:
+          type: integer
+        totalItems:
+          type: integer
+        totalPages:
+          type: integer
+    Error:
+      type: object
+      description: Standard error response
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Human-readable error message
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
+  responses:
+    BadRequest:
+      description: Bad request - invalid parameters or malformed request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication required or credentials invalid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: Insufficient permissions or invalid consent
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Requested resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    UnprocessableEntity:
+      description: Request validation failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+security:
+  - oauth2:
+      - aisp
+      - pisp
+  - bearerAuth: []

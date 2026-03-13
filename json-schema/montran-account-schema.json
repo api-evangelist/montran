@@ -1,0 +1,165 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://www.montran.com/schemas/account.json",
+  "title": "Montran Account",
+  "description": "A financial account managed through Montran's payment infrastructure. Represents both physical bank accounts and virtual accounts, with support for ISO 20022 camt message structures for balance and statement reporting.",
+  "type": "object",
+  "required": [
+    "accountId",
+    "currency",
+    "status"
+  ],
+  "properties": {
+    "accountId": {
+      "type": "string",
+      "description": "Unique account identifier"
+    },
+    "accountType": {
+      "type": "string",
+      "description": "Type of account",
+      "enum": [
+        "physical",
+        "virtual",
+        "virtual_iban"
+      ]
+    },
+    "iban": {
+      "type": "string",
+      "description": "International Bank Account Number",
+      "pattern": "^[A-Z]{2}[0-9]{2}[A-Z0-9]{4,30}$"
+    },
+    "accountNumber": {
+      "type": "string",
+      "description": "Proprietary account number"
+    },
+    "currency": {
+      "type": "string",
+      "description": "Account currency (ISO 4217)",
+      "pattern": "^[A-Z]{3}$"
+    },
+    "ownerName": {
+      "type": "string",
+      "description": "Name of the account owner"
+    },
+    "accountName": {
+      "type": "string",
+      "description": "Account name or description"
+    },
+    "status": {
+      "type": "string",
+      "description": "Account status",
+      "enum": [
+        "active",
+        "suspended",
+        "closed",
+        "blocked"
+      ]
+    },
+    "institution": {
+      "type": "object",
+      "description": "Account-holding financial institution",
+      "properties": {
+        "bic": {
+          "type": "string",
+          "description": "Bank Identifier Code (SWIFT/BIC)",
+          "pattern": "^[A-Z]{4}[A-Z]{2}[A-Z0-9]{2}([A-Z0-9]{3})?$"
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the financial institution"
+        },
+        "country": {
+          "type": "string",
+          "description": "Country code (ISO 3166-1 alpha-2)",
+          "pattern": "^[A-Z]{2}$"
+        }
+      }
+    },
+    "balances": {
+      "type": "array",
+      "description": "Account balances aligned with ISO 20022 camt.052 BankToCustomerAccountReport",
+      "items": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "Balance type code",
+            "enum": [
+              "CLBD",
+              "ITBD",
+              "OPBD",
+              "PRCD",
+              "XPCD",
+              "ITAV"
+            ]
+          },
+          "amount": {
+            "type": "number",
+            "description": "Balance amount"
+          },
+          "currency": {
+            "type": "string",
+            "description": "Balance currency",
+            "pattern": "^[A-Z]{3}$"
+          },
+          "creditDebitIndicator": {
+            "type": "string",
+            "enum": [
+              "CRDT",
+              "DBIT"
+            ]
+          },
+          "dateTime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Balance date and time"
+          }
+        }
+      }
+    },
+    "virtualAccount": {
+      "type": "object",
+      "description": "Virtual account specific properties (when accountType is virtual)",
+      "properties": {
+        "physicalAccountId": {
+          "type": "string",
+          "description": "ID of the underlying physical bank account"
+        },
+        "virtualIban": {
+          "type": "string",
+          "description": "Associated virtual IBAN"
+        },
+        "purpose": {
+          "type": "string",
+          "description": "Purpose of the virtual account",
+          "enum": [
+            "GENERAL",
+            "POBO",
+            "COBO",
+            "ESCROW",
+            "IN_HOUSE_BANK",
+            "TREASURY"
+          ]
+        },
+        "parentVirtualAccountId": {
+          "type": "string",
+          "description": "Parent virtual account for hierarchical structures"
+        },
+        "autoAllocate": {
+          "type": "boolean",
+          "description": "Whether incoming payments are auto-allocated"
+        }
+      }
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Account creation timestamp"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last update timestamp"
+    }
+  }
+}

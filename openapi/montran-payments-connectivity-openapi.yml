@@ -1,0 +1,945 @@
+openapi: 3.1.0
+info:
+  title: Montran Payments Connectivity API
+  description: >-
+    The Montran Payments Connectivity solution allows commercial banks to
+    connect to multiple clearing and settlement systems and messaging systems
+    such as SWIFT. It provides a single point of integration between
+    back-office applications and the external world. The platform supports
+    APIs (REST, SOAP), queue-based protocols (IBM MQ, Apache Kafka),
+    file-based protocols (shared directories, SFTP), and messaging standards
+    including SWIFT FIN, ISO 20022 (pain, pacs, camt messages), and local
+    proprietary formats. Montran has certified interfaces to clearing and
+    settlement systems worldwide with gpi features, open APIs, web services,
+    and ISO 20022 support.
+  version: 1.0.0
+  contact:
+    name: Montran Corporation
+    url: https://www.montran.com/contact-us/
+  license:
+    name: Proprietary
+    url: https://www.montran.com/terms-conditions/
+  x-logo:
+    url: https://www.montran.com/logo.png
+externalDocs:
+  description: Montran Payments Connectivity Documentation
+  url: https://www.montran.com/solutions/payments-connectivity/
+servers:
+  - url: https://api.montran.com/connectivity/v1
+    description: Montran Payments Connectivity API Server
+tags:
+  - name: Message Routing
+    description: Message routing and transformation between systems
+  - name: Channels
+    description: Communication channel management and monitoring
+  - name: Message Formats
+    description: Message format conversion and validation
+  - name: SWIFT
+    description: SWIFT network connectivity and message management
+  - name: Clearing Systems
+    description: Clearing and settlement system connectivity
+paths:
+  /messages:
+    get:
+      operationId: listMessages
+      summary: List processed messages
+      description: >-
+        Retrieves a list of messages processed through the connectivity
+        platform. Supports filtering by source system, destination system,
+        message format (SWIFT FIN, ISO 20022, proprietary), direction, and
+        processing status.
+      tags:
+        - Message Routing
+      parameters:
+        - name: sourceSystem
+          in: query
+          description: Filter by source system identifier
+          schema:
+            type: string
+        - name: destinationSystem
+          in: query
+          description: Filter by destination system identifier
+          schema:
+            type: string
+        - name: format
+          in: query
+          description: Filter by message format
+          schema:
+            type: string
+            enum:
+              - SWIFT_FIN
+              - ISO20022
+              - PROPRIETARY
+        - name: messageType
+          in: query
+          description: >-
+            Filter by specific message type (e.g., MT103, pacs.008,
+            pain.001, camt.053)
+          schema:
+            type: string
+        - name: direction
+          in: query
+          description: Filter by message direction
+          schema:
+            type: string
+            enum:
+              - inbound
+              - outbound
+        - name: status
+          in: query
+          description: Filter by processing status
+          schema:
+            type: string
+            enum:
+              - received
+              - validated
+              - transformed
+              - routed
+              - delivered
+              - failed
+        - name: fromDate
+          in: query
+          description: Start date filter (ISO 8601)
+          schema:
+            type: string
+            format: date-time
+        - name: toDate
+          in: query
+          description: End date filter (ISO 8601)
+          schema:
+            type: string
+            format: date-time
+        - name: page
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        '200':
+          description: Successfully retrieved message list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageList'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      operationId: submitMessage
+      summary: Submit a message for routing
+      description: >-
+        Submits a payment or financial message for routing through the
+        connectivity platform. The message is validated, transformed to the
+        required format, and routed to the appropriate destination system.
+        Supports SWIFT FIN (MT series), ISO 20022 (pain, pacs, camt), and
+        proprietary formats. The system automatically determines the
+        appropriate channel and format transformation.
+      tags:
+        - Message Routing
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MessageSubmission'
+      responses:
+        '201':
+          description: Message accepted for routing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /messages/{messageId}:
+    get:
+      operationId: getMessage
+      summary: Get message details
+      description: >-
+        Retrieves the full details of a specific message including its
+        routing path, format transformations applied, delivery status, and
+        any acknowledgements received from destination systems.
+      tags:
+        - Message Routing
+      parameters:
+        - name: messageId
+          in: path
+          required: true
+          description: Unique identifier of the message
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully retrieved message details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageDetail'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /messages/transform:
+    post:
+      operationId: transformMessage
+      summary: Transform a message between formats
+      description: >-
+        Transforms a financial message between supported formats without
+        routing it. Supports conversion between SWIFT FIN MT and ISO 20022
+        MX formats, as well as local proprietary formats. Useful for
+        validating format transformations before submission.
+      tags:
+        - Message Formats
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransformRequest'
+      responses:
+        '200':
+          description: Message successfully transformed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransformResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /messages/validate:
+    post:
+      operationId: validateMessage
+      summary: Validate a message
+      description: >-
+        Validates a financial message against the rules for its message type
+        and format. Checks structural validity, field content, and business
+        rules without submitting the message for routing. Supports SWIFT FIN,
+        ISO 20022, and proprietary format validation.
+      tags:
+        - Message Formats
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidateRequest'
+      responses:
+        '200':
+          description: Validation result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationResult'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /channels:
+    get:
+      operationId: listChannels
+      summary: List communication channels
+      description: >-
+        Retrieves a list of configured communication channels including
+        SWIFT connections, clearing system interfaces, API endpoints,
+        queue-based channels (IBM MQ, Kafka), and file-based channels
+        (SFTP). Shows channel status and connectivity health.
+      tags:
+        - Channels
+      parameters:
+        - name: type
+          in: query
+          description: Filter by channel type
+          schema:
+            type: string
+            enum:
+              - SWIFT
+              - API_REST
+              - API_SOAP
+              - QUEUE_MQ
+              - QUEUE_KAFKA
+              - FILE_SFTP
+              - FILE_SHARED
+        - name: status
+          in: query
+          description: Filter by channel status
+          schema:
+            type: string
+            enum:
+              - active
+              - inactive
+              - degraded
+              - error
+      responses:
+        '200':
+          description: Successfully retrieved channel list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChannelList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /channels/{channelId}:
+    get:
+      operationId: getChannel
+      summary: Get channel details
+      description: >-
+        Retrieves the configuration and current status of a specific
+        communication channel including connection parameters, supported
+        message formats, throughput statistics, and health metrics.
+      tags:
+        - Channels
+      parameters:
+        - name: channelId
+          in: path
+          required: true
+          description: Unique identifier of the channel
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully retrieved channel details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChannelDetail'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /channels/{channelId}/health:
+    get:
+      operationId: getChannelHealth
+      summary: Get channel health status
+      description: >-
+        Retrieves the real-time health and connectivity status of a
+        communication channel including latency metrics, error rates,
+        and throughput statistics.
+      tags:
+        - Channels
+      parameters:
+        - name: channelId
+          in: path
+          required: true
+          description: Unique identifier of the channel
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully retrieved channel health
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChannelHealth'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /swift/messages:
+    get:
+      operationId: listSwiftMessages
+      summary: List SWIFT messages
+      description: >-
+        Retrieves SWIFT FIN messages processed through the connectivity
+        platform. Supports filtering by message type (MT103, MT202, etc.),
+        direction, and date range. Includes SWIFT gpi tracking information
+        where available.
+      tags:
+        - SWIFT
+      parameters:
+        - name: messageType
+          in: query
+          description: SWIFT MT message type filter
+          schema:
+            type: string
+        - name: direction
+          in: query
+          schema:
+            type: string
+            enum:
+              - sent
+              - received
+        - name: fromDate
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: toDate
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: page
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        '200':
+          description: Successfully retrieved SWIFT messages
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SwiftMessageList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /clearing-systems:
+    get:
+      operationId: listClearingSystems
+      summary: List connected clearing systems
+      description: >-
+        Retrieves a list of clearing and settlement systems connected
+        through the platform including SEPA (Step1, Step2), Target2, TIPS,
+        RT1, Fedwire, CHIPS, CHAPS, Faster Payments, and local RTGS and
+        ACH systems. Shows connection status and supported message formats.
+      tags:
+        - Clearing Systems
+      responses:
+        '200':
+          description: Successfully retrieved clearing systems
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClearingSystemList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /clearing-systems/{systemId}:
+    get:
+      operationId: getClearingSystem
+      summary: Get clearing system details
+      description: >-
+        Retrieves the details of a specific clearing and settlement system
+        connection including supported message types, operating hours,
+        settlement windows, and current connectivity status.
+      tags:
+        - Clearing Systems
+      parameters:
+        - name: systemId
+          in: path
+          required: true
+          description: Unique identifier of the clearing system
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully retrieved clearing system details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClearingSystemDetail'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    apiKey:
+      type: apiKey
+      in: header
+      name: X-API-Key
+  schemas:
+    MessageSubmission:
+      type: object
+      description: Message submission for routing through the connectivity platform
+      required:
+        - format
+        - messageType
+        - content
+      properties:
+        format:
+          type: string
+          description: Message format
+          enum:
+            - SWIFT_FIN
+            - ISO20022
+            - PROPRIETARY
+        messageType:
+          type: string
+          description: >-
+            Specific message type (e.g., MT103, MT202, pacs.008, pain.001,
+            camt.053)
+        destinationSystem:
+          type: string
+          description: Target clearing or settlement system
+        destinationChannel:
+          type: string
+          description: Target communication channel identifier
+        priority:
+          type: string
+          description: Message priority
+          enum:
+            - NORMAL
+            - URGENT
+            - SYSTEM
+        content:
+          type: string
+          description: Message content in the specified format
+        metadata:
+          type: object
+          description: Additional routing metadata
+          additionalProperties:
+            type: string
+    MessageResponse:
+      type: object
+      description: Response after message submission
+      properties:
+        messageId:
+          type: string
+          description: Unique message identifier assigned by the system
+        status:
+          type: string
+          enum:
+            - RECEIVED
+            - VALIDATED
+            - QUEUED
+        channel:
+          type: string
+          description: Assigned routing channel
+        destinationSystem:
+          type: string
+          description: Resolved destination system
+        createdAt:
+          type: string
+          format: date-time
+    MessageDetail:
+      type: object
+      description: Full message details including routing information
+      properties:
+        messageId:
+          type: string
+        format:
+          type: string
+        messageType:
+          type: string
+        direction:
+          type: string
+          enum:
+            - inbound
+            - outbound
+        sourceSystem:
+          type: string
+        destinationSystem:
+          type: string
+        channel:
+          type: string
+        status:
+          type: string
+          enum:
+            - received
+            - validated
+            - transformed
+            - routed
+            - delivered
+            - acknowledged
+            - failed
+        transformations:
+          type: array
+          description: Format transformations applied
+          items:
+            type: object
+            properties:
+              fromFormat:
+                type: string
+              toFormat:
+                type: string
+              timestamp:
+                type: string
+                format: date-time
+        acknowledgement:
+          type: object
+          description: Acknowledgement from destination system
+          properties:
+            status:
+              type: string
+            receivedAt:
+              type: string
+              format: date-time
+            reference:
+              type: string
+        errorDetails:
+          type: string
+          description: Error details if message processing failed
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    MessageList:
+      type: object
+      properties:
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/MessageDetail'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+    TransformRequest:
+      type: object
+      description: Request to transform a message between formats
+      required:
+        - sourceFormat
+        - targetFormat
+        - content
+      properties:
+        sourceFormat:
+          type: string
+          description: Source message format
+          enum:
+            - SWIFT_FIN
+            - ISO20022
+            - PROPRIETARY
+        sourceMessageType:
+          type: string
+          description: Source message type (e.g., MT103, pacs.008)
+        targetFormat:
+          type: string
+          description: Target message format
+          enum:
+            - SWIFT_FIN
+            - ISO20022
+            - PROPRIETARY
+        targetMessageType:
+          type: string
+          description: Target message type
+        content:
+          type: string
+          description: Source message content
+    TransformResponse:
+      type: object
+      description: Result of message format transformation
+      properties:
+        sourceFormat:
+          type: string
+        targetFormat:
+          type: string
+        sourceMessageType:
+          type: string
+        targetMessageType:
+          type: string
+        transformedContent:
+          type: string
+          description: Transformed message content
+        warnings:
+          type: array
+          description: Transformation warnings (e.g., data truncation)
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
+    ValidateRequest:
+      type: object
+      description: Request to validate a message
+      required:
+        - format
+        - messageType
+        - content
+      properties:
+        format:
+          type: string
+          enum:
+            - SWIFT_FIN
+            - ISO20022
+            - PROPRIETARY
+        messageType:
+          type: string
+        content:
+          type: string
+    ValidationResult:
+      type: object
+      description: Message validation result
+      properties:
+        valid:
+          type: boolean
+          description: Whether the message is valid
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              severity:
+                type: string
+                enum:
+                  - ERROR
+                  - WARNING
+              field:
+                type: string
+              rule:
+                type: string
+              message:
+                type: string
+    ChannelList:
+      type: object
+      properties:
+        channels:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChannelDetail'
+    ChannelDetail:
+      type: object
+      description: Communication channel configuration and status
+      properties:
+        channelId:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+          enum:
+            - SWIFT
+            - API_REST
+            - API_SOAP
+            - QUEUE_MQ
+            - QUEUE_KAFKA
+            - FILE_SFTP
+            - FILE_SHARED
+        status:
+          type: string
+          enum:
+            - active
+            - inactive
+            - degraded
+            - error
+        supportedFormats:
+          type: array
+          items:
+            type: string
+        connectedSystems:
+          type: array
+          items:
+            type: string
+        configuration:
+          type: object
+          description: Channel-specific configuration
+          additionalProperties:
+            type: string
+    ChannelHealth:
+      type: object
+      description: Real-time channel health metrics
+      properties:
+        channelId:
+          type: string
+        status:
+          type: string
+          enum:
+            - healthy
+            - degraded
+            - down
+        latencyMs:
+          type: integer
+          description: Current latency in milliseconds
+        errorRate:
+          type: number
+          format: double
+          description: Error rate percentage over the last hour
+        throughput:
+          type: integer
+          description: Messages processed in the last hour
+        lastActivityAt:
+          type: string
+          format: date-time
+        checkedAt:
+          type: string
+          format: date-time
+    SwiftMessageList:
+      type: object
+      properties:
+        messages:
+          type: array
+          items:
+            type: object
+            properties:
+              messageId:
+                type: string
+              swiftMessageType:
+                type: string
+                description: SWIFT MT message type (e.g., MT103, MT202)
+              direction:
+                type: string
+                enum:
+                  - sent
+                  - received
+              senderBic:
+                type: string
+              receiverBic:
+                type: string
+              reference:
+                type: string
+              gpiUetr:
+                type: string
+                description: SWIFT gpi Unique End-to-end Transaction Reference
+              status:
+                type: string
+              processedAt:
+                type: string
+                format: date-time
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+    ClearingSystemList:
+      type: object
+      properties:
+        clearingSystems:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClearingSystemDetail'
+    ClearingSystemDetail:
+      type: object
+      description: Clearing and settlement system details
+      properties:
+        systemId:
+          type: string
+        name:
+          type: string
+          description: Clearing system name
+        type:
+          type: string
+          description: System type
+          enum:
+            - RTGS
+            - ACH
+            - INSTANT
+            - HYBRID
+        country:
+          type: string
+          description: Country of the clearing system
+        status:
+          type: string
+          enum:
+            - connected
+            - disconnected
+            - maintenance
+        supportedFormats:
+          type: array
+          items:
+            type: string
+        supportedMessageTypes:
+          type: array
+          items:
+            type: string
+        operatingHours:
+          type: object
+          properties:
+            is24x7:
+              type: boolean
+            openTime:
+              type: string
+            closeTime:
+              type: string
+            timezone:
+              type: string
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+        pageSize:
+          type: integer
+        totalItems:
+          type: integer
+        totalPages:
+          type: integer
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
+  responses:
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    UnprocessableEntity:
+      description: Validation failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+security:
+  - bearerAuth: []
+  - apiKey: []

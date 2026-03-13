@@ -1,0 +1,123 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://www.montran.com/schemas/transaction.json",
+  "title": "Montran Transaction",
+  "description": "A financial transaction entry on an account, aligned with ISO 20022 camt.053 (BankToCustomerStatement) entry structures. Represents a single credit or debit entry resulting from payment processing through Montran's infrastructure.",
+  "type": "object",
+  "required": [
+    "transactionId",
+    "amount",
+    "currency",
+    "creditDebitIndicator",
+    "bookingDate"
+  ],
+  "properties": {
+    "transactionId": {
+      "type": "string",
+      "description": "Unique transaction identifier"
+    },
+    "entryReference": {
+      "type": "string",
+      "description": "Entry reference assigned by the account servicer"
+    },
+    "endToEndId": {
+      "type": "string",
+      "description": "End-to-end identification from the originating payment"
+    },
+    "amount": {
+      "type": "number",
+      "description": "Transaction amount",
+      "minimum": 0
+    },
+    "currency": {
+      "type": "string",
+      "description": "Transaction currency (ISO 4217)",
+      "pattern": "^[A-Z]{3}$"
+    },
+    "creditDebitIndicator": {
+      "type": "string",
+      "description": "Indicates whether the entry is a credit or debit",
+      "enum": [
+        "CRDT",
+        "DBIT"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "description": "Entry booking status",
+      "enum": [
+        "BOOK",
+        "PDNG",
+        "INFO"
+      ]
+    },
+    "bookingDate": {
+      "type": "string",
+      "format": "date",
+      "description": "Date when the entry was booked"
+    },
+    "valueDate": {
+      "type": "string",
+      "format": "date",
+      "description": "Value date of the entry"
+    },
+    "debtorName": {
+      "type": "string",
+      "description": "Name of the debtor"
+    },
+    "debtorAccount": {
+      "type": "object",
+      "description": "Debtor account identification",
+      "properties": {
+        "iban": {
+          "type": "string"
+        },
+        "accountNumber": {
+          "type": "string"
+        }
+      }
+    },
+    "creditorName": {
+      "type": "string",
+      "description": "Name of the creditor"
+    },
+    "creditorAccount": {
+      "type": "object",
+      "description": "Creditor account identification",
+      "properties": {
+        "iban": {
+          "type": "string"
+        },
+        "accountNumber": {
+          "type": "string"
+        }
+      }
+    },
+    "remittanceInformation": {
+      "type": "string",
+      "description": "Remittance information or payment reference"
+    },
+    "bankTransactionCode": {
+      "type": "object",
+      "description": "Bank transaction code identifying the type of transaction (ISO 20022 BankTransactionCode)",
+      "properties": {
+        "domain": {
+          "type": "string",
+          "description": "Domain code (e.g., PMNT for Payments)"
+        },
+        "family": {
+          "type": "string",
+          "description": "Family code within the domain"
+        },
+        "subFamily": {
+          "type": "string",
+          "description": "Sub-family code"
+        }
+      }
+    },
+    "proprietaryCode": {
+      "type": "string",
+      "description": "Proprietary bank transaction code"
+    }
+  }
+}

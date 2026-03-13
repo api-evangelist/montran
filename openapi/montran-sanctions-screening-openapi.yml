@@ -1,0 +1,823 @@
+openapi: 3.1.0
+info:
+  title: Montran Sanctions Screening API
+  description: >-
+    The Montran Enhanced Filtering System (EFS) provides comprehensive payments
+    filtering and sanctions screening capabilities. It supports all common
+    message formats including ISO 20022 (pacs, pain, camt), SWIFT MT, ISO 8583,
+    NACHA, and local CSM formats. The system integrates via REST APIs, SOAP,
+    IBM MQ, Apache Kafka, and file-based protocols. It supports compliance
+    lists from around the world including OFAC, European OFAC, Lloyds MIU,
+    and OFSI. Designed for both commercial banks seeking individual solutions
+    and central institutions looking for a centralized multi-tenant SaaS
+    offering to participant banks. Optimized for instant payments with native
+    ISO 20022 support.
+  version: 1.0.0
+  contact:
+    name: Montran Corporation
+    url: https://www.montran.com/contact-us/
+  license:
+    name: Proprietary
+    url: https://www.montran.com/terms-conditions/
+  x-logo:
+    url: https://www.montran.com/logo.png
+externalDocs:
+  description: Montran Sanctions Screening Documentation
+  url: https://www.montran.com/solutions/sanctions-screening/
+servers:
+  - url: https://api.montran.com/efs/v1
+    description: Montran Enhanced Filtering System API Server
+tags:
+  - name: Screening
+    description: Transaction and entity screening operations
+  - name: Alerts
+    description: Screening alert management and resolution
+  - name: Lists
+    description: Sanctions and compliance list management
+  - name: Configuration
+    description: Screening rules and channel configuration
+paths:
+  /screen:
+    post:
+      operationId: screenTransaction
+      summary: Screen a transaction
+      description: >-
+        Submits a payment transaction for real-time sanctions screening.
+        The transaction is screened against all configured compliance lists
+        (OFAC, EU, OFSI, etc.) for the specified channel. Supports ISO 20022
+        pacs and pain messages, SWIFT FIN MT messages, ISO 8583, NACHA, and
+        local CSM formats. Returns screening results synchronously for
+        instant payment use cases with sub-second response times.
+      tags:
+        - Screening
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScreeningRequest'
+      responses:
+        '200':
+          description: Screening completed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScreeningResult'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /screen/batch:
+    post:
+      operationId: screenBatch
+      summary: Screen a batch of transactions
+      description: >-
+        Submits a batch of payment transactions for sanctions screening.
+        Each transaction is individually screened against the configured
+        compliance lists. Returns results for all transactions in the batch.
+      tags:
+        - Screening
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchScreeningRequest'
+      responses:
+        '200':
+          description: Batch screening completed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BatchScreeningResult'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /screen/entity:
+    post:
+      operationId: screenEntity
+      summary: Screen an entity
+      description: >-
+        Screens an individual or organization entity against configured
+        sanctions and compliance lists. Used for customer onboarding,
+        periodic review, and ad-hoc screening independent of a specific
+        payment transaction.
+      tags:
+        - Screening
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EntityScreeningRequest'
+      responses:
+        '200':
+          description: Entity screening completed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityScreeningResult'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /alerts:
+    get:
+      operationId: listAlerts
+      summary: List screening alerts
+      description: >-
+        Retrieves a list of screening alerts generated by the filtering
+        system. Alerts require review and resolution by compliance analysts.
+        Supports filtering by status, severity, screening type, and date
+        range.
+      tags:
+        - Alerts
+      parameters:
+        - name: status
+          in: query
+          description: Filter by alert status
+          schema:
+            type: string
+            enum:
+              - open
+              - under_review
+              - escalated
+              - cleared
+              - confirmed
+        - name: severity
+          in: query
+          description: Filter by match severity
+          schema:
+            type: string
+            enum:
+              - high
+              - medium
+              - low
+        - name: screeningType
+          in: query
+          description: Filter by screening type
+          schema:
+            type: string
+            enum:
+              - transaction
+              - entity
+              - batch
+        - name: fromDate
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: toDate
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: page
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        '200':
+          description: Successfully retrieved alerts
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlertList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /alerts/{alertId}:
+    get:
+      operationId: getAlert
+      summary: Get alert details
+      description: >-
+        Retrieves the full details of a screening alert including the
+        matched entity, match score, list source, and any analyst
+        comments or resolution history.
+      tags:
+        - Alerts
+      parameters:
+        - name: alertId
+          in: path
+          required: true
+          description: Unique identifier of the alert
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully retrieved alert details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlertDetail'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /alerts/{alertId}/resolve:
+    post:
+      operationId: resolveAlert
+      summary: Resolve a screening alert
+      description: >-
+        Resolves a screening alert with a disposition (cleared as false
+        positive or confirmed as true match). Records the analyst decision,
+        justification, and any associated actions taken.
+      tags:
+        - Alerts
+      parameters:
+        - name: alertId
+          in: path
+          required: true
+          description: Unique identifier of the alert
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlertResolution'
+      responses:
+        '200':
+          description: Alert successfully resolved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlertDetail'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /lists:
+    get:
+      operationId: listComplianceLists
+      summary: List compliance lists
+      description: >-
+        Retrieves the configured sanctions and compliance lists including
+        OFAC SDN, EU Consolidated List, OFSI, Lloyds MIU, UN Sanctions,
+        and any local or custom lists. Shows list status, last update date,
+        and entry count.
+      tags:
+        - Lists
+      responses:
+        '200':
+          description: Successfully retrieved compliance lists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComplianceListSummary'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /lists/{listId}:
+    get:
+      operationId: getComplianceList
+      summary: Get compliance list details
+      description: >-
+        Retrieves the details of a specific compliance list including its
+        source, last update date, entry count, and configuration for which
+        channels use this list.
+      tags:
+        - Lists
+      parameters:
+        - name: listId
+          in: path
+          required: true
+          description: Unique identifier of the compliance list
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully retrieved list details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComplianceListDetail'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /channels:
+    get:
+      operationId: listScreeningChannels
+      summary: List screening channels
+      description: >-
+        Retrieves the configured screening channels. Each channel can be
+        independently configured to use specific compliance lists, matching
+        thresholds, and screening rules. Channels correspond to different
+        payment types or clearing systems.
+      tags:
+        - Configuration
+      responses:
+        '200':
+          description: Successfully retrieved channels
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScreeningChannelList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    apiKey:
+      type: apiKey
+      in: header
+      name: X-API-Key
+  schemas:
+    ScreeningRequest:
+      type: object
+      description: Transaction screening request
+      required:
+        - channelId
+        - transaction
+      properties:
+        channelId:
+          type: string
+          description: Screening channel identifier
+        messageFormat:
+          type: string
+          description: Format of the transaction message
+          enum:
+            - ISO20022
+            - SWIFT_FIN
+            - ISO8583
+            - NACHA
+            - PROPRIETARY
+        messageType:
+          type: string
+          description: Specific message type (e.g., pacs.008, MT103)
+        transaction:
+          $ref: '#/components/schemas/TransactionData'
+        rawMessage:
+          type: string
+          description: Raw message content for format-native screening
+    TransactionData:
+      type: object
+      description: Structured transaction data for screening
+      properties:
+        transactionId:
+          type: string
+          description: Transaction reference
+        debtorName:
+          type: string
+          description: Name of the debtor/originator
+        debtorAddress:
+          type: string
+          description: Address of the debtor
+        debtorCountry:
+          type: string
+          description: Country of the debtor (ISO 3166-1 alpha-2)
+        debtorAccountIban:
+          type: string
+          description: Debtor IBAN
+        debtorAgentBic:
+          type: string
+          description: Debtor agent BIC
+        creditorName:
+          type: string
+          description: Name of the creditor/beneficiary
+        creditorAddress:
+          type: string
+          description: Address of the creditor
+        creditorCountry:
+          type: string
+          description: Country of the creditor (ISO 3166-1 alpha-2)
+        creditorAccountIban:
+          type: string
+          description: Creditor IBAN
+        creditorAgentBic:
+          type: string
+          description: Creditor agent BIC
+        amount:
+          type: number
+          format: double
+          description: Transaction amount
+        currency:
+          type: string
+          description: Currency code (ISO 4217)
+        remittanceInformation:
+          type: string
+          description: Remittance information / purpose
+    ScreeningResult:
+      type: object
+      description: Transaction screening result
+      properties:
+        screeningId:
+          type: string
+          description: Unique screening identifier
+        result:
+          type: string
+          description: Overall screening result
+          enum:
+            - PASS
+            - HIT
+            - POSSIBLE_HIT
+        matchCount:
+          type: integer
+          description: Number of matches found
+        matches:
+          type: array
+          items:
+            $ref: '#/components/schemas/ScreeningMatch'
+        screenedAt:
+          type: string
+          format: date-time
+        latencyMs:
+          type: integer
+          description: Screening processing time in milliseconds
+    ScreeningMatch:
+      type: object
+      description: Individual screening match details
+      properties:
+        matchId:
+          type: string
+        matchedField:
+          type: string
+          description: Transaction field that triggered the match
+          enum:
+            - debtorName
+            - creditorName
+            - debtorAddress
+            - creditorAddress
+            - debtorCountry
+            - creditorCountry
+            - remittanceInformation
+        matchedValue:
+          type: string
+          description: Value from the transaction that matched
+        listName:
+          type: string
+          description: Name of the compliance list
+        listEntryId:
+          type: string
+          description: Entry identifier in the compliance list
+        listedName:
+          type: string
+          description: Name on the sanctions list
+        matchScore:
+          type: number
+          format: double
+          description: Match confidence score (0-100)
+          minimum: 0
+          maximum: 100
+        matchType:
+          type: string
+          description: Type of match
+          enum:
+            - EXACT
+            - FUZZY
+            - PHONETIC
+            - PARTIAL
+        severity:
+          type: string
+          enum:
+            - high
+            - medium
+            - low
+    BatchScreeningRequest:
+      type: object
+      description: Batch screening request
+      required:
+        - channelId
+        - transactions
+      properties:
+        channelId:
+          type: string
+        transactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionData'
+          minItems: 1
+    BatchScreeningResult:
+      type: object
+      description: Batch screening results
+      properties:
+        batchId:
+          type: string
+        totalScreened:
+          type: integer
+        passCount:
+          type: integer
+        hitCount:
+          type: integer
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ScreeningResult'
+        screenedAt:
+          type: string
+          format: date-time
+    EntityScreeningRequest:
+      type: object
+      description: Entity screening request
+      required:
+        - entityType
+        - name
+      properties:
+        entityType:
+          type: string
+          enum:
+            - INDIVIDUAL
+            - ORGANIZATION
+        name:
+          type: string
+          description: Full name of the entity
+        aliases:
+          type: array
+          description: Known aliases
+          items:
+            type: string
+        dateOfBirth:
+          type: string
+          format: date
+          description: Date of birth (individuals only)
+        nationality:
+          type: string
+          description: Nationality (ISO 3166-1 alpha-2)
+        country:
+          type: string
+          description: Country of residence/registration
+        address:
+          type: string
+          description: Full address
+        identificationNumber:
+          type: string
+          description: National ID, passport, or registration number
+    EntityScreeningResult:
+      type: object
+      description: Entity screening result
+      properties:
+        screeningId:
+          type: string
+        result:
+          type: string
+          enum:
+            - CLEAR
+            - HIT
+            - POSSIBLE_HIT
+        matchCount:
+          type: integer
+        matches:
+          type: array
+          items:
+            $ref: '#/components/schemas/ScreeningMatch'
+        screenedAt:
+          type: string
+          format: date-time
+    AlertList:
+      type: object
+      properties:
+        alerts:
+          type: array
+          items:
+            $ref: '#/components/schemas/AlertDetail'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+    AlertDetail:
+      type: object
+      description: Screening alert full details
+      properties:
+        alertId:
+          type: string
+        screeningId:
+          type: string
+        status:
+          type: string
+          enum:
+            - open
+            - under_review
+            - escalated
+            - cleared
+            - confirmed
+        severity:
+          type: string
+          enum:
+            - high
+            - medium
+            - low
+        screeningType:
+          type: string
+          enum:
+            - transaction
+            - entity
+        match:
+          $ref: '#/components/schemas/ScreeningMatch'
+        transactionData:
+          $ref: '#/components/schemas/TransactionData'
+        resolution:
+          type: object
+          properties:
+            disposition:
+              type: string
+              enum:
+                - false_positive
+                - true_match
+            resolvedBy:
+              type: string
+            resolvedAt:
+              type: string
+              format: date-time
+            justification:
+              type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    AlertResolution:
+      type: object
+      description: Alert resolution submission
+      required:
+        - disposition
+        - justification
+      properties:
+        disposition:
+          type: string
+          description: Resolution disposition
+          enum:
+            - false_positive
+            - true_match
+        justification:
+          type: string
+          description: Justification for the resolution decision
+        action:
+          type: string
+          description: Action taken (for true matches)
+          enum:
+            - BLOCK_TRANSACTION
+            - RELEASE_TRANSACTION
+            - ESCALATE
+            - FILE_SAR
+    ComplianceListSummary:
+      type: object
+      properties:
+        lists:
+          type: array
+          items:
+            $ref: '#/components/schemas/ComplianceListDetail'
+    ComplianceListDetail:
+      type: object
+      description: Compliance list details
+      properties:
+        listId:
+          type: string
+        name:
+          type: string
+          description: List name
+        source:
+          type: string
+          description: List source organization
+          enum:
+            - OFAC
+            - EU
+            - OFSI
+            - UN
+            - LLOYDS_MIU
+            - CUSTOM
+        status:
+          type: string
+          enum:
+            - active
+            - inactive
+        entryCount:
+          type: integer
+          description: Number of entries in the list
+        lastUpdated:
+          type: string
+          format: date-time
+          description: When the list was last updated
+        channels:
+          type: array
+          description: Channels configured to use this list
+          items:
+            type: string
+    ScreeningChannelList:
+      type: object
+      properties:
+        channels:
+          type: array
+          items:
+            type: object
+            properties:
+              channelId:
+                type: string
+              name:
+                type: string
+              description:
+                type: string
+              messageFormats:
+                type: array
+                items:
+                  type: string
+              activeLists:
+                type: array
+                items:
+                  type: string
+              matchThreshold:
+                type: number
+                format: double
+                description: Minimum match score threshold
+              status:
+                type: string
+                enum:
+                  - active
+                  - inactive
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+        pageSize:
+          type: integer
+        totalItems:
+          type: integer
+        totalPages:
+          type: integer
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
+  responses:
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    UnprocessableEntity:
+      description: Validation failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+security:
+  - bearerAuth: []
+  - apiKey: []
