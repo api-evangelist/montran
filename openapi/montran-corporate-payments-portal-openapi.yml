@@ -40,7 +40,7 @@ paths:
   /payments:
     get:
       operationId: listCorporatePayments
-      summary: List corporate payments
+      summary: Montran List corporate payments
       description: >-
         Retrieves a list of payments initiated through the corporate portal.
         Supports filtering by payment type, status, bank relationship,
@@ -122,7 +122,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
     post:
       operationId: createCorporatePayment
-      summary: Create a corporate payment
+      summary: Montran Create a corporate payment
       description: >-
         Creates a new payment through the corporate portal. The payment
         is routed through the appropriate bank relationship and clearing
@@ -156,7 +156,7 @@ paths:
   /payments/{paymentId}:
     get:
       operationId: getCorporatePayment
-      summary: Get payment details
+      summary: Montran Get payment details
       description: >-
         Retrieves the full details of a corporate payment including
         its approval status, bank submission status, and settlement
@@ -181,7 +181,7 @@ paths:
   /payments/{paymentId}/approve:
     post:
       operationId: approvePayment
-      summary: Approve a payment
+      summary: Montran Approve a payment
       description: >-
         Approves a payment that is pending approval. Multi-level approval
         workflows are supported based on the corporate's configured
@@ -222,7 +222,7 @@ paths:
   /payments/{paymentId}/reject:
     post:
       operationId: rejectPayment
-      summary: Reject a payment
+      summary: Montran Reject a payment
       description: >-
         Rejects a payment that is pending approval. The payment is
         returned to the initiator with the rejection reason.
@@ -258,7 +258,7 @@ paths:
   /accounts:
     get:
       operationId: listBankAccounts
-      summary: List bank accounts
+      summary: Montran List bank accounts
       description: >-
         Retrieves a consolidated view of accounts across all connected
         bank relationships. Provides multi-bank visibility including
@@ -290,7 +290,7 @@ paths:
   /accounts/{accountId}:
     get:
       operationId: getBankAccount
-      summary: Get bank account details
+      summary: Montran Get bank account details
       description: >-
         Retrieves detailed information about a specific bank account
         including current balance, available balance, and recent
@@ -320,7 +320,7 @@ paths:
   /accounts/{accountId}/transactions:
     get:
       operationId: listAccountTransactions
-      summary: List account transactions
+      summary: Montran List account transactions
       description: >-
         Retrieves the transaction history for a bank account. Supports
         date range filtering and pagination.
@@ -371,7 +371,7 @@ paths:
   /files:
     post:
       operationId: uploadPaymentFile
-      summary: Upload a payment file
+      summary: Montran Upload a payment file
       description: >-
         Uploads a payment file for batch processing. Supports various file
         formats for bulk payment initiation including CSV, XML (pain.001),
@@ -422,7 +422,7 @@ paths:
   /files/{fileId}:
     get:
       operationId: getFileStatus
-      summary: Get file processing status
+      summary: Montran Get file processing status
       description: >-
         Retrieves the processing status of an uploaded payment file
         including the number of payments extracted, validated, and
@@ -452,7 +452,7 @@ paths:
   /beneficiaries:
     get:
       operationId: listBeneficiaries
-      summary: List beneficiaries
+      summary: Montran List beneficiaries
       description: >-
         Retrieves the list of registered payment beneficiaries. Beneficiaries
         store pre-validated account details for recurring payment recipients.
@@ -485,7 +485,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
     post:
       operationId: createBeneficiary
-      summary: Create a beneficiary
+      summary: Montran Create a beneficiary
       description: >-
         Registers a new payment beneficiary with pre-validated account
         details for use in future payments.

@@ -46,7 +46,7 @@ paths:
   /payments:
     get:
       operationId: listPayments
-      summary: List payments
+      summary: Montran List payments
       description: >-
         Retrieves a list of payments processed through the Global Payments Hub.
         Supports filtering by payment type, status, currency, date range, and
@@ -81,7 +81,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
     post:
       operationId: initiatePayment
-      summary: Initiate a payment
+      summary: Montran Initiate a payment
       description: >-
         Initiates a new payment through the Global Payments Hub. Supports
         credit transfers, direct debits, cross-border payments, and cheques.
@@ -117,7 +117,7 @@ paths:
   /payments/{paymentId}:
     get:
       operationId: getPayment
-      summary: Get payment details
+      summary: Montran Get payment details
       description: >-
         Retrieves the full details of a specific payment including its current
         status, clearing system assignment, settlement information, and
@@ -144,7 +144,7 @@ paths:
   /payments/{paymentId}/status:
     get:
       operationId: getPaymentStatus
-      summary: Get payment status
+      summary: Montran Get payment status
       description: >-
         Retrieves the current processing status of a payment. Returns status
         information aligned with ISO 20022 pacs.002 Payment Status Report
@@ -169,7 +169,7 @@ paths:
   /payments/{paymentId}/cancel:
     post:
       operationId: cancelPayment
-      summary: Cancel a payment
+      summary: Montran Cancel a payment
       description: >-
         Requests cancellation of a payment that has not yet been settled.
         Generates an ISO 20022 camt.056 FIToFIPaymentCancellationRequest
@@ -209,7 +209,7 @@ paths:
   /credit-transfers:
     post:
       operationId: initiateCreditTransfer
-      summary: Initiate a credit transfer
+      summary: Montran Initiate a credit transfer
       description: >-
         Initiates a credit transfer payment using ISO 20022 pain.001
         CustomerCreditTransferInitiation format. Supports SEPA credit
@@ -242,7 +242,7 @@ paths:
   /direct-debits:
     post:
       operationId: initiateDirectDebit
-      summary: Initiate a direct debit
+      summary: Montran Initiate a direct debit
       description: >-
         Initiates a direct debit collection using ISO 20022 pain.008
         CustomerDirectDebitInitiation format. Supports SEPA Direct Debit
@@ -273,7 +273,7 @@ paths:
   /clearing/batches:
     get:
       operationId: listClearingBatches
-      summary: List clearing batches
+      summary: Montran List clearing batches
       description: >-
         Retrieves a list of clearing batches submitted to or received from
         clearing and settlement mechanisms. Supports filtering by clearing
@@ -311,7 +311,7 @@ paths:
   /clearing/batches/{batchId}:
     get:
       operationId: getClearingBatch
-      summary: Get clearing batch details
+      summary: Montran Get clearing batch details
       description: >-
         Retrieves the details of a specific clearing batch including the list
         of payments contained within it, settlement status, and clearing
@@ -341,7 +341,7 @@ paths:
   /accounts/{accountId}/balance:
     get:
       operationId: getAccountBalance
-      summary: Get account balance
+      summary: Montran Get account balance
       description: >-
         Retrieves the current balance of an account including available
         balance, booked balance, and pending transactions. Aligned with
@@ -371,7 +371,7 @@ paths:
   /accounts/{accountId}/statements:
     get:
       operationId: getAccountStatements
-      summary: Get account statements
+      summary: Montran Get account statements
       description: >-
         Retrieves account statements for a specified date range. Returns
         statement information aligned with ISO 20022 camt.053

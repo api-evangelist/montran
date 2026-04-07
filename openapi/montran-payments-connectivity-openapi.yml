@@ -42,7 +42,7 @@ paths:
   /messages:
     get:
       operationId: listMessages
-      summary: List processed messages
+      summary: Montran List processed messages
       description: >-
         Retrieves a list of messages processed through the connectivity
         platform. Supports filtering by source system, destination system,
@@ -137,7 +137,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
     post:
       operationId: submitMessage
-      summary: Submit a message for routing
+      summary: Montran Submit a message for routing
       description: >-
         Submits a payment or financial message for routing through the
         connectivity platform. The message is validated, transformed to the
@@ -171,7 +171,7 @@ paths:
   /messages/{messageId}:
     get:
       operationId: getMessage
-      summary: Get message details
+      summary: Montran Get message details
       description: >-
         Retrieves the full details of a specific message including its
         routing path, format transformations applied, delivery status, and
@@ -201,7 +201,7 @@ paths:
   /messages/transform:
     post:
       operationId: transformMessage
-      summary: Transform a message between formats
+      summary: Montran Transform a message between formats
       description: >-
         Transforms a financial message between supported formats without
         routing it. Supports conversion between SWIFT FIN MT and ISO 20022
@@ -233,7 +233,7 @@ paths:
   /messages/validate:
     post:
       operationId: validateMessage
-      summary: Validate a message
+      summary: Montran Validate a message
       description: >-
         Validates a financial message against the rules for its message type
         and format. Checks structural validity, field content, and business
@@ -263,7 +263,7 @@ paths:
   /channels:
     get:
       operationId: listChannels
-      summary: List communication channels
+      summary: Montran List communication channels
       description: >-
         Retrieves a list of configured communication channels including
         SWIFT connections, clearing system interfaces, API endpoints,
@@ -309,7 +309,7 @@ paths:
   /channels/{channelId}:
     get:
       operationId: getChannel
-      summary: Get channel details
+      summary: Montran Get channel details
       description: >-
         Retrieves the configuration and current status of a specific
         communication channel including connection parameters, supported
@@ -339,7 +339,7 @@ paths:
   /channels/{channelId}/health:
     get:
       operationId: getChannelHealth
-      summary: Get channel health status
+      summary: Montran Get channel health status
       description: >-
         Retrieves the real-time health and connectivity status of a
         communication channel including latency metrics, error rates,
@@ -369,7 +369,7 @@ paths:
   /swift/messages:
     get:
       operationId: listSwiftMessages
-      summary: List SWIFT messages
+      summary: Montran List SWIFT messages
       description: >-
         Retrieves SWIFT FIN messages processed through the connectivity
         platform. Supports filtering by message type (MT103, MT202, etc.),
@@ -427,7 +427,7 @@ paths:
   /clearing-systems:
     get:
       operationId: listClearingSystems
-      summary: List connected clearing systems
+      summary: Montran List connected clearing systems
       description: >-
         Retrieves a list of clearing and settlement systems connected
         through the platform including SEPA (Step1, Step2), Target2, TIPS,
@@ -449,7 +449,7 @@ paths:
   /clearing-systems/{systemId}:
     get:
       operationId: getClearingSystem
-      summary: Get clearing system details
+      summary: Montran Get clearing system details
       description: >-
         Retrieves the details of a specific clearing and settlement system
         connection including supported message types, operating hours,

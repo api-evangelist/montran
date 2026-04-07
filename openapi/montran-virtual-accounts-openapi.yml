@@ -41,7 +41,7 @@ paths:
   /virtual-accounts:
     get:
       operationId: listVirtualAccounts
-      summary: List virtual accounts
+      summary: Montran List virtual accounts
       description: >-
         Retrieves a list of virtual accounts managed on the platform.
         Supports filtering by status, currency, parent account, and
@@ -103,7 +103,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
     post:
       operationId: createVirtualAccount
-      summary: Create a virtual account
+      summary: Montran Create a virtual account
       description: >-
         Creates a new virtual account mapped to an existing physical bank
         account. The virtual account can optionally be assigned a Virtual
@@ -136,7 +136,7 @@ paths:
   /virtual-accounts/{accountId}:
     get:
       operationId: getVirtualAccount
-      summary: Get virtual account details
+      summary: Montran Get virtual account details
       description: >-
         Retrieves the full details of a specific virtual account including
         its virtual IBAN, mapped physical account, balance, transaction
@@ -160,7 +160,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
     put:
       operationId: updateVirtualAccount
-      summary: Update a virtual account
+      summary: Montran Update a virtual account
       description: >-
         Updates the configuration of a virtual account including its name,
         metadata, and allocation rules. Cannot change the mapped physical
@@ -195,7 +195,7 @@ paths:
   /virtual-accounts/{accountId}/close:
     post:
       operationId: closeVirtualAccount
-      summary: Close a virtual account
+      summary: Montran Close a virtual account
       description: >-
         Closes a virtual account. The account must have a zero balance
         before it can be closed. Any associated virtual IBANs are
@@ -235,7 +235,7 @@ paths:
   /virtual-accounts/{accountId}/balance:
     get:
       operationId: getVirtualAccountBalance
-      summary: Get virtual account balance
+      summary: Montran Get virtual account balance
       description: >-
         Retrieves the current balance of a virtual account including
         available balance, booked balance, and pending transactions.
@@ -260,7 +260,7 @@ paths:
   /virtual-accounts/{accountId}/transactions:
     get:
       operationId: listVirtualAccountTransactions
-      summary: List virtual account transactions
+      summary: Montran List virtual account transactions
       description: >-
         Retrieves transactions for a specific virtual account. Includes
         both automatically allocated incoming payments and manually
@@ -318,7 +318,7 @@ paths:
   /virtual-ibans:
     get:
       operationId: listVirtualIbans
-      summary: List virtual IBANs
+      summary: Montran List virtual IBANs
       description: >-
         Retrieves a list of issued virtual IBANs. Supports filtering by
         status and associated virtual account. Virtual IBANs enable
@@ -365,7 +365,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
     post:
       operationId: issueVirtualIban
-      summary: Issue a virtual IBAN
+      summary: Montran Issue a virtual IBAN
       description: >-
         Issues a new virtual IBAN and associates it with a virtual account.
         The VIBAN can be used for receiving incoming payments that are
@@ -397,7 +397,7 @@ paths:
   /virtual-ibans/{vibanId}:
     get:
       operationId: getVirtualIban
-      summary: Get virtual IBAN details
+      summary: Montran Get virtual IBAN details
       description: >-
         Retrieves the details of a specific virtual IBAN including its
         associated virtual account, status, and usage statistics.
@@ -426,7 +426,7 @@ paths:
   /virtual-ibans/{vibanId}/deactivate:
     post:
       operationId: deactivateVirtualIban
-      summary: Deactivate a virtual IBAN
+      summary: Montran Deactivate a virtual IBAN
       description: >-
         Deactivates a virtual IBAN so it can no longer receive incoming
         payments. The IBAN remains in the system for historical reference
@@ -456,7 +456,7 @@ paths:
   /account-structures:
     get:
       operationId: listAccountStructures
-      summary: List account structures
+      summary: Montran List account structures
       description: >-
         Retrieves virtual account hierarchy structures. Account structures
         define the organizational grouping of virtual accounts for
@@ -477,7 +477,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
     post:
       operationId: createAccountStructure
-      summary: Create an account structure
+      summary: Montran Create an account structure
       description: >-
         Creates a new virtual account hierarchy structure mapping virtual
         accounts to physical bank accounts. Supports multi-bank, multi-
@@ -509,7 +509,7 @@ paths:
   /internal-transfers:
     post:
       operationId: createInternalTransfer
-      summary: Create an internal transfer
+      summary: Montran Create an internal transfer
       description: >-
         Creates a transfer between two virtual accounts within the same
         physical account structure. Internal transfers are processed

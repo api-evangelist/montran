@@ -50,7 +50,7 @@ paths:
   /consents:
     post:
       operationId: createConsent
-      summary: Create a PSD2 consent
+      summary: Montran Create a PSD2 consent
       description: >-
         Creates a new PSD2 consent for account access (AISP) or payment
         initiation (PISP). The consent must be authorized by the payment
@@ -80,7 +80,7 @@ paths:
   /consents/{consentId}:
     get:
       operationId: getConsent
-      summary: Get consent status
+      summary: Montran Get consent status
       description: >-
         Retrieves the current status and details of a PSD2 consent. Used to
         check whether the consent has been authorized by the PSU and remains
@@ -104,7 +104,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
     delete:
       operationId: revokeConsent
-      summary: Revoke a consent
+      summary: Montran Revoke a consent
       description: >-
         Revokes an existing PSD2 consent. Once revoked, the consent can no
         longer be used for account access or payment initiation.
@@ -124,7 +124,7 @@ paths:
   /payments/instant:
     post:
       operationId: initiateInstantPayment
-      summary: Initiate an instant payment
+      summary: Montran Initiate an instant payment
       description: >-
         Initiates a real-time instant payment with guaranteed end-to-end
         processing latency of a few seconds. The payment is processed using
@@ -166,7 +166,7 @@ paths:
   /payments/instant/{paymentId}:
     get:
       operationId: getInstantPayment
-      summary: Get instant payment details
+      summary: Montran Get instant payment details
       description: >-
         Retrieves the full details and current status of a specific instant
         payment. Returns ISO 20022 pacs.002 status information including
@@ -192,7 +192,7 @@ paths:
   /payments/instant/{paymentId}/return:
     post:
       operationId: returnInstantPayment
-      summary: Return an instant payment
+      summary: Montran Return an instant payment
       description: >-
         Initiates the return of a previously received instant payment. Uses
         ISO 20022 pacs.004 PaymentReturn messaging. The return must specify a
@@ -231,7 +231,7 @@ paths:
   /payments/credit-transfer:
     post:
       operationId: initiateCreditTransfer
-      summary: Initiate a PISP credit transfer
+      summary: Montran Initiate a PISP credit transfer
       description: >-
         Initiates a credit transfer payment on behalf of a Payment Service
         User (PSU) as a Payment Initiation Service Provider (PISP) under
@@ -265,7 +265,7 @@ paths:
   /payments/request-to-pay:
     post:
       operationId: initiateRequestToPay
-      summary: Initiate a request to pay
+      summary: Montran Initiate a request to pay
       description: >-
         Initiates a request-to-pay (R2P) message to request payment from a
         debtor. The debtor receives the request and can accept or reject it.
@@ -297,7 +297,7 @@ paths:
   /payments/request-to-pay/{requestId}:
     get:
       operationId: getRequestToPay
-      summary: Get request-to-pay details
+      summary: Montran Get request-to-pay details
       description: >-
         Retrieves the details and current status of a request-to-pay. Shows
         whether the request has been accepted, rejected, or is still pending.
@@ -326,7 +326,7 @@ paths:
   /payments/bulk:
     post:
       operationId: submitBulkPayment
-      summary: Submit a bulk payment
+      summary: Montran Submit a bulk payment
       description: >-
         Submits a batch of instant payments for processing. Each payment in
         the batch is processed individually in real-time. Supports high-volume
@@ -357,7 +357,7 @@ paths:
   /accounts:
     get:
       operationId: listAccounts
-      summary: List accessible accounts (AISP)
+      summary: Montran List accessible accounts (AISP)
       description: >-
         Retrieves a list of payment accounts accessible to the Account
         Information Service Provider (AISP) under an authorized PSD2 consent.
@@ -388,7 +388,7 @@ paths:
   /accounts/{accountId}:
     get:
       operationId: getAccountDetails
-      summary: Get account details (AISP)
+      summary: Montran Get account details (AISP)
       description: >-
         Retrieves detailed information about a specific payment account
         including account holder name, IBAN, currency, and product type.
@@ -421,7 +421,7 @@ paths:
   /accounts/{accountId}/balances:
     get:
       operationId: getAccountBalances
-      summary: Get account balances (AISP)
+      summary: Montran Get account balances (AISP)
       description: >-
         Retrieves the current balances for a specific payment account.
         Returns available balance, booked balance, and expected balance.
@@ -454,7 +454,7 @@ paths:
   /accounts/{accountId}/transactions:
     get:
       operationId: getAccountTransactions
-      summary: Get account transactions (AISP)
+      summary: Montran Get account transactions (AISP)
       description: >-
         Retrieves a list of transactions for a specific payment account.
         Supports filtering by date range, booking status, and amount.
@@ -510,7 +510,7 @@ paths:
   /accounts/{accountId}/verification:
     post:
       operationId: verifyAccountBalance
-      summary: Verify account balance sufficiency
+      summary: Montran Verify account balance sufficiency
       description: >-
         Performs a balance sufficiency check on a payment account. Returns
         whether the account has sufficient funds for the specified amount
@@ -544,7 +544,7 @@ paths:
   /payments/{paymentId}/status:
     get:
       operationId: getPaymentStatus
-      summary: Get payment status
+      summary: Montran Get payment status
       description: >-
         Retrieves the real-time processing status of a payment. Returns
         ISO 20022 pacs.002 status codes including acceptance, rejection,
