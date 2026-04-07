@@ -27,16 +27,16 @@ servers:
   - url: https://api.montran.com/vam/v1
     description: Montran Virtual Account Management API Server
 tags:
-  - name: Virtual Accounts
-    description: Virtual account creation, management, and lifecycle operations
-  - name: Virtual IBANs
-    description: Virtual IBAN issuance and management
+  - name: Account Structures
+    description: Virtual account hierarchy and structure management
   - name: Balances
     description: Balance inquiry and reconciliation operations
   - name: Transactions
     description: Transaction processing and allocation
-  - name: Account Structures
-    description: Virtual account hierarchy and structure management
+  - name: Virtual Accounts
+    description: Virtual account creation, management, and lifecycle operations
+  - name: Virtual IBANs
+    description: Virtual IBAN issuance and management
 paths:
   /virtual-accounts:
     get:

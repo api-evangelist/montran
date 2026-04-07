@@ -28,14 +28,14 @@ servers:
   - url: https://api.montran.com/efs/v1
     description: Montran Enhanced Filtering System API Server
 tags:
-  - name: Screening
-    description: Transaction and entity screening operations
   - name: Alerts
     description: Screening alert management and resolution
-  - name: Lists
-    description: Sanctions and compliance list management
   - name: Configuration
     description: Screening rules and channel configuration
+  - name: Lists
+    description: Sanctions and compliance list management
+  - name: Screening
+    description: Transaction and entity screening operations
 paths:
   /screen:
     post:

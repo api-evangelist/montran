@@ -26,16 +26,16 @@ servers:
   - url: https://api.montran.com/corporate/v1
     description: Montran Corporate Payments Portal API Server
 tags:
-  - name: Payments
-    description: Corporate payment initiation and management
   - name: Accounts
     description: Multi-bank account visibility and management
-  - name: Files
-    description: File upload and processing for batch payments
   - name: Approvals
     description: Payment approval workflow management
   - name: Beneficiaries
     description: Beneficiary management for recurring payments
+  - name: Files
+    description: File upload and processing for batch payments
+  - name: Payments
+    description: Corporate payment initiation and management
 paths:
   /payments:
     get:

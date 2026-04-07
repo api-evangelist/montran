@@ -28,16 +28,16 @@ servers:
   - url: https://api.montran.com/connectivity/v1
     description: Montran Payments Connectivity API Server
 tags:
-  - name: Message Routing
-    description: Message routing and transformation between systems
   - name: Channels
     description: Communication channel management and monitoring
-  - name: Message Formats
-    description: Message format conversion and validation
-  - name: SWIFT
-    description: SWIFT network connectivity and message management
   - name: Clearing Systems
     description: Clearing and settlement system connectivity
+  - name: Message Formats
+    description: Message format conversion and validation
+  - name: Message Routing
+    description: Message routing and transformation between systems
+  - name: SWIFT
+    description: SWIFT network connectivity and message management
 paths:
   /messages:
     get:

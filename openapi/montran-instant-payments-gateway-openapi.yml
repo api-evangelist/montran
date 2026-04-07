@@ -28,24 +28,24 @@ servers:
   - url: https://api.montran.com/ipg/v1
     description: Montran Instant Payments Gateway API Server
 tags:
-  - name: Payment Initiation
-    description: >-
-      PSD2-compliant payment initiation operations for PISP integration.
-      Supports instant credit transfers and request-to-pay flows.
   - name: Account Information
     description: >-
       PSD2-compliant account information operations for AISP integration.
       Provides account details, balances, and transaction history.
+  - name: Consent
+    description: PSD2 consent management for AISP and PISP access
   - name: Instant Payments
     description: >-
       Real-time instant payment processing with guaranteed end-to-end latency
       of a few seconds
-  - name: Request to Pay
-    description: Request-to-pay initiation and management operations
+  - name: Payment Initiation
+    description: >-
+      PSD2-compliant payment initiation operations for PISP integration.
+      Supports instant credit transfers and request-to-pay flows.
   - name: Payment Status
     description: Real-time payment status inquiry and notification operations
-  - name: Consent
-    description: PSD2 consent management for AISP and PISP access
+  - name: Request to Pay
+    description: Request-to-pay initiation and management operations
 paths:
   /consents:
     post:

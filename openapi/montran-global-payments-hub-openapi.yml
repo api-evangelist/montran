@@ -28,18 +28,18 @@ servers:
   - url: https://api.montran.com/gph/v1
     description: Montran Global Payments Hub API Server
 tags:
-  - name: Payments
-    description: Payment initiation, submission, and management operations
+  - name: Accounts
+    description: Account information and balance inquiry operations
+  - name: Clearing
+    description: Clearing and settlement operations across multiple CSMs
   - name: Credit Transfers
     description: Credit transfer payment operations including SEPA and cross-border
   - name: Direct Debits
     description: Direct debit payment operations
-  - name: Clearing
-    description: Clearing and settlement operations across multiple CSMs
   - name: Payment Status
     description: Payment status inquiry and tracking operations
-  - name: Accounts
-    description: Account information and balance inquiry operations
+  - name: Payments
+    description: Payment initiation, submission, and management operations
   - name: Statements
     description: Account statement and reporting operations
 paths:
