@@ -1,0 +1,13 @@
+{
+  "repo": "montran",
+  "feeds": [
+    {
+      "source": "https://www.montran.com/news-and-insights/",
+      "feed_url": "https://www.montran.com/feed/",
+      "saved": 10,
+      "title": "Montran"
+    }
+  ],
+  "post_count": 10,
+  "fetched": "2026-05-03T23:32:10Z"
+}
