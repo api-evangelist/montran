@@ -4,186 +4,38 @@ schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main
 provider: Montran
 providerId: montran
 created: '2026-05-04'
-modified: '2026-05-04'
+modified: '2026-05-05'
+reconciled: false
 tags:
-  - Banking
-  - Central Banking
-  - Financial Services
-  - ISO 20022
-  - Market Infrastructure
-  - Messaging
-  - Payments
-  - Real-Time Payments
-  - SWIFT
   - Rate Limiting
-  - Quotas
-  - Throttling
-description: Machine-readable rate limit definitions for the Montran API surface. Captures per-tier quotas,
-  burst behavior, response signaling, and recovery semantics. Defaults are scaffold values to be replaced
-  with published provider limits.
-headers:
-  limit: X-RateLimit-Limit
-  remaining: X-RateLimit-Remaining
-  reset: X-RateLimit-Reset
-  retryAfter: Retry-After
-  policy: RateLimit-Policy
+  - Payments
+  - Banking
+  - Instant Payments
+description: Montran APIs ship inside on-premise / private-cloud deployments at central banks and commercial
+  banks; rate limits are sized by the operator to scheme requirements (e.g. instant-payment scheme TPS targets,
+  RTGS throughput SLAs). Montran does not publish a public rate-limit document because the limits are
+  set per-deployment.
+sources:
+  - https://www.montran.com
+  - https://www.montran.com/solutions/instant-payments-gateway/
+notes: No public rate-limit document. Limits will be defined in the deployment's non-functional requirements
+  / scheme conformance specification.
 responseCodes:
   throttled: 429
-  quotaExceeded: 429
   serviceUnavailable: 503
 limits:
-  - tier: free
-    name: Free Tier Default
-    scope: api-key
-    metric: requests_per_minute
-    limit: 10
-    burst: 20
-    timeFrame: minute
-    applies:
-      - Montran Global Payments Hub
-      - Montran Instant Payments Gateway
-      - Montran Instant Payments System
-      - Montran Payments Connectivity
-      - Montran Real-Time Gross Settlement
-      - Montran Automated Clearing House
-      - Montran Automated Transfer System
-      - Montran Central Securities Depository
-      - Montran Trading System
-      - Montran Corporate Payments Portal
-      - Montran Virtual Accounts
-      - Montran Intraday Liquidity Management
-      - Montran Cash Pool Engine
-      - Montran Sanctions Screening
-      - Montran Payments and Collections Factory
-      - Montran In-House Bank
-      - Montran Mandate Management
-      - Montran Case Management
-      - Montran Dispute Management
-      - Montran Backup RTGS
-  - tier: free
-    name: Free Tier Monthly Quota
-    scope: api-key
-    metric: requests_per_month
-    limit: 1000
-    timeFrame: month
-    applies:
-      - Montran Global Payments Hub
-      - Montran Instant Payments Gateway
-      - Montran Instant Payments System
-      - Montran Payments Connectivity
-      - Montran Real-Time Gross Settlement
-      - Montran Automated Clearing House
-      - Montran Automated Transfer System
-      - Montran Central Securities Depository
-      - Montran Trading System
-      - Montran Corporate Payments Portal
-      - Montran Virtual Accounts
-      - Montran Intraday Liquidity Management
-      - Montran Cash Pool Engine
-      - Montran Sanctions Screening
-      - Montran Payments and Collections Factory
-      - Montran In-House Bank
-      - Montran Mandate Management
-      - Montran Case Management
-      - Montran Dispute Management
-      - Montran Backup RTGS
-  - tier: professional
-    name: Professional Tier Default
-    scope: api-key
-    metric: requests_per_minute
-    limit: 100
-    burst: 200
-    timeFrame: minute
-    applies:
-      - Montran Global Payments Hub
-      - Montran Instant Payments Gateway
-      - Montran Instant Payments System
-      - Montran Payments Connectivity
-      - Montran Real-Time Gross Settlement
-      - Montran Automated Clearing House
-      - Montran Automated Transfer System
-      - Montran Central Securities Depository
-      - Montran Trading System
-      - Montran Corporate Payments Portal
-      - Montran Virtual Accounts
-      - Montran Intraday Liquidity Management
-      - Montran Cash Pool Engine
-      - Montran Sanctions Screening
-      - Montran Payments and Collections Factory
-      - Montran In-House Bank
-      - Montran Mandate Management
-      - Montran Case Management
-      - Montran Dispute Management
-      - Montran Backup RTGS
-  - tier: professional
-    name: Professional Tier Monthly Quota
-    scope: api-key
-    metric: requests_per_month
-    limit: 100000
-    timeFrame: month
-    applies:
-      - Montran Global Payments Hub
-      - Montran Instant Payments Gateway
-      - Montran Instant Payments System
-      - Montran Payments Connectivity
-      - Montran Real-Time Gross Settlement
-      - Montran Automated Clearing House
-      - Montran Automated Transfer System
-      - Montran Central Securities Depository
-      - Montran Trading System
-      - Montran Corporate Payments Portal
-      - Montran Virtual Accounts
-      - Montran Intraday Liquidity Management
-      - Montran Cash Pool Engine
-      - Montran Sanctions Screening
-      - Montran Payments and Collections Factory
-      - Montran In-House Bank
-      - Montran Mandate Management
-      - Montran Case Management
-      - Montran Dispute Management
-      - Montran Backup RTGS
-  - tier: enterprise
-    name: Enterprise Negotiated Limit
-    scope: contract
-    metric: requests_per_minute
-    limit: 1000
-    burst: 5000
-    timeFrame: minute
-    applies:
-      - Montran Global Payments Hub
-      - Montran Instant Payments Gateway
-      - Montran Instant Payments System
-      - Montran Payments Connectivity
-      - Montran Real-Time Gross Settlement
-      - Montran Automated Clearing House
-      - Montran Automated Transfer System
-      - Montran Central Securities Depository
-      - Montran Trading System
-      - Montran Corporate Payments Portal
-      - Montran Virtual Accounts
-      - Montran Intraday Liquidity Management
-      - Montran Cash Pool Engine
-      - Montran Sanctions Screening
-      - Montran Payments and Collections Factory
-      - Montran In-House Bank
-      - Montran Mandate Management
-      - Montran Case Management
-      - Montran Dispute Management
-      - Montran Backup RTGS
+  - name: Deployment-defined throughput
+    scope: deployment
+    metric: varies
+    limit: see deployment NFRs
+    notes: Sized to scheme TPS / SLA (e.g. SCT Inst, FedNow, TIPS, RTP scheme requirements).
 policies:
-  - name: Backoff Strategy
-    description: Clients should implement exponential backoff with jitter, honoring the Retry-After header
-      when present.
-  - name: Burst Handling
-    description: Short bursts above the steady-state limit are tolerated up to the documented burst ceiling
-      before throttling engages.
-  - name: Quota Reset
-    description: Monthly quotas reset at the start of each calendar month in UTC. Per-minute and per-second
-      windows reset on a sliding-window basis.
-  - name: Fair Use
-    description: Even on uncapped enterprise tiers, sustained usage that materially impacts shared infrastructure
-      may be subject to fair-use throttling.
+  - name: Scheme conformance
+    description: Throughput, latency, and availability targets follow the host scheme's conformance specification
+      (e.g. TIPS, SCT Inst, FedNow, RTP) rather than a Montran-published default.
+  - name: Operator responsibility
+    description: The deploying institution (central bank or commercial bank) sizes infrastructure and
+      configures any internal rate-limit policy on top of Montran's gateway.
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
-    url: https://www.montran.com

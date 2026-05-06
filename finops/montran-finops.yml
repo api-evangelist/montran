@@ -1,329 +1,79 @@
 specification: FinOps Framework
 specificationVersion: '1.0'
+schema: https://www.finops.org/framework/
+provider: Montran
+providerId: montran
+created: '2026-05-04'
+modified: '2026-05-05'
+reconciled: false
+tags:
+  - FinOps
+  - FOCUS
+  - Payments
+  - Banking
+  - Capital Markets
+description: 'FOCUS-aligned FinOps profile for Montran: enterprise software licensed to central banks
+  and banks. Costs are dominated by perpetual / term licenses, implementation services, and annual support
+  rather than a metered cloud spend. No public usage API.'
+sources:
+  - https://www.montran.com
+notes: Reconciliation set to false absent a public billing surface. License-based cost model documented
+  per general industry practice for payments software.
 alignedWith:
   framework: FinOps Foundation Framework
   frameworkUrl: https://www.finops.org/framework/
   dataSpec: FOCUS
   dataSpecVersion: '1.3'
   dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/
-provider: Montran
-providerId: montran
-publisherName: Montran
-serviceCategory: API
-created: '2026-05-04'
-modified: '2026-05-04'
-tags:
-  - Banking
-  - Central Banking
-  - Financial Services
-  - ISO 20022
-  - Market Infrastructure
-  - Messaging
-  - Payments
-  - Real-Time Payments
-  - SWIFT
-  - FinOps
-  - Cost Management
-  - FOCUS
-description: FinOps framework definition for the Montran API surface. Provides a FOCUS-aligned mapping
-  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
-principles:
-  - name: Visibility
-    description: Make API consumption costs visible to engineering, product, and finance teams in near
-      real-time.
-  - name: Allocation
-    description: Tag every chargeable API call with the consuming team, environment, application, and
-      feature so cost can be allocated.
-  - name: Optimization
-    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce
-      cost per useful unit of work.
-  - name: Accountability
-    description: Establish budget owners and chargeback or showback flows for each consuming team.
-domains:
-  - name: Understand Usage and Cost
-    capabilities:
-      - Data Ingestion
-      - Allocation
-      - Reporting and Analytics
-      - Anomaly Management
-  - name: Quantify Business Value
-    capabilities:
-      - Planning and Estimating
-      - Forecasting
-      - Budgeting
-      - Benchmarking
-      - Unit Economics
-  - name: Optimize Usage and Cost
-    capabilities:
-      - Architecting for Cloud
-      - Rate Optimization
-      - Workload Optimization
-      - Cloud Sustainability
-      - Licensing and SaaS
-  - name: Manage the FinOps Practice
-    capabilities:
-      - FinOps Practice Operations
-      - FinOps Education and Enablement
-      - Invoicing and Chargeback
-      - Onboarding Workloads
-      - Intersecting Disciplines
+publisherName: Montran Corporation
+serviceCategory: Payments / Capital Markets Software
 billingModel:
-  pricingCategory: Usage-Based
-  billingFrequency: Monthly
+  pricingCategory: Enterprise License + Services
+  billingFrequency: Annual
   billingCurrency: USD
   chargeCategories:
-    - Usage
     - Purchase
-    - Tax
-    - Credit
     - Adjustment
-  chargeFrequency: Recurring
 focusColumns:
   ServiceName: Montran
-  ServiceCategory: Developer Tools / API
+  ServiceCategory: Payments Software
   ProviderName: Montran
-  PublisherName: Montran
-  InvoiceIssuerName: Montran
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  PublisherName: Montran Corporation
+  InvoiceIssuerName: Montran Corporation
   BillingCurrency: USD
-  ChargeCategory: Usage
 meters:
-  - name: api_requests
-    description: Count of billable API requests
-    unit: request
+  - name: license_fees
+    unit: year
     aggregation: sum
     dimensions:
-      - api
-      - endpoint
+      - product
+      - environment
+  - name: implementation_services
+    unit: project
+    aggregation: sum
+    dimensions:
+      - product
+      - phase
+  - name: support_maintenance
+    unit: year
+    aggregation: sum
+    dimensions:
+      - product
       - tier
-      - region
-      - consumer
-  - name: data_egress
-    description: Bytes returned over the network in API responses
-    unit: GB
-    aggregation: sum
-    dimensions:
-      - api
-      - region
-      - consumer
-  - name: compute_seconds
-    description: Server-side compute consumed by the request, where applicable
-    unit: second
-    aggregation: sum
-    dimensions:
-      - api
-      - endpoint
-      - tier
-apis:
-  - name: Montran Global Payments Hub
-    baseURL: ''
-    tags:
-      - Clearing
-      - Cross-Border
-      - Multi-Currency
-      - Payments
-      - Settlement
-    serviceName: Montran Global Payments Hub
-    serviceCategory: API
-  - name: Montran Instant Payments Gateway
-    baseURL: ''
-    tags:
-      - Instant Payments
-      - ISO 20022
-      - Open API
-      - PSD2
-      - Real-Time
-    serviceName: Montran Instant Payments Gateway
-    serviceCategory: API
-  - name: Montran Instant Payments System
-    baseURL: ''
-    tags:
-      - Central Banking
-      - Clearing
-      - Instant Payments
-      - Market Infrastructure
-      - Real-Time
-    serviceName: Montran Instant Payments System
-    serviceCategory: API
-  - name: Montran Payments Connectivity
-    baseURL: ''
-    tags:
-      - Connectivity
-      - Integration
-      - ISO 20022
-      - Messaging
-      - SWIFT
-    serviceName: Montran Payments Connectivity
-    serviceCategory: API
-  - name: Montran Real-Time Gross Settlement
-    baseURL: ''
-    tags:
-      - Central Banking
-      - High-Value Payments
-      - Market Infrastructure
-      - RTGS
-      - Settlement
-    serviceName: Montran Real-Time Gross Settlement
-    serviceCategory: API
-  - name: Montran Automated Clearing House
-    baseURL: ''
-    tags:
-      - ACH
-      - Clearing
-      - Credit Transfers
-      - Direct Debits
-      - Payments
-    serviceName: Montran Automated Clearing House
-    serviceCategory: API
-  - name: Montran Automated Transfer System
-    baseURL: ''
-    tags:
-      - Clearing
-      - High-Value
-      - Low-Value
-      - Payments
-      - Settlement
-    serviceName: Montran Automated Transfer System
-    serviceCategory: API
-  - name: Montran Central Securities Depository
-    baseURL: ''
-    tags:
-      - Corporate Actions
-      - Depository
-      - Market Infrastructure
-      - Securities
-      - Settlement
-    serviceName: Montran Central Securities Depository
-    serviceCategory: API
-  - name: Montran Trading System
-    baseURL: ''
-    tags:
-      - Capital Markets
-      - Financial Instruments
-      - Multi-Currency
-      - Securities
-      - Trading
-    serviceName: Montran Trading System
-    serviceCategory: API
-  - name: Montran Corporate Payments Portal
-    baseURL: ''
-    tags:
-      - Banking
-      - Cash Management
-      - Corporate Payments
-      - Multi-Bank
-      - Treasury
-    serviceName: Montran Corporate Payments Portal
-    serviceCategory: API
-  - name: Montran Virtual Accounts
-    baseURL: ''
-    tags:
-      - Cash Management
-      - Open Banking
-      - POBO
-      - Treasury
-      - Virtual Accounts
-    serviceName: Montran Virtual Accounts
-    serviceCategory: API
-  - name: Montran Intraday Liquidity Management
-    baseURL: ''
-    tags:
-      - Banking
-      - Cash Management
-      - Liquidity
-      - Monitoring
-      - Real-Time
-    serviceName: Montran Intraday Liquidity Management
-    serviceCategory: API
-  - name: Montran Cash Pool Engine
-    baseURL: ''
-    tags:
-      - Cash Pooling
-      - Liquidity
-      - Multi-Currency
-      - Sweeping
-      - Treasury
-    serviceName: Montran Cash Pool Engine
-    serviceCategory: API
-  - name: Montran Sanctions Screening
-    baseURL: ''
-    tags:
-      - AML
-      - Compliance
-      - Risk Management
-      - Sanctions
-      - Screening
-    serviceName: Montran Sanctions Screening
-    serviceCategory: API
-  - name: Montran Payments and Collections Factory
-    baseURL: ''
-    tags:
-      - COBO
-      - Collections
-      - Corporate Payments
-      - Multi-Bank
-      - POBO
-    serviceName: Montran Payments and Collections Factory
-    serviceCategory: API
-  - name: Montran In-House Bank
-    baseURL: ''
-    tags:
-      - Centralization
-      - Corporate
-      - In-House Banking
-      - Liquidity
-      - Treasury
-    serviceName: Montran In-House Bank
-    serviceCategory: API
-  - name: Montran Mandate Management
-    baseURL: ''
-    tags:
-      - Compliance
-      - Direct Debits
-      - Mandates
-      - Payments
-      - Risk Management
-    serviceName: Montran Mandate Management
-    serviceCategory: API
-  - name: Montran Case Management
-    baseURL: ''
-    tags:
-      - Case Management
-      - Compensation
-      - Disputes
-      - Investigation
-      - Payments
-    serviceName: Montran Case Management
-    serviceCategory: API
-  - name: Montran Dispute Management
-    baseURL: ''
-    tags:
-      - Banking
-      - Case Management
-      - Disputes
-      - Payments
-      - Resolution
-    serviceName: Montran Dispute Management
-    serviceCategory: API
-  - name: Montran Backup RTGS
-    baseURL: ''
-    tags:
-      - Backup
-      - Business Continuity
-      - Market Infrastructure
-      - RTGS
-      - Settlement
-    serviceName: Montran Backup RTGS
-    serviceCategory: API
-unitEconomics:
-  - name: Cost per 1K Requests
-    metric: billed_cost / (api_requests / 1000)
-    target: TBD
-  - name: Cost per Active Consumer
-    metric: billed_cost / active_consumers
-    target: TBD
+principles:
+  - name: Visibility
+    description: Track Montran license, implementation, and support invoices in the financial system; product-line
+      visibility comes from the deployed Montran modules (Instant Payments Gateway, Corporate Payments Portal,
+      RTGS, etc.).
+  - name: Allocation
+    description: Allocate Montran spend by product line and operating environment (production, DR, sandbox)
+      so payments operations and IT each carry their share.
+  - name: Optimization
+    description: Optimization is realized through scope at procurement (which modules and environments
+      are licensed) and right-sizing the infrastructure footprint that hosts Montran.
+  - name: Accountability
+    description: Payments operations owns the business case; IT owns the hosting cost; procurement owns
+      the renewal calendar.
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
-    url: https://www.montran.com
