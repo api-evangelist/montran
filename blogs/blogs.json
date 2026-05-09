@@ -3,11 +3,11 @@
   "feeds": [
     {
       "source": "https://www.montran.com/news-and-insights/",
-      "feed_url": "https://www.montran.com/feed/",
-      "saved": 10,
-      "title": "Montran"
+      "feed_url": "https://www.montran.com/news-and-insights/feed/",
+      "title": "News and Insights - Montran",
+      "saved": 3
     }
   ],
-  "post_count": 10,
-  "fetched": "2026-05-03T23:32:10Z"
+  "post_count": 13,
+  "fetched": "2026-05-09T20:17:51Z"
 }
