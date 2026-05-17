@@ -397,9 +397,9 @@ common:
     url: https://www.montran.com/news-and-insights/
   - type: Support
     url: https://www.montran.com/contact-us/
-  - type: Terms of Service
+  - type: TermsOfService
     url: https://www.montran.com/terms-conditions/
-  - type: Privacy Policy
+  - type: PrivacyPolicy
     url: https://www.montran.com/privacy-policy/
   - type: Contact
     url: https://www.montran.com/contact-us/
