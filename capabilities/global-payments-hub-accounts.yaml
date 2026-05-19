@@ -1,0 +1,80 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Montran Global Payments Hub API — Accounts
+  description: 'Montran Global Payments Hub API — Accounts. 1 operations. Lead operation: Montran Get account balance. Self-contained
+    Naftiko capability covering one Montran business surface.'
+  tags:
+  - Montran
+  - Accounts
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    MONTRAN_API_KEY: MONTRAN_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: global-payments-hub-accounts
+    baseUri: https://api.montran.com/gph/v1
+    description: Montran Global Payments Hub API — Accounts business capability. Self-contained, no shared references.
+    resources:
+    - name: accounts-accountId-balance
+      path: /accounts/{accountId}/balance
+      operations:
+      - name: getaccountbalance
+        method: GET
+        description: Montran Get account balance
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: accountId
+          in: path
+          type: string
+          description: Unique identifier of the account
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.MONTRAN_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: global-payments-hub-accounts-rest
+    port: 8080
+    description: REST adapter for Montran Global Payments Hub API — Accounts. One Spectral-compliant resource per consumed
+      operation, prefixed with /v1.
+    resources:
+    - path: /v1/accounts/{accountid}/balance
+      name: accounts-accountid-balance
+      description: REST surface for accounts-accountId-balance.
+      operations:
+      - method: GET
+        name: getaccountbalance
+        description: Montran Get account balance
+        call: global-payments-hub-accounts.getaccountbalance
+        with:
+          accountId: rest.accountId
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: global-payments-hub-accounts-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Montran Global Payments Hub API — Accounts. One tool per consumed operation, routed inline
+      through this capability's consumes block.
+    tools:
+    - name: montran-get-account-balance
+      description: Montran Get account balance
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: global-payments-hub-accounts.getaccountbalance
+      with:
+        accountId: tools.accountId
+      outputParameters:
+      - type: object
+        mapping: $.

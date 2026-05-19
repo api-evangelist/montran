@@ -1,0 +1,169 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Montran Payments Connectivity API — Channels
+  description: 'Montran Payments Connectivity API — Channels. 3 operations. Lead operation: Montran List communication channels.
+    Self-contained Naftiko capability covering one Montran business surface.'
+  tags:
+  - Montran
+  - Channels
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    MONTRAN_API_KEY: MONTRAN_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: payments-connectivity-channels
+    baseUri: https://api.montran.com/connectivity/v1
+    description: Montran Payments Connectivity API — Channels business capability. Self-contained, no shared references.
+    resources:
+    - name: channels
+      path: /channels
+      operations:
+      - name: listchannels
+        method: GET
+        description: Montran List communication channels
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: type
+          in: query
+          type: string
+          description: Filter by channel type
+        - name: status
+          in: query
+          type: string
+          description: Filter by channel status
+    - name: channels-channelId
+      path: /channels/{channelId}
+      operations:
+      - name: getchannel
+        method: GET
+        description: Montran Get channel details
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: channelId
+          in: path
+          type: string
+          description: Unique identifier of the channel
+          required: true
+    - name: channels-channelId-health
+      path: /channels/{channelId}/health
+      operations:
+      - name: getchannelhealth
+        method: GET
+        description: Montran Get channel health status
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: channelId
+          in: path
+          type: string
+          description: Unique identifier of the channel
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.MONTRAN_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: payments-connectivity-channels-rest
+    port: 8080
+    description: REST adapter for Montran Payments Connectivity API — Channels. One Spectral-compliant resource per consumed
+      operation, prefixed with /v1.
+    resources:
+    - path: /v1/channels
+      name: channels
+      description: REST surface for channels.
+      operations:
+      - method: GET
+        name: listchannels
+        description: Montran List communication channels
+        call: payments-connectivity-channels.listchannels
+        with:
+          type: rest.type
+          status: rest.status
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/channels/{channelid}
+      name: channels-channelid
+      description: REST surface for channels-channelId.
+      operations:
+      - method: GET
+        name: getchannel
+        description: Montran Get channel details
+        call: payments-connectivity-channels.getchannel
+        with:
+          channelId: rest.channelId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/channels/{channelid}/health
+      name: channels-channelid-health
+      description: REST surface for channels-channelId-health.
+      operations:
+      - method: GET
+        name: getchannelhealth
+        description: Montran Get channel health status
+        call: payments-connectivity-channels.getchannelhealth
+        with:
+          channelId: rest.channelId
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: payments-connectivity-channels-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Montran Payments Connectivity API — Channels. One tool per consumed operation, routed inline
+      through this capability's consumes block.
+    tools:
+    - name: montran-list-communication-channels
+      description: Montran List communication channels
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: payments-connectivity-channels.listchannels
+      with:
+        type: tools.type
+        status: tools.status
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: montran-get-channel-details
+      description: Montran Get channel details
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: payments-connectivity-channels.getchannel
+      with:
+        channelId: tools.channelId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: montran-get-channel-health-status
+      description: Montran Get channel health status
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: payments-connectivity-channels.getchannelhealth
+      with:
+        channelId: tools.channelId
+      outputParameters:
+      - type: object
+        mapping: $.

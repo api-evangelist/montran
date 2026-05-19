@@ -1,0 +1,164 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Montran Sanctions Screening API — Screening
+  description: 'Montran Sanctions Screening API — Screening. 3 operations. Lead operation: Montran Screen a transaction. Self-contained
+    Naftiko capability covering one Montran business surface.'
+  tags:
+  - Montran
+  - Screening
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    MONTRAN_API_KEY: MONTRAN_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: sanctions-screening-screening
+    baseUri: https://api.montran.com/efs/v1
+    description: Montran Sanctions Screening API — Screening business capability. Self-contained, no shared references.
+    resources:
+    - name: screen
+      path: /screen
+      operations:
+      - name: screentransaction
+        method: POST
+        description: Montran Screen a transaction
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: screen-batch
+      path: /screen/batch
+      operations:
+      - name: screenbatch
+        method: POST
+        description: Montran Screen a batch of transactions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: screen-entity
+      path: /screen/entity
+      operations:
+      - name: screenentity
+        method: POST
+        description: Montran Screen an entity
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.MONTRAN_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: sanctions-screening-screening-rest
+    port: 8080
+    description: REST adapter for Montran Sanctions Screening API — Screening. One Spectral-compliant resource per consumed
+      operation, prefixed with /v1.
+    resources:
+    - path: /v1/screen
+      name: screen
+      description: REST surface for screen.
+      operations:
+      - method: POST
+        name: screentransaction
+        description: Montran Screen a transaction
+        call: sanctions-screening-screening.screentransaction
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/screen/batch
+      name: screen-batch
+      description: REST surface for screen-batch.
+      operations:
+      - method: POST
+        name: screenbatch
+        description: Montran Screen a batch of transactions
+        call: sanctions-screening-screening.screenbatch
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/screen/entity
+      name: screen-entity
+      description: REST surface for screen-entity.
+      operations:
+      - method: POST
+        name: screenentity
+        description: Montran Screen an entity
+        call: sanctions-screening-screening.screenentity
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: sanctions-screening-screening-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Montran Sanctions Screening API — Screening. One tool per consumed operation, routed inline
+      through this capability's consumes block.
+    tools:
+    - name: montran-screen-transaction
+      description: Montran Screen a transaction
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: sanctions-screening-screening.screentransaction
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: montran-screen-batch-transactions
+      description: Montran Screen a batch of transactions
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: sanctions-screening-screening.screenbatch
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: montran-screen-entity
+      description: Montran Screen an entity
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: sanctions-screening-screening.screenentity
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

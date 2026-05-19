@@ -1,0 +1,112 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Montran Payments Connectivity API — Clearing Systems
+  description: 'Montran Payments Connectivity API — Clearing Systems. 2 operations. Lead operation: Montran List connected
+    clearing systems. Self-contained Naftiko capability covering one Montran business surface.'
+  tags:
+  - Montran
+  - Clearing Systems
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    MONTRAN_API_KEY: MONTRAN_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: payments-connectivity-clearing-systems
+    baseUri: https://api.montran.com/connectivity/v1
+    description: Montran Payments Connectivity API — Clearing Systems business capability. Self-contained, no shared references.
+    resources:
+    - name: clearing-systems
+      path: /clearing-systems
+      operations:
+      - name: listclearingsystems
+        method: GET
+        description: Montran List connected clearing systems
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: clearing-systems-systemId
+      path: /clearing-systems/{systemId}
+      operations:
+      - name: getclearingsystem
+        method: GET
+        description: Montran Get clearing system details
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: systemId
+          in: path
+          type: string
+          description: Unique identifier of the clearing system
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.MONTRAN_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: payments-connectivity-clearing-systems-rest
+    port: 8080
+    description: REST adapter for Montran Payments Connectivity API — Clearing Systems. One Spectral-compliant resource per
+      consumed operation, prefixed with /v1.
+    resources:
+    - path: /v1/clearing-systems
+      name: clearing-systems
+      description: REST surface for clearing-systems.
+      operations:
+      - method: GET
+        name: listclearingsystems
+        description: Montran List connected clearing systems
+        call: payments-connectivity-clearing-systems.listclearingsystems
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/clearing-systems/{systemid}
+      name: clearing-systems-systemid
+      description: REST surface for clearing-systems-systemId.
+      operations:
+      - method: GET
+        name: getclearingsystem
+        description: Montran Get clearing system details
+        call: payments-connectivity-clearing-systems.getclearingsystem
+        with:
+          systemId: rest.systemId
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: payments-connectivity-clearing-systems-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Montran Payments Connectivity API — Clearing Systems. One tool per consumed operation, routed
+      inline through this capability's consumes block.
+    tools:
+    - name: montran-list-connected-clearing-systems
+      description: Montran List connected clearing systems
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: payments-connectivity-clearing-systems.listclearingsystems
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: montran-get-clearing-system-details
+      description: Montran Get clearing system details
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: payments-connectivity-clearing-systems.getclearingsystem
+      with:
+        systemId: tools.systemId
+      outputParameters:
+      - type: object
+        mapping: $.

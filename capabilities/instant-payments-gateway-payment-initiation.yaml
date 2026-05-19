@@ -1,0 +1,123 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Montran Instant Payments Gateway API — Payment Initiation
+  description: 'Montran Instant Payments Gateway API — Payment Initiation. 2 operations. Lead operation: Montran Initiate
+    a PISP credit transfer. Self-contained Naftiko capability covering one Montran business surface.'
+  tags:
+  - Montran
+  - Payment Initiation
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    MONTRAN_API_KEY: MONTRAN_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: instant-payments-gateway-payment-initiation
+    baseUri: https://api.montran.com/ipg/v1
+    description: Montran Instant Payments Gateway API — Payment Initiation business capability. Self-contained, no shared
+      references.
+    resources:
+    - name: payments-credit-transfer
+      path: /payments/credit-transfer
+      operations:
+      - name: initiatecredittransfer
+        method: POST
+        description: Montran Initiate a PISP credit transfer
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: payments-instant
+      path: /payments/instant
+      operations:
+      - name: initiateinstantpayment
+        method: POST
+        description: Montran Initiate an instant payment
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.MONTRAN_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: instant-payments-gateway-payment-initiation-rest
+    port: 8080
+    description: REST adapter for Montran Instant Payments Gateway API — Payment Initiation. One Spectral-compliant resource
+      per consumed operation, prefixed with /v1.
+    resources:
+    - path: /v1/payments/credit-transfer
+      name: payments-credit-transfer
+      description: REST surface for payments-credit-transfer.
+      operations:
+      - method: POST
+        name: initiatecredittransfer
+        description: Montran Initiate a PISP credit transfer
+        call: instant-payments-gateway-payment-initiation.initiatecredittransfer
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/payments/instant
+      name: payments-instant
+      description: REST surface for payments-instant.
+      operations:
+      - method: POST
+        name: initiateinstantpayment
+        description: Montran Initiate an instant payment
+        call: instant-payments-gateway-payment-initiation.initiateinstantpayment
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: instant-payments-gateway-payment-initiation-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Montran Instant Payments Gateway API — Payment Initiation. One tool per consumed operation,
+      routed inline through this capability's consumes block.
+    tools:
+    - name: montran-initiate-pisp-credit-transfer
+      description: Montran Initiate a PISP credit transfer
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: instant-payments-gateway-payment-initiation.initiatecredittransfer
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: montran-initiate-instant-payment
+      description: Montran Initiate an instant payment
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: instant-payments-gateway-payment-initiation.initiateinstantpayment
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

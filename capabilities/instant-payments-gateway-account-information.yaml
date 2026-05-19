@@ -1,0 +1,267 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Montran Instant Payments Gateway API — Account Information
+  description: 'Montran Instant Payments Gateway API — Account Information. 5 operations. Lead operation: Montran List accessible
+    accounts (AISP). Self-contained Naftiko capability covering one Montran business surface.'
+  tags:
+  - Montran
+  - Account Information
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    MONTRAN_API_KEY: MONTRAN_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: instant-payments-gateway-account-information
+    baseUri: https://api.montran.com/ipg/v1
+    description: Montran Instant Payments Gateway API — Account Information business capability. Self-contained, no shared
+      references.
+    resources:
+    - name: accounts
+      path: /accounts
+      operations:
+      - name: listaccounts
+        method: GET
+        description: Montran List accessible accounts (AISP)
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: consentId
+          in: query
+          type: string
+          description: PSD2 consent identifier authorizing access
+          required: true
+    - name: accounts-accountId
+      path: /accounts/{accountId}
+      operations:
+      - name: getaccountdetails
+        method: GET
+        description: Montran Get account details (AISP)
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: consentId
+          in: query
+          type: string
+          description: PSD2 consent identifier
+          required: true
+    - name: accounts-accountId-balances
+      path: /accounts/{accountId}/balances
+      operations:
+      - name: getaccountbalances
+        method: GET
+        description: Montran Get account balances (AISP)
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: consentId
+          in: query
+          type: string
+          description: PSD2 consent identifier
+          required: true
+    - name: accounts-accountId-transactions
+      path: /accounts/{accountId}/transactions
+      operations:
+      - name: getaccounttransactions
+        method: GET
+        description: Montran Get account transactions (AISP)
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: consentId
+          in: query
+          type: string
+          description: PSD2 consent identifier
+          required: true
+        - name: dateFrom
+          in: query
+          type: string
+          description: Start date for transaction filter (ISO 8601)
+        - name: dateTo
+          in: query
+          type: string
+          description: End date for transaction filter (ISO 8601)
+        - name: bookingStatus
+          in: query
+          type: string
+          description: Filter by booking status
+    - name: accounts-accountId-verification
+      path: /accounts/{accountId}/verification
+      operations:
+      - name: verifyaccountbalance
+        method: POST
+        description: Montran Verify account balance sufficiency
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.MONTRAN_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: instant-payments-gateway-account-information-rest
+    port: 8080
+    description: REST adapter for Montran Instant Payments Gateway API — Account Information. One Spectral-compliant resource
+      per consumed operation, prefixed with /v1.
+    resources:
+    - path: /v1/accounts
+      name: accounts
+      description: REST surface for accounts.
+      operations:
+      - method: GET
+        name: listaccounts
+        description: Montran List accessible accounts (AISP)
+        call: instant-payments-gateway-account-information.listaccounts
+        with:
+          consentId: rest.consentId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/accounts/{accountid}
+      name: accounts-accountid
+      description: REST surface for accounts-accountId.
+      operations:
+      - method: GET
+        name: getaccountdetails
+        description: Montran Get account details (AISP)
+        call: instant-payments-gateway-account-information.getaccountdetails
+        with:
+          consentId: rest.consentId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/accounts/{accountid}/balances
+      name: accounts-accountid-balances
+      description: REST surface for accounts-accountId-balances.
+      operations:
+      - method: GET
+        name: getaccountbalances
+        description: Montran Get account balances (AISP)
+        call: instant-payments-gateway-account-information.getaccountbalances
+        with:
+          consentId: rest.consentId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/accounts/{accountid}/transactions
+      name: accounts-accountid-transactions
+      description: REST surface for accounts-accountId-transactions.
+      operations:
+      - method: GET
+        name: getaccounttransactions
+        description: Montran Get account transactions (AISP)
+        call: instant-payments-gateway-account-information.getaccounttransactions
+        with:
+          consentId: rest.consentId
+          dateFrom: rest.dateFrom
+          dateTo: rest.dateTo
+          bookingStatus: rest.bookingStatus
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/accounts/{accountid}/verification
+      name: accounts-accountid-verification
+      description: REST surface for accounts-accountId-verification.
+      operations:
+      - method: POST
+        name: verifyaccountbalance
+        description: Montran Verify account balance sufficiency
+        call: instant-payments-gateway-account-information.verifyaccountbalance
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: instant-payments-gateway-account-information-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Montran Instant Payments Gateway API — Account Information. One tool per consumed operation,
+      routed inline through this capability's consumes block.
+    tools:
+    - name: montran-list-accessible-accounts-aisp
+      description: Montran List accessible accounts (AISP)
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: instant-payments-gateway-account-information.listaccounts
+      with:
+        consentId: tools.consentId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: montran-get-account-details-aisp
+      description: Montran Get account details (AISP)
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: instant-payments-gateway-account-information.getaccountdetails
+      with:
+        consentId: tools.consentId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: montran-get-account-balances-aisp
+      description: Montran Get account balances (AISP)
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: instant-payments-gateway-account-information.getaccountbalances
+      with:
+        consentId: tools.consentId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: montran-get-account-transactions-aisp
+      description: Montran Get account transactions (AISP)
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: instant-payments-gateway-account-information.getaccounttransactions
+      with:
+        consentId: tools.consentId
+        dateFrom: tools.dateFrom
+        dateTo: tools.dateTo
+        bookingStatus: tools.bookingStatus
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: montran-verify-account-balance-sufficiency
+      description: Montran Verify account balance sufficiency
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: instant-payments-gateway-account-information.verifyaccountbalance
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

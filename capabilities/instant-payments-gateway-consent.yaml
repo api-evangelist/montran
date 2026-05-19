@@ -1,0 +1,137 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Montran Instant Payments Gateway API — Consent
+  description: 'Montran Instant Payments Gateway API — Consent. 3 operations. Lead operation: Montran Create a PSD2 consent.
+    Self-contained Naftiko capability covering one Montran business surface.'
+  tags:
+  - Montran
+  - Consent
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    MONTRAN_API_KEY: MONTRAN_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: instant-payments-gateway-consent
+    baseUri: https://api.montran.com/ipg/v1
+    description: Montran Instant Payments Gateway API — Consent business capability. Self-contained, no shared references.
+    resources:
+    - name: consents
+      path: /consents
+      operations:
+      - name: createconsent
+        method: POST
+        description: Montran Create a PSD2 consent
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: consents-consentId
+      path: /consents/{consentId}
+      operations:
+      - name: getconsent
+        method: GET
+        description: Montran Get consent status
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: revokeconsent
+        method: DELETE
+        description: Montran Revoke a consent
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.MONTRAN_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: instant-payments-gateway-consent-rest
+    port: 8080
+    description: REST adapter for Montran Instant Payments Gateway API — Consent. One Spectral-compliant resource per consumed
+      operation, prefixed with /v1.
+    resources:
+    - path: /v1/consents
+      name: consents
+      description: REST surface for consents.
+      operations:
+      - method: POST
+        name: createconsent
+        description: Montran Create a PSD2 consent
+        call: instant-payments-gateway-consent.createconsent
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/consents/{consentid}
+      name: consents-consentid
+      description: REST surface for consents-consentId.
+      operations:
+      - method: GET
+        name: getconsent
+        description: Montran Get consent status
+        call: instant-payments-gateway-consent.getconsent
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: revokeconsent
+        description: Montran Revoke a consent
+        call: instant-payments-gateway-consent.revokeconsent
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: instant-payments-gateway-consent-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Montran Instant Payments Gateway API — Consent. One tool per consumed operation, routed inline
+      through this capability's consumes block.
+    tools:
+    - name: montran-create-psd2-consent
+      description: Montran Create a PSD2 consent
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: instant-payments-gateway-consent.createconsent
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: montran-get-consent-status
+      description: Montran Get consent status
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: instant-payments-gateway-consent.getconsent
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: montran-revoke-consent
+      description: Montran Revoke a consent
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: instant-payments-gateway-consent.revokeconsent
+      outputParameters:
+      - type: object
+        mapping: $.

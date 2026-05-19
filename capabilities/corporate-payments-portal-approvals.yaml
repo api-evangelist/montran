@@ -1,0 +1,122 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Montran Corporate Payments Portal API — Approvals
+  description: 'Montran Corporate Payments Portal API — Approvals. 2 operations. Lead operation: Montran Approve a payment.
+    Self-contained Naftiko capability covering one Montran business surface.'
+  tags:
+  - Montran
+  - Approvals
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    MONTRAN_API_KEY: MONTRAN_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: corporate-payments-portal-approvals
+    baseUri: https://api.montran.com/corporate/v1
+    description: Montran Corporate Payments Portal API — Approvals business capability. Self-contained, no shared references.
+    resources:
+    - name: payments-paymentId-approve
+      path: /payments/{paymentId}/approve
+      operations:
+      - name: approvepayment
+        method: POST
+        description: Montran Approve a payment
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: payments-paymentId-reject
+      path: /payments/{paymentId}/reject
+      operations:
+      - name: rejectpayment
+        method: POST
+        description: Montran Reject a payment
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.MONTRAN_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: corporate-payments-portal-approvals-rest
+    port: 8080
+    description: REST adapter for Montran Corporate Payments Portal API — Approvals. One Spectral-compliant resource per consumed
+      operation, prefixed with /v1.
+    resources:
+    - path: /v1/payments/{paymentid}/approve
+      name: payments-paymentid-approve
+      description: REST surface for payments-paymentId-approve.
+      operations:
+      - method: POST
+        name: approvepayment
+        description: Montran Approve a payment
+        call: corporate-payments-portal-approvals.approvepayment
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/payments/{paymentid}/reject
+      name: payments-paymentid-reject
+      description: REST surface for payments-paymentId-reject.
+      operations:
+      - method: POST
+        name: rejectpayment
+        description: Montran Reject a payment
+        call: corporate-payments-portal-approvals.rejectpayment
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: corporate-payments-portal-approvals-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Montran Corporate Payments Portal API — Approvals. One tool per consumed operation, routed
+      inline through this capability's consumes block.
+    tools:
+    - name: montran-approve-payment
+      description: Montran Approve a payment
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: corporate-payments-portal-approvals.approvepayment
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: montran-reject-payment
+      description: Montran Reject a payment
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: corporate-payments-portal-approvals.rejectpayment
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

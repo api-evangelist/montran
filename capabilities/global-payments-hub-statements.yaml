@@ -1,0 +1,80 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Montran Global Payments Hub API — Statements
+  description: 'Montran Global Payments Hub API — Statements. 1 operations. Lead operation: Montran Get account statements.
+    Self-contained Naftiko capability covering one Montran business surface.'
+  tags:
+  - Montran
+  - Statements
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    MONTRAN_API_KEY: MONTRAN_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: global-payments-hub-statements
+    baseUri: https://api.montran.com/gph/v1
+    description: Montran Global Payments Hub API — Statements business capability. Self-contained, no shared references.
+    resources:
+    - name: accounts-accountId-statements
+      path: /accounts/{accountId}/statements
+      operations:
+      - name: getaccountstatements
+        method: GET
+        description: Montran Get account statements
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: accountId
+          in: path
+          type: string
+          description: Unique identifier of the account
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.MONTRAN_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: global-payments-hub-statements-rest
+    port: 8080
+    description: REST adapter for Montran Global Payments Hub API — Statements. One Spectral-compliant resource per consumed
+      operation, prefixed with /v1.
+    resources:
+    - path: /v1/accounts/{accountid}/statements
+      name: accounts-accountid-statements
+      description: REST surface for accounts-accountId-statements.
+      operations:
+      - method: GET
+        name: getaccountstatements
+        description: Montran Get account statements
+        call: global-payments-hub-statements.getaccountstatements
+        with:
+          accountId: rest.accountId
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: global-payments-hub-statements-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Montran Global Payments Hub API — Statements. One tool per consumed operation, routed inline
+      through this capability's consumes block.
+    tools:
+    - name: montran-get-account-statements
+      description: Montran Get account statements
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: global-payments-hub-statements.getaccountstatements
+      with:
+        accountId: tools.accountId
+      outputParameters:
+      - type: object
+        mapping: $.

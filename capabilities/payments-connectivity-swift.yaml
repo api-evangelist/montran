@@ -1,0 +1,104 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Montran Payments Connectivity API — SWIFT
+  description: 'Montran Payments Connectivity API — SWIFT. 1 operations. Lead operation: Montran List SWIFT messages. Self-contained
+    Naftiko capability covering one Montran business surface.'
+  tags:
+  - Montran
+  - SWIFT
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    MONTRAN_API_KEY: MONTRAN_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: payments-connectivity-swift
+    baseUri: https://api.montran.com/connectivity/v1
+    description: Montran Payments Connectivity API — SWIFT business capability. Self-contained, no shared references.
+    resources:
+    - name: swift-messages
+      path: /swift/messages
+      operations:
+      - name: listswiftmessages
+        method: GET
+        description: Montran List SWIFT messages
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: messageType
+          in: query
+          type: string
+          description: SWIFT MT message type filter
+        - name: direction
+          in: query
+          type: string
+        - name: fromDate
+          in: query
+          type: string
+        - name: toDate
+          in: query
+          type: string
+        - name: page
+          in: query
+          type: integer
+        - name: pageSize
+          in: query
+          type: integer
+    authentication:
+      type: bearer
+      token: '{{env.MONTRAN_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: payments-connectivity-swift-rest
+    port: 8080
+    description: REST adapter for Montran Payments Connectivity API — SWIFT. One Spectral-compliant resource per consumed
+      operation, prefixed with /v1.
+    resources:
+    - path: /v1/swift/messages
+      name: swift-messages
+      description: REST surface for swift-messages.
+      operations:
+      - method: GET
+        name: listswiftmessages
+        description: Montran List SWIFT messages
+        call: payments-connectivity-swift.listswiftmessages
+        with:
+          messageType: rest.messageType
+          direction: rest.direction
+          fromDate: rest.fromDate
+          toDate: rest.toDate
+          page: rest.page
+          pageSize: rest.pageSize
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: payments-connectivity-swift-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Montran Payments Connectivity API — SWIFT. One tool per consumed operation, routed inline
+      through this capability's consumes block.
+    tools:
+    - name: montran-list-swift-messages
+      description: Montran List SWIFT messages
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: payments-connectivity-swift.listswiftmessages
+      with:
+        messageType: tools.messageType
+        direction: tools.direction
+        fromDate: tools.fromDate
+        toDate: tools.toDate
+        page: tools.page
+        pageSize: tools.pageSize
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -1,0 +1,179 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Montran Global Payments Hub API — Payments
+  description: 'Montran Global Payments Hub API — Payments. 4 operations. Lead operation: Montran List payments. Self-contained
+    Naftiko capability covering one Montran business surface.'
+  tags:
+  - Montran
+  - Payments
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    MONTRAN_API_KEY: MONTRAN_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: global-payments-hub-payments
+    baseUri: https://api.montran.com/gph/v1
+    description: Montran Global Payments Hub API — Payments business capability. Self-contained, no shared references.
+    resources:
+    - name: payments
+      path: /payments
+      operations:
+      - name: listpayments
+        method: GET
+        description: Montran List payments
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: initiatepayment
+        method: POST
+        description: Montran Initiate a payment
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: payments-paymentId
+      path: /payments/{paymentId}
+      operations:
+      - name: getpayment
+        method: GET
+        description: Montran Get payment details
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: payments-paymentId-cancel
+      path: /payments/{paymentId}/cancel
+      operations:
+      - name: cancelpayment
+        method: POST
+        description: Montran Cancel a payment
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.MONTRAN_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: global-payments-hub-payments-rest
+    port: 8080
+    description: REST adapter for Montran Global Payments Hub API — Payments. One Spectral-compliant resource per consumed
+      operation, prefixed with /v1.
+    resources:
+    - path: /v1/payments
+      name: payments
+      description: REST surface for payments.
+      operations:
+      - method: GET
+        name: listpayments
+        description: Montran List payments
+        call: global-payments-hub-payments.listpayments
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: initiatepayment
+        description: Montran Initiate a payment
+        call: global-payments-hub-payments.initiatepayment
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/payments/{paymentid}
+      name: payments-paymentid
+      description: REST surface for payments-paymentId.
+      operations:
+      - method: GET
+        name: getpayment
+        description: Montran Get payment details
+        call: global-payments-hub-payments.getpayment
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/payments/{paymentid}/cancel
+      name: payments-paymentid-cancel
+      description: REST surface for payments-paymentId-cancel.
+      operations:
+      - method: POST
+        name: cancelpayment
+        description: Montran Cancel a payment
+        call: global-payments-hub-payments.cancelpayment
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: global-payments-hub-payments-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Montran Global Payments Hub API — Payments. One tool per consumed operation, routed inline
+      through this capability's consumes block.
+    tools:
+    - name: montran-list-payments
+      description: Montran List payments
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: global-payments-hub-payments.listpayments
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: montran-initiate-payment
+      description: Montran Initiate a payment
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: global-payments-hub-payments.initiatepayment
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: montran-get-payment-details
+      description: Montran Get payment details
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: global-payments-hub-payments.getpayment
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: montran-cancel-payment
+      description: Montran Cancel a payment
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: global-payments-hub-payments.cancelpayment
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

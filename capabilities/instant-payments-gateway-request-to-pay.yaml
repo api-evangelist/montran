@@ -1,0 +1,122 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Montran Instant Payments Gateway API — Request to Pay
+  description: 'Montran Instant Payments Gateway API — Request to Pay. 2 operations. Lead operation: Montran Initiate a request
+    to pay. Self-contained Naftiko capability covering one Montran business surface.'
+  tags:
+  - Montran
+  - Request to Pay
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    MONTRAN_API_KEY: MONTRAN_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: instant-payments-gateway-request-to-pay
+    baseUri: https://api.montran.com/ipg/v1
+    description: Montran Instant Payments Gateway API — Request to Pay business capability. Self-contained, no shared references.
+    resources:
+    - name: payments-request-to-pay
+      path: /payments/request-to-pay
+      operations:
+      - name: initiaterequesttopay
+        method: POST
+        description: Montran Initiate a request to pay
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: payments-request-to-pay-requestId
+      path: /payments/request-to-pay/{requestId}
+      operations:
+      - name: getrequesttopay
+        method: GET
+        description: Montran Get request-to-pay details
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: requestId
+          in: path
+          type: string
+          description: Unique identifier of the request to pay
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.MONTRAN_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: instant-payments-gateway-request-to-pay-rest
+    port: 8080
+    description: REST adapter for Montran Instant Payments Gateway API — Request to Pay. One Spectral-compliant resource per
+      consumed operation, prefixed with /v1.
+    resources:
+    - path: /v1/payments/request-to-pay
+      name: payments-request-to-pay
+      description: REST surface for payments-request-to-pay.
+      operations:
+      - method: POST
+        name: initiaterequesttopay
+        description: Montran Initiate a request to pay
+        call: instant-payments-gateway-request-to-pay.initiaterequesttopay
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/payments/request-to-pay/{requestid}
+      name: payments-request-to-pay-requestid
+      description: REST surface for payments-request-to-pay-requestId.
+      operations:
+      - method: GET
+        name: getrequesttopay
+        description: Montran Get request-to-pay details
+        call: instant-payments-gateway-request-to-pay.getrequesttopay
+        with:
+          requestId: rest.requestId
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: instant-payments-gateway-request-to-pay-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Montran Instant Payments Gateway API — Request to Pay. One tool per consumed operation, routed
+      inline through this capability's consumes block.
+    tools:
+    - name: montran-initiate-request-pay
+      description: Montran Initiate a request to pay
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: instant-payments-gateway-request-to-pay.initiaterequesttopay
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: montran-get-request-pay-details
+      description: Montran Get request-to-pay details
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: instant-payments-gateway-request-to-pay.getrequesttopay
+      with:
+        requestId: tools.requestId
+      outputParameters:
+      - type: object
+        mapping: $.

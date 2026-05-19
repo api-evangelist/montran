@@ -1,0 +1,187 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Montran Corporate Payments Portal API — Accounts
+  description: 'Montran Corporate Payments Portal API — Accounts. 3 operations. Lead operation: Montran List bank accounts.
+    Self-contained Naftiko capability covering one Montran business surface.'
+  tags:
+  - Montran
+  - Accounts
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    MONTRAN_API_KEY: MONTRAN_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: corporate-payments-portal-accounts
+    baseUri: https://api.montran.com/corporate/v1
+    description: Montran Corporate Payments Portal API — Accounts business capability. Self-contained, no shared references.
+    resources:
+    - name: accounts
+      path: /accounts
+      operations:
+      - name: listbankaccounts
+        method: GET
+        description: Montran List bank accounts
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: bankId
+          in: query
+          type: string
+          description: Filter by bank relationship
+        - name: currency
+          in: query
+          type: string
+    - name: accounts-accountId
+      path: /accounts/{accountId}
+      operations:
+      - name: getbankaccount
+        method: GET
+        description: Montran Get bank account details
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: accountId
+          in: path
+          type: string
+          description: Unique account identifier
+          required: true
+    - name: accounts-accountId-transactions
+      path: /accounts/{accountId}/transactions
+      operations:
+      - name: listaccounttransactions
+        method: GET
+        description: Montran List account transactions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: accountId
+          in: path
+          type: string
+          required: true
+        - name: fromDate
+          in: query
+          type: string
+        - name: toDate
+          in: query
+          type: string
+        - name: page
+          in: query
+          type: integer
+        - name: pageSize
+          in: query
+          type: integer
+    authentication:
+      type: bearer
+      token: '{{env.MONTRAN_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: corporate-payments-portal-accounts-rest
+    port: 8080
+    description: REST adapter for Montran Corporate Payments Portal API — Accounts. One Spectral-compliant resource per consumed
+      operation, prefixed with /v1.
+    resources:
+    - path: /v1/accounts
+      name: accounts
+      description: REST surface for accounts.
+      operations:
+      - method: GET
+        name: listbankaccounts
+        description: Montran List bank accounts
+        call: corporate-payments-portal-accounts.listbankaccounts
+        with:
+          bankId: rest.bankId
+          currency: rest.currency
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/accounts/{accountid}
+      name: accounts-accountid
+      description: REST surface for accounts-accountId.
+      operations:
+      - method: GET
+        name: getbankaccount
+        description: Montran Get bank account details
+        call: corporate-payments-portal-accounts.getbankaccount
+        with:
+          accountId: rest.accountId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/accounts/{accountid}/transactions
+      name: accounts-accountid-transactions
+      description: REST surface for accounts-accountId-transactions.
+      operations:
+      - method: GET
+        name: listaccounttransactions
+        description: Montran List account transactions
+        call: corporate-payments-portal-accounts.listaccounttransactions
+        with:
+          accountId: rest.accountId
+          fromDate: rest.fromDate
+          toDate: rest.toDate
+          page: rest.page
+          pageSize: rest.pageSize
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: corporate-payments-portal-accounts-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Montran Corporate Payments Portal API — Accounts. One tool per consumed operation, routed
+      inline through this capability's consumes block.
+    tools:
+    - name: montran-list-bank-accounts
+      description: Montran List bank accounts
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: corporate-payments-portal-accounts.listbankaccounts
+      with:
+        bankId: tools.bankId
+        currency: tools.currency
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: montran-get-bank-account-details
+      description: Montran Get bank account details
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: corporate-payments-portal-accounts.getbankaccount
+      with:
+        accountId: tools.accountId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: montran-list-account-transactions
+      description: Montran List account transactions
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: corporate-payments-portal-accounts.listaccounttransactions
+      with:
+        accountId: tools.accountId
+        fromDate: tools.fromDate
+        toDate: tools.toDate
+        page: tools.page
+        pageSize: tools.pageSize
+      outputParameters:
+      - type: object
+        mapping: $.
