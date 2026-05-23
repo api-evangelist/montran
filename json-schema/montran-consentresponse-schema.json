@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/ConsentResponse",
+  "title": "ConsentResponse",
+  "type": "object",
+  "description": "PSD2 consent details",
+  "properties": {
+    "consentId": {
+      "type": "string",
+      "description": "Unique consent identifier"
+    },
+    "consentType": {
+      "type": "string",
+      "enum": [
+        "AISP",
+        "PISP"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "description": "Consent status",
+      "enum": [
+        "received",
+        "valid",
+        "rejected",
+        "expired",
+        "revokedByPsu",
+        "terminatedByTpp"
+      ]
+    },
+    "scaRedirectUrl": {
+      "type": "string",
+      "format": "uri",
+      "description": "URL for SCA redirect flow"
+    },
+    "validUntil": {
+      "type": "string",
+      "format": "date"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

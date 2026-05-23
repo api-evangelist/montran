@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/VirtualTransactionList",
+  "title": "VirtualTransactionList",
+  "type": "object",
+  "properties": {
+    "transactions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "transactionId": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "incoming",
+              "outgoing",
+              "internal_transfer",
+              "allocation"
+            ]
+          },
+          "amount": {
+            "type": "number",
+            "format": "double"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "creditDebitIndicator": {
+            "type": "string",
+            "enum": [
+              "CRDT",
+              "DBIT"
+            ]
+          },
+          "counterpartyName": {
+            "type": "string"
+          },
+          "counterpartyAccount": {
+            "type": "string"
+          },
+          "reference": {
+            "type": "string"
+          },
+          "bookingDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "valueDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    },
+    "pagination": {
+      "$ref": "#/components/schemas/Pagination"
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/BeneficiaryCreate",
+  "title": "BeneficiaryCreate",
+  "type": "object",
+  "required": [
+    "name",
+    "accountIban"
+  ],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Beneficiary name"
+    },
+    "accountIban": {
+      "type": "string",
+      "description": "Beneficiary IBAN"
+    },
+    "accountNumber": {
+      "type": "string"
+    },
+    "bankBic": {
+      "type": "string"
+    },
+    "bankName": {
+      "type": "string"
+    },
+    "country": {
+      "type": "string"
+    },
+    "address": {
+      "type": "string"
+    }
+  }
+}

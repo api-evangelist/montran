@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/VirtualAccountUpdate",
+  "title": "VirtualAccountUpdate",
+  "type": "object",
+  "description": "Virtual account update request",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "accountHolder": {
+      "type": "string"
+    },
+    "autoAllocate": {
+      "type": "boolean"
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  }
+}

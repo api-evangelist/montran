@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/Beneficiary",
+  "title": "Beneficiary",
+  "type": "object",
+  "properties": {
+    "beneficiaryId": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "accountIban": {
+      "type": "string"
+    },
+    "accountNumber": {
+      "type": "string"
+    },
+    "bankBic": {
+      "type": "string"
+    },
+    "bankName": {
+      "type": "string"
+    },
+    "country": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "inactive"
+      ]
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

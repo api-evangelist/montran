@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/ScreeningChannelList",
+  "title": "ScreeningChannelList",
+  "type": "object",
+  "properties": {
+    "channels": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "channelId": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "messageFormats": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "activeLists": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "matchThreshold": {
+            "type": "number",
+            "format": "double",
+            "description": "Minimum match score threshold"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "active",
+              "inactive"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

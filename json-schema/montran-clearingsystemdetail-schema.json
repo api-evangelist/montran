@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/ClearingSystemDetail",
+  "title": "ClearingSystemDetail",
+  "type": "object",
+  "description": "Clearing and settlement system details",
+  "properties": {
+    "systemId": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string",
+      "description": "Clearing system name"
+    },
+    "type": {
+      "type": "string",
+      "description": "System type",
+      "enum": [
+        "RTGS",
+        "ACH",
+        "INSTANT",
+        "HYBRID"
+      ]
+    },
+    "country": {
+      "type": "string",
+      "description": "Country of the clearing system"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "connected",
+        "disconnected",
+        "maintenance"
+      ]
+    },
+    "supportedFormats": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "supportedMessageTypes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "operatingHours": {
+      "type": "object",
+      "properties": {
+        "is24x7": {
+          "type": "boolean"
+        },
+        "openTime": {
+          "type": "string"
+        },
+        "closeTime": {
+          "type": "string"
+        },
+        "timezone": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

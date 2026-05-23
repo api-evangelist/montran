@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/PaymentStatusResponse",
+  "title": "PaymentStatusResponse",
+  "type": "object",
+  "description": "Payment status aligned with ISO 20022 pacs.002 FIToFIPaymentStatusReport",
+  "properties": {
+    "paymentId": {
+      "type": "string"
+    },
+    "originalMessageId": {
+      "type": "string"
+    },
+    "originalEndToEndId": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ACCP",
+        "ACSC",
+        "ACSP",
+        "ACTC",
+        "PDNG",
+        "RCVD",
+        "RJCT",
+        "CANC"
+      ]
+    },
+    "reasonCode": {
+      "type": "string",
+      "description": "Reason code for rejection"
+    },
+    "statusDateTime": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

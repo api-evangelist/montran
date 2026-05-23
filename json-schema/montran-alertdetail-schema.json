@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/AlertDetail",
+  "title": "AlertDetail",
+  "type": "object",
+  "description": "Screening alert full details",
+  "properties": {
+    "alertId": {
+      "type": "string"
+    },
+    "screeningId": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "open",
+        "under_review",
+        "escalated",
+        "cleared",
+        "confirmed"
+      ]
+    },
+    "severity": {
+      "type": "string",
+      "enum": [
+        "high",
+        "medium",
+        "low"
+      ]
+    },
+    "screeningType": {
+      "type": "string",
+      "enum": [
+        "transaction",
+        "entity"
+      ]
+    },
+    "match": {
+      "$ref": "#/components/schemas/ScreeningMatch"
+    },
+    "transactionData": {
+      "$ref": "#/components/schemas/TransactionData"
+    },
+    "resolution": {
+      "type": "object",
+      "properties": {
+        "disposition": {
+          "type": "string",
+          "enum": [
+            "false_positive",
+            "true_match"
+          ]
+        },
+        "resolvedBy": {
+          "type": "string"
+        },
+        "resolvedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "justification": {
+          "type": "string"
+        }
+      }
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

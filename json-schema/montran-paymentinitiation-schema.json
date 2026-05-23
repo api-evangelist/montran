@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/PaymentInitiation",
+  "title": "PaymentInitiation",
+  "type": "object",
+  "description": "Payment initiation request aligned with ISO 20022 pain.001 CustomerCreditTransferInitiation message structure",
+  "required": [
+    "paymentType",
+    "debtorAccount",
+    "creditorAccount",
+    "amount",
+    "currency"
+  ],
+  "properties": {
+    "messageId": {
+      "type": "string",
+      "description": "Unique message identification assigned by the initiating party"
+    },
+    "paymentType": {
+      "type": "string",
+      "description": "Type of payment being initiated",
+      "enum": [
+        "credit-transfer",
+        "direct-debit",
+        "cheque",
+        "cross-border",
+        "remittance"
+      ]
+    },
+    "debtorName": {
+      "type": "string",
+      "description": "Name of the debtor (payer)"
+    },
+    "debtorAccount": {
+      "$ref": "#/components/schemas/AccountIdentification"
+    },
+    "debtorAgent": {
+      "$ref": "#/components/schemas/FinancialInstitution"
+    },
+    "creditorName": {
+      "type": "string",
+      "description": "Name of the creditor (payee)"
+    },
+    "creditorAccount": {
+      "$ref": "#/components/schemas/AccountIdentification"
+    },
+    "creditorAgent": {
+      "$ref": "#/components/schemas/FinancialInstitution"
+    },
+    "amount": {
+      "type": "number",
+      "format": "double",
+      "description": "Payment amount",
+      "minimum": 0.01
+    },
+    "currency": {
+      "type": "string",
+      "description": "ISO 4217 currency code",
+      "pattern": "^[A-Z]{3}$"
+    },
+    "requestedExecutionDate": {
+      "type": "string",
+      "format": "date",
+      "description": "Requested execution date for the payment"
+    },
+    "endToEndId": {
+      "type": "string",
+      "description": "End-to-end identification assigned by the initiating party"
+    },
+    "remittanceInformation": {
+      "type": "string",
+      "description": "Remittance information or payment reference"
+    },
+    "chargeBearer": {
+      "type": "string",
+      "description": "Specifies which party bears the charges",
+      "enum": [
+        "DEBT",
+        "CRED",
+        "SHAR",
+        "SLEV"
+      ]
+    },
+    "urgency": {
+      "type": "string",
+      "description": "Payment urgency level",
+      "enum": [
+        "NORMAL",
+        "HIGH",
+        "EXPRESS"
+      ]
+    }
+  }
+}

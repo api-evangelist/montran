@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/AccountDetail",
+  "title": "AccountDetail",
+  "type": "object",
+  "description": "Payment account details",
+  "properties": {
+    "accountId": {
+      "type": "string",
+      "description": "Unique account identifier"
+    },
+    "iban": {
+      "type": "string",
+      "description": "International Bank Account Number"
+    },
+    "currency": {
+      "type": "string",
+      "description": "Account currency (ISO 4217)"
+    },
+    "name": {
+      "type": "string",
+      "description": "Account name or description"
+    },
+    "ownerName": {
+      "type": "string",
+      "description": "Name of the account owner"
+    },
+    "product": {
+      "type": "string",
+      "description": "Product name of the account"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "enabled",
+        "deleted",
+        "blocked"
+      ]
+    }
+  }
+}

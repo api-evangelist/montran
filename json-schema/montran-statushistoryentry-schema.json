@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/StatusHistoryEntry",
+  "title": "StatusHistoryEntry",
+  "type": "object",
+  "description": "A single entry in the payment status history",
+  "properties": {
+    "status": {
+      "type": "string",
+      "description": "Payment status at this point"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the status changed"
+    },
+    "reasonCode": {
+      "type": "string",
+      "description": "Reason code if applicable"
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of the status change"
+    }
+  }
+}

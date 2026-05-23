@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/AccountStructureCreate",
+  "title": "AccountStructureCreate",
+  "type": "object",
+  "description": "Account structure creation request",
+  "required": [
+    "name",
+    "physicalAccountId"
+  ],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Structure name"
+    },
+    "physicalAccountId": {
+      "type": "string",
+      "description": "Root physical account"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "POBO",
+        "COBO",
+        "IN_HOUSE_BANK",
+        "ESCROW",
+        "GENERAL"
+      ]
+    },
+    "description": {
+      "type": "string"
+    }
+  }
+}

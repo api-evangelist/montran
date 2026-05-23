@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/ValidateRequest",
+  "title": "ValidateRequest",
+  "type": "object",
+  "description": "Request to validate a message",
+  "required": [
+    "format",
+    "messageType",
+    "content"
+  ],
+  "properties": {
+    "format": {
+      "type": "string",
+      "enum": [
+        "SWIFT_FIN",
+        "ISO20022",
+        "PROPRIETARY"
+      ]
+    },
+    "messageType": {
+      "type": "string"
+    },
+    "content": {
+      "type": "string"
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/PaymentCancellationRequest",
+  "title": "PaymentCancellationRequest",
+  "type": "object",
+  "description": "Payment cancellation request aligned with ISO 20022 camt.056 FIToFIPaymentCancellationRequest",
+  "required": [
+    "reason"
+  ],
+  "properties": {
+    "reason": {
+      "type": "string",
+      "description": "Cancellation reason code",
+      "enum": [
+        "DUPL",
+        "AGNT",
+        "CURR",
+        "CUST",
+        "UPAY",
+        "FRAD",
+        "TECH"
+      ]
+    },
+    "additionalInformation": {
+      "type": "string",
+      "description": "Additional information about the cancellation request"
+    }
+  }
+}

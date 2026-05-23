@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/DirectDebitInitiation",
+  "title": "DirectDebitInitiation",
+  "type": "object",
+  "description": "Direct debit initiation request aligned with ISO 20022 pain.008 CustomerDirectDebitInitiation",
+  "required": [
+    "creditorAccount",
+    "debtorAccount",
+    "amount",
+    "currency",
+    "mandateId"
+  ],
+  "properties": {
+    "messageId": {
+      "type": "string",
+      "description": "Unique message identification"
+    },
+    "creditorName": {
+      "type": "string",
+      "description": "Name of the creditor (collector)"
+    },
+    "creditorAccount": {
+      "$ref": "#/components/schemas/AccountIdentification"
+    },
+    "creditorAgent": {
+      "$ref": "#/components/schemas/FinancialInstitution"
+    },
+    "debtorName": {
+      "type": "string",
+      "description": "Name of the debtor"
+    },
+    "debtorAccount": {
+      "$ref": "#/components/schemas/AccountIdentification"
+    },
+    "debtorAgent": {
+      "$ref": "#/components/schemas/FinancialInstitution"
+    },
+    "amount": {
+      "type": "number",
+      "format": "double",
+      "description": "Instructed amount",
+      "minimum": 0.01
+    },
+    "currency": {
+      "type": "string",
+      "description": "ISO 4217 currency code",
+      "pattern": "^[A-Z]{3}$"
+    },
+    "requestedCollectionDate": {
+      "type": "string",
+      "format": "date",
+      "description": "Requested collection date"
+    },
+    "mandateId": {
+      "type": "string",
+      "description": "Direct debit mandate identification"
+    },
+    "mandateDateOfSignature": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the mandate was signed"
+    },
+    "sequenceType": {
+      "type": "string",
+      "description": "Sequence type of the direct debit",
+      "enum": [
+        "FRST",
+        "RCUR",
+        "FNAL",
+        "OOFF"
+      ]
+    },
+    "schemeType": {
+      "type": "string",
+      "description": "Direct debit scheme type",
+      "enum": [
+        "CORE",
+        "B2B"
+      ]
+    },
+    "endToEndId": {
+      "type": "string",
+      "description": "End-to-end identification"
+    },
+    "remittanceInformation": {
+      "type": "string",
+      "description": "Remittance information"
+    }
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/ComplianceListDetail",
+  "title": "ComplianceListDetail",
+  "type": "object",
+  "description": "Compliance list details",
+  "properties": {
+    "listId": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string",
+      "description": "List name"
+    },
+    "source": {
+      "type": "string",
+      "description": "List source organization",
+      "enum": [
+        "OFAC",
+        "EU",
+        "OFSI",
+        "UN",
+        "LLOYDS_MIU",
+        "CUSTOM"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "inactive"
+      ]
+    },
+    "entryCount": {
+      "type": "integer",
+      "description": "Number of entries in the list"
+    },
+    "lastUpdated": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the list was last updated"
+    },
+    "channels": {
+      "type": "array",
+      "description": "Channels configured to use this list",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

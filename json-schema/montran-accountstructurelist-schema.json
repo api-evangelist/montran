@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/AccountStructureList",
+  "title": "AccountStructureList",
+  "type": "object",
+  "properties": {
+    "structures": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/AccountStructure"
+      }
+    }
+  }
+}

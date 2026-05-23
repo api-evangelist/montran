@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/BatchScreeningRequest",
+  "title": "BatchScreeningRequest",
+  "type": "object",
+  "description": "Batch screening request",
+  "required": [
+    "channelId",
+    "transactions"
+  ],
+  "properties": {
+    "channelId": {
+      "type": "string"
+    },
+    "transactions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/TransactionData"
+      },
+      "minItems": 1
+    }
+  }
+}

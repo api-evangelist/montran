@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/AlertResolution",
+  "title": "AlertResolution",
+  "type": "object",
+  "description": "Alert resolution submission",
+  "required": [
+    "disposition",
+    "justification"
+  ],
+  "properties": {
+    "disposition": {
+      "type": "string",
+      "description": "Resolution disposition",
+      "enum": [
+        "false_positive",
+        "true_match"
+      ]
+    },
+    "justification": {
+      "type": "string",
+      "description": "Justification for the resolution decision"
+    },
+    "action": {
+      "type": "string",
+      "description": "Action taken (for true matches)",
+      "enum": [
+        "BLOCK_TRANSACTION",
+        "RELEASE_TRANSACTION",
+        "ESCALATE",
+        "FILE_SAR"
+      ]
+    }
+  }
+}

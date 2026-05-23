@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/BalanceVerificationResponse",
+  "title": "BalanceVerificationResponse",
+  "type": "object",
+  "description": "Result of account balance verification",
+  "properties": {
+    "sufficient": {
+      "type": "boolean",
+      "description": "Whether the account has sufficient funds"
+    },
+    "verifiedAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

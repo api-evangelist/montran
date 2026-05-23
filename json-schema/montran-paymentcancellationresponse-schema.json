@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/PaymentCancellationResponse",
+  "title": "PaymentCancellationResponse",
+  "type": "object",
+  "description": "Response to a payment cancellation request",
+  "properties": {
+    "paymentId": {
+      "type": "string",
+      "description": "Payment identifier"
+    },
+    "cancellationStatus": {
+      "type": "string",
+      "description": "Status of the cancellation request",
+      "enum": [
+        "ACCEPTED",
+        "PENDING",
+        "REJECTED"
+      ]
+    },
+    "reasonCode": {
+      "type": "string",
+      "description": "Reason code if cancellation was rejected"
+    },
+    "processedAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

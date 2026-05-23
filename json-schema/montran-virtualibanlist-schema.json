@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/VirtualIbanList",
+  "title": "VirtualIbanList",
+  "type": "object",
+  "properties": {
+    "virtualIbans": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/VirtualIban"
+      }
+    },
+    "pagination": {
+      "$ref": "#/components/schemas/Pagination"
+    }
+  }
+}

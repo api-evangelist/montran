@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/AccountList",
+  "title": "AccountList",
+  "type": "object",
+  "description": "List of accessible payment accounts",
+  "properties": {
+    "accounts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/AccountDetail"
+      }
+    }
+  }
+}

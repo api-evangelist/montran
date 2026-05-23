@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/CorporatePaymentCreate",
+  "title": "CorporatePaymentCreate",
+  "type": "object",
+  "description": "Corporate payment creation request",
+  "required": [
+    "debitAccountId",
+    "beneficiaryAccount",
+    "amount",
+    "currency",
+    "paymentType"
+  ],
+  "properties": {
+    "paymentType": {
+      "type": "string",
+      "enum": [
+        "domestic",
+        "cross_border",
+        "swift",
+        "sepa",
+        "ach"
+      ]
+    },
+    "debitAccountId": {
+      "type": "string",
+      "description": "Debit account identifier"
+    },
+    "beneficiaryId": {
+      "type": "string",
+      "description": "Registered beneficiary ID (if using saved beneficiary)"
+    },
+    "beneficiaryName": {
+      "type": "string",
+      "description": "Beneficiary name"
+    },
+    "beneficiaryAccount": {
+      "type": "object",
+      "properties": {
+        "iban": {
+          "type": "string"
+        },
+        "accountNumber": {
+          "type": "string"
+        },
+        "bankBic": {
+          "type": "string"
+        },
+        "bankName": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        }
+      }
+    },
+    "amount": {
+      "type": "number",
+      "format": "double",
+      "minimum": 0.01
+    },
+    "currency": {
+      "type": "string",
+      "pattern": "^[A-Z]{3}$"
+    },
+    "valueDate": {
+      "type": "string",
+      "format": "date"
+    },
+    "reference": {
+      "type": "string",
+      "description": "Payment reference"
+    },
+    "remittanceInformation": {
+      "type": "string"
+    },
+    "chargeBearer": {
+      "type": "string",
+      "enum": [
+        "OUR",
+        "BEN",
+        "SHA"
+      ]
+    },
+    "urgency": {
+      "type": "string",
+      "enum": [
+        "NORMAL",
+        "URGENT"
+      ]
+    }
+  }
+}

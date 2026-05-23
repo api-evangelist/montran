@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/CreditTransferInitiation",
+  "title": "CreditTransferInitiation",
+  "type": "object",
+  "description": "Credit transfer initiation request aligned with ISO 20022 pain.001 CustomerCreditTransferInitiation",
+  "required": [
+    "debtorAccount",
+    "creditorAccount",
+    "amount",
+    "currency"
+  ],
+  "properties": {
+    "messageId": {
+      "type": "string",
+      "description": "Unique message identification"
+    },
+    "paymentInformationId": {
+      "type": "string",
+      "description": "Payment information identification"
+    },
+    "numberOfTransactions": {
+      "type": "integer",
+      "description": "Number of individual transactions in the message"
+    },
+    "controlSum": {
+      "type": "number",
+      "format": "double",
+      "description": "Total of all individual amounts"
+    },
+    "debtorName": {
+      "type": "string",
+      "description": "Name of the debtor"
+    },
+    "debtorAccount": {
+      "$ref": "#/components/schemas/AccountIdentification"
+    },
+    "debtorAgent": {
+      "$ref": "#/components/schemas/FinancialInstitution"
+    },
+    "creditorName": {
+      "type": "string",
+      "description": "Name of the creditor"
+    },
+    "creditorAccount": {
+      "$ref": "#/components/schemas/AccountIdentification"
+    },
+    "creditorAgent": {
+      "$ref": "#/components/schemas/FinancialInstitution"
+    },
+    "amount": {
+      "type": "number",
+      "format": "double",
+      "description": "Instructed amount",
+      "minimum": 0.01
+    },
+    "currency": {
+      "type": "string",
+      "description": "ISO 4217 currency code",
+      "pattern": "^[A-Z]{3}$"
+    },
+    "requestedExecutionDate": {
+      "type": "string",
+      "format": "date",
+      "description": "Requested execution date"
+    },
+    "endToEndId": {
+      "type": "string",
+      "description": "End-to-end identification"
+    },
+    "remittanceInformation": {
+      "type": "string",
+      "description": "Remittance information"
+    },
+    "chargeBearer": {
+      "type": "string",
+      "enum": [
+        "DEBT",
+        "CRED",
+        "SHAR",
+        "SLEV"
+      ]
+    },
+    "categoryPurpose": {
+      "type": "string",
+      "description": "Category purpose code for the payment"
+    },
+    "serviceLevel": {
+      "type": "string",
+      "description": "Service level code (e.g., SEPA for SEPA payments)"
+    }
+  }
+}

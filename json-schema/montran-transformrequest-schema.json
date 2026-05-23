@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/TransformRequest",
+  "title": "TransformRequest",
+  "type": "object",
+  "description": "Request to transform a message between formats",
+  "required": [
+    "sourceFormat",
+    "targetFormat",
+    "content"
+  ],
+  "properties": {
+    "sourceFormat": {
+      "type": "string",
+      "description": "Source message format",
+      "enum": [
+        "SWIFT_FIN",
+        "ISO20022",
+        "PROPRIETARY"
+      ]
+    },
+    "sourceMessageType": {
+      "type": "string",
+      "description": "Source message type (e.g., MT103, pacs.008)"
+    },
+    "targetFormat": {
+      "type": "string",
+      "description": "Target message format",
+      "enum": [
+        "SWIFT_FIN",
+        "ISO20022",
+        "PROPRIETARY"
+      ]
+    },
+    "targetMessageType": {
+      "type": "string",
+      "description": "Target message type"
+    },
+    "content": {
+      "type": "string",
+      "description": "Source message content"
+    }
+  }
+}

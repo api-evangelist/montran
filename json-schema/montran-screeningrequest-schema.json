@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/ScreeningRequest",
+  "title": "ScreeningRequest",
+  "type": "object",
+  "description": "Transaction screening request",
+  "required": [
+    "channelId",
+    "transaction"
+  ],
+  "properties": {
+    "channelId": {
+      "type": "string",
+      "description": "Screening channel identifier"
+    },
+    "messageFormat": {
+      "type": "string",
+      "description": "Format of the transaction message",
+      "enum": [
+        "ISO20022",
+        "SWIFT_FIN",
+        "ISO8583",
+        "NACHA",
+        "PROPRIETARY"
+      ]
+    },
+    "messageType": {
+      "type": "string",
+      "description": "Specific message type (e.g., pacs.008, MT103)"
+    },
+    "transaction": {
+      "$ref": "#/components/schemas/TransactionData"
+    },
+    "rawMessage": {
+      "type": "string",
+      "description": "Raw message content for format-native screening"
+    }
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/ScreeningMatch",
+  "title": "ScreeningMatch",
+  "type": "object",
+  "description": "Individual screening match details",
+  "properties": {
+    "matchId": {
+      "type": "string"
+    },
+    "matchedField": {
+      "type": "string",
+      "description": "Transaction field that triggered the match",
+      "enum": [
+        "debtorName",
+        "creditorName",
+        "debtorAddress",
+        "creditorAddress",
+        "debtorCountry",
+        "creditorCountry",
+        "remittanceInformation"
+      ]
+    },
+    "matchedValue": {
+      "type": "string",
+      "description": "Value from the transaction that matched"
+    },
+    "listName": {
+      "type": "string",
+      "description": "Name of the compliance list"
+    },
+    "listEntryId": {
+      "type": "string",
+      "description": "Entry identifier in the compliance list"
+    },
+    "listedName": {
+      "type": "string",
+      "description": "Name on the sanctions list"
+    },
+    "matchScore": {
+      "type": "number",
+      "format": "double",
+      "description": "Match confidence score (0-100)",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "matchType": {
+      "type": "string",
+      "description": "Type of match",
+      "enum": [
+        "EXACT",
+        "FUZZY",
+        "PHONETIC",
+        "PARTIAL"
+      ]
+    },
+    "severity": {
+      "type": "string",
+      "enum": [
+        "high",
+        "medium",
+        "low"
+      ]
+    }
+  }
+}

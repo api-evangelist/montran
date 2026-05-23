@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/InstantPaymentResponse",
+  "title": "InstantPaymentResponse",
+  "type": "object",
+  "description": "Response for an instant payment including real-time status",
+  "properties": {
+    "paymentId": {
+      "type": "string",
+      "description": "Unique payment identifier"
+    },
+    "messageId": {
+      "type": "string",
+      "description": "Message identification"
+    },
+    "endToEndId": {
+      "type": "string",
+      "description": "End-to-end identification"
+    },
+    "transactionId": {
+      "type": "string",
+      "description": "Transaction identification"
+    },
+    "status": {
+      "type": "string",
+      "description": "Payment processing status (ISO 20022 status codes)",
+      "enum": [
+        "ACCP",
+        "ACSC",
+        "ACSP",
+        "RJCT"
+      ]
+    },
+    "reasonCode": {
+      "type": "string",
+      "description": "Rejection reason code if status is RJCT"
+    },
+    "settlementDate": {
+      "type": "string",
+      "format": "date",
+      "description": "Settlement date"
+    },
+    "acceptanceDateTime": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp of payment acceptance"
+    }
+  }
+}

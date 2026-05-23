@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/ConsentRequest",
+  "title": "ConsentRequest",
+  "type": "object",
+  "description": "PSD2 consent creation request",
+  "required": [
+    "consentType",
+    "psuId"
+  ],
+  "properties": {
+    "consentType": {
+      "type": "string",
+      "description": "Type of PSD2 consent",
+      "enum": [
+        "AISP",
+        "PISP"
+      ]
+    },
+    "psuId": {
+      "type": "string",
+      "description": "Payment Service User identifier"
+    },
+    "accountIds": {
+      "type": "array",
+      "description": "List of account IDs for AISP consent",
+      "items": {
+        "type": "string"
+      }
+    },
+    "validUntil": {
+      "type": "string",
+      "format": "date",
+      "description": "Expiration date of the consent"
+    },
+    "frequencyPerDay": {
+      "type": "integer",
+      "description": "Maximum number of access requests per day",
+      "minimum": 1
+    },
+    "recurringIndicator": {
+      "type": "boolean",
+      "description": "Whether the consent is for recurring access"
+    }
+  }
+}

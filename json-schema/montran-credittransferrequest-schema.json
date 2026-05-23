@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/CreditTransferRequest",
+  "title": "CreditTransferRequest",
+  "type": "object",
+  "description": "PSD2 PISP credit transfer request using ISO 20022 pain.001 CustomerCreditTransferInitiation",
+  "required": [
+    "consentId",
+    "debtorAccount",
+    "creditorAccount",
+    "amount",
+    "currency"
+  ],
+  "properties": {
+    "consentId": {
+      "type": "string",
+      "description": "PSD2 consent identifier authorizing the payment"
+    },
+    "debtorAccount": {
+      "$ref": "#/components/schemas/AccountIdentification"
+    },
+    "creditorName": {
+      "type": "string",
+      "description": "Name of the creditor"
+    },
+    "creditorAccount": {
+      "$ref": "#/components/schemas/AccountIdentification"
+    },
+    "creditorAgent": {
+      "$ref": "#/components/schemas/FinancialInstitution"
+    },
+    "amount": {
+      "type": "number",
+      "format": "double",
+      "description": "Payment amount",
+      "minimum": 0.01
+    },
+    "currency": {
+      "type": "string",
+      "description": "ISO 4217 currency code",
+      "pattern": "^[A-Z]{3}$"
+    },
+    "endToEndId": {
+      "type": "string",
+      "description": "End-to-end identification"
+    },
+    "remittanceInformation": {
+      "type": "string",
+      "description": "Remittance information"
+    }
+  }
+}

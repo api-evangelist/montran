@@ -1,0 +1,19 @@
+name: Montran Domain Vocabulary
+provider: Montran
+providerId: montran
+description: Tag-derived vocabulary for the Montran API surface; sourced from openapi/ tags.
+terms:
+- term: Account Information
+  description: PSD2-compliant account information operations for AISP integration. Provides account details, balances, and
+    transaction history.
+- term: Consent
+  description: PSD2 consent management for AISP and PISP access
+- term: Instant Payments
+  description: Real-time instant payment processing with guaranteed end-to-end latency of a few seconds
+- term: Payment Initiation
+  description: PSD2-compliant payment initiation operations for PISP integration. Supports instant credit transfers and request-to-pay
+    flows.
+- term: Payment Status
+  description: Real-time payment status inquiry and notification operations
+- term: Request to Pay
+  description: Request-to-pay initiation and management operations

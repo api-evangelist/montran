@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/InstantPaymentRequest",
+  "title": "InstantPaymentRequest",
+  "type": "object",
+  "description": "Instant payment initiation request using ISO 20022 pacs.008 FIToFICustomerCreditTransfer structure",
+  "required": [
+    "debtorAccount",
+    "creditorAccount",
+    "amount",
+    "currency"
+  ],
+  "properties": {
+    "messageId": {
+      "type": "string",
+      "description": "Unique message identification"
+    },
+    "endToEndId": {
+      "type": "string",
+      "description": "End-to-end identification assigned by the initiating party"
+    },
+    "transactionId": {
+      "type": "string",
+      "description": "Unique transaction identification"
+    },
+    "debtorName": {
+      "type": "string",
+      "description": "Name of the debtor (payer)"
+    },
+    "debtorAccount": {
+      "$ref": "#/components/schemas/AccountIdentification"
+    },
+    "debtorAgent": {
+      "$ref": "#/components/schemas/FinancialInstitution"
+    },
+    "creditorName": {
+      "type": "string",
+      "description": "Name of the creditor (payee)"
+    },
+    "creditorAccount": {
+      "$ref": "#/components/schemas/AccountIdentification"
+    },
+    "creditorAgent": {
+      "$ref": "#/components/schemas/FinancialInstitution"
+    },
+    "amount": {
+      "type": "number",
+      "format": "double",
+      "description": "Payment amount",
+      "minimum": 0.01
+    },
+    "currency": {
+      "type": "string",
+      "description": "ISO 4217 currency code",
+      "pattern": "^[A-Z]{3}$"
+    },
+    "remittanceInformation": {
+      "type": "string",
+      "description": "Remittance information or payment reference"
+    },
+    "purpose": {
+      "type": "string",
+      "description": "Purpose code for the payment"
+    },
+    "chargeBearer": {
+      "type": "string",
+      "enum": [
+        "SLEV"
+      ]
+    }
+  }
+}

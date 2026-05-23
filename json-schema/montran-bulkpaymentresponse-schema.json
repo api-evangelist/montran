@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/BulkPaymentResponse",
+  "title": "BulkPaymentResponse",
+  "type": "object",
+  "description": "Response for a bulk payment submission",
+  "properties": {
+    "bulkPaymentId": {
+      "type": "string",
+      "description": "Unique bulk payment identifier"
+    },
+    "batchId": {
+      "type": "string",
+      "description": "Client batch identifier"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ACCEPTED",
+        "PARTIALLY_ACCEPTED",
+        "REJECTED"
+      ]
+    },
+    "acceptedCount": {
+      "type": "integer",
+      "description": "Number of accepted payments"
+    },
+    "rejectedCount": {
+      "type": "integer",
+      "description": "Number of rejected payments"
+    },
+    "paymentResults": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "index": {
+            "type": "integer",
+            "description": "Index of the payment in the original batch"
+          },
+          "paymentId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACCP",
+              "RJCT"
+            ]
+          },
+          "reasonCode": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

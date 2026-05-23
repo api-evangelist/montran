@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/PaymentInitiationResponse",
+  "title": "PaymentInitiationResponse",
+  "type": "object",
+  "description": "Response for a PISP-initiated payment",
+  "properties": {
+    "paymentId": {
+      "type": "string",
+      "description": "Unique payment identifier"
+    },
+    "status": {
+      "type": "string",
+      "description": "Payment initiation status",
+      "enum": [
+        "RCVD",
+        "PDNG",
+        "ACCP",
+        "RJCT"
+      ]
+    },
+    "scaRedirectUrl": {
+      "type": "string",
+      "format": "uri",
+      "description": "URL for SCA redirect if required"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

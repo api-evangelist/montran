@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/AccountStructure",
+  "title": "AccountStructure",
+  "type": "object",
+  "description": "Account hierarchy structure",
+  "properties": {
+    "structureId": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "physicalAccountId": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string"
+    },
+    "virtualAccounts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/VirtualAccount"
+      }
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

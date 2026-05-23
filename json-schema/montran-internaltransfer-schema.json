@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/InternalTransfer",
+  "title": "InternalTransfer",
+  "type": "object",
+  "description": "Internal transfer between virtual accounts",
+  "required": [
+    "sourceAccountId",
+    "destinationAccountId",
+    "amount",
+    "currency"
+  ],
+  "properties": {
+    "sourceAccountId": {
+      "type": "string",
+      "description": "Source virtual account ID"
+    },
+    "destinationAccountId": {
+      "type": "string",
+      "description": "Destination virtual account ID"
+    },
+    "amount": {
+      "type": "number",
+      "format": "double",
+      "minimum": 0.01
+    },
+    "currency": {
+      "type": "string",
+      "pattern": "^[A-Z]{3}$"
+    },
+    "reference": {
+      "type": "string",
+      "description": "Transfer reference"
+    }
+  }
+}

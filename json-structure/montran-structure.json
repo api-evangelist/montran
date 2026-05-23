@@ -1,0 +1,343 @@
+{
+  "provider": "Montran",
+  "providerId": "montran",
+  "kind": "json-structure",
+  "description": "Structural overview of the Montran API surface; extracted from openapi/.",
+  "schemaCount": 26,
+  "operationCount": 16,
+  "schemas": [
+    {
+      "name": "ConsentRequest",
+      "type": "object",
+      "propertyCount": 6,
+      "required": [
+        "consentType",
+        "psuId"
+      ]
+    },
+    {
+      "name": "ConsentResponse",
+      "type": "object",
+      "propertyCount": 6,
+      "required": []
+    },
+    {
+      "name": "InstantPaymentRequest",
+      "type": "object",
+      "propertyCount": 14,
+      "required": [
+        "debtorAccount",
+        "creditorAccount",
+        "amount",
+        "currency"
+      ]
+    },
+    {
+      "name": "InstantPaymentResponse",
+      "type": "object",
+      "propertyCount": 8,
+      "required": []
+    },
+    {
+      "name": "InstantPaymentDetail",
+      "type": "object",
+      "propertyCount": 18,
+      "required": []
+    },
+    {
+      "name": "CreditTransferRequest",
+      "type": "object",
+      "propertyCount": 9,
+      "required": [
+        "consentId",
+        "debtorAccount",
+        "creditorAccount",
+        "amount",
+        "currency"
+      ]
+    },
+    {
+      "name": "PaymentInitiationResponse",
+      "type": "object",
+      "propertyCount": 4,
+      "required": []
+    },
+    {
+      "name": "RequestToPayRequest",
+      "type": "object",
+      "propertyCount": 10,
+      "required": [
+        "creditorAccount",
+        "debtorAccount",
+        "amount",
+        "currency"
+      ]
+    },
+    {
+      "name": "RequestToPayResponse",
+      "type": "object",
+      "propertyCount": 3,
+      "required": []
+    },
+    {
+      "name": "RequestToPayDetail",
+      "type": "object",
+      "propertyCount": 13,
+      "required": []
+    },
+    {
+      "name": "PaymentReturnRequest",
+      "type": "object",
+      "propertyCount": 2,
+      "required": [
+        "reasonCode"
+      ]
+    },
+    {
+      "name": "PaymentReturnResponse",
+      "type": "object",
+      "propertyCount": 4,
+      "required": []
+    },
+    {
+      "name": "BulkPaymentRequest",
+      "type": "object",
+      "propertyCount": 4,
+      "required": [
+        "payments"
+      ]
+    },
+    {
+      "name": "BulkPaymentResponse",
+      "type": "object",
+      "propertyCount": 6,
+      "required": []
+    },
+    {
+      "name": "AccountList",
+      "type": "object",
+      "propertyCount": 1,
+      "required": []
+    },
+    {
+      "name": "AccountDetail",
+      "type": "object",
+      "propertyCount": 7,
+      "required": []
+    },
+    {
+      "name": "AccountBalances",
+      "type": "object",
+      "propertyCount": 2,
+      "required": []
+    },
+    {
+      "name": "TransactionList",
+      "type": "object",
+      "propertyCount": 3,
+      "required": []
+    },
+    {
+      "name": "Transaction",
+      "type": "object",
+      "propertyCount": 13,
+      "required": []
+    },
+    {
+      "name": "BalanceVerificationRequest",
+      "type": "object",
+      "propertyCount": 2,
+      "required": [
+        "amount",
+        "currency"
+      ]
+    },
+    {
+      "name": "BalanceVerificationResponse",
+      "type": "object",
+      "propertyCount": 2,
+      "required": []
+    },
+    {
+      "name": "PaymentStatusResponse",
+      "type": "object",
+      "propertyCount": 6,
+      "required": []
+    },
+    {
+      "name": "AccountIdentification",
+      "type": "object",
+      "propertyCount": 3,
+      "required": []
+    },
+    {
+      "name": "FinancialInstitution",
+      "type": "object",
+      "propertyCount": 2,
+      "required": []
+    },
+    {
+      "name": "Pagination",
+      "type": "object",
+      "propertyCount": 4,
+      "required": []
+    },
+    {
+      "name": "Error",
+      "type": "object",
+      "propertyCount": 3,
+      "required": [
+        "code",
+        "message"
+      ]
+    }
+  ],
+  "operations": [
+    {
+      "method": "POST",
+      "path": "/consents",
+      "operationId": "createConsent",
+      "summary": "Montran Create a PSD2 consent",
+      "tags": [
+        "Consent"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/consents/{consentId}",
+      "operationId": "getConsent",
+      "summary": "Montran Get consent status",
+      "tags": [
+        "Consent"
+      ]
+    },
+    {
+      "method": "DELETE",
+      "path": "/consents/{consentId}",
+      "operationId": "revokeConsent",
+      "summary": "Montran Revoke a consent",
+      "tags": [
+        "Consent"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/payments/instant",
+      "operationId": "initiateInstantPayment",
+      "summary": "Montran Initiate an instant payment",
+      "tags": [
+        "Instant Payments",
+        "Payment Initiation"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/payments/instant/{paymentId}",
+      "operationId": "getInstantPayment",
+      "summary": "Montran Get instant payment details",
+      "tags": [
+        "Instant Payments",
+        "Payment Status"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/payments/instant/{paymentId}/return",
+      "operationId": "returnInstantPayment",
+      "summary": "Montran Return an instant payment",
+      "tags": [
+        "Instant Payments"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/payments/credit-transfer",
+      "operationId": "initiateCreditTransfer",
+      "summary": "Montran Initiate a PISP credit transfer",
+      "tags": [
+        "Payment Initiation"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/payments/request-to-pay",
+      "operationId": "initiateRequestToPay",
+      "summary": "Montran Initiate a request to pay",
+      "tags": [
+        "Request to Pay"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/payments/request-to-pay/{requestId}",
+      "operationId": "getRequestToPay",
+      "summary": "Montran Get request-to-pay details",
+      "tags": [
+        "Request to Pay"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/payments/bulk",
+      "operationId": "submitBulkPayment",
+      "summary": "Montran Submit a bulk payment",
+      "tags": [
+        "Instant Payments"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/accounts",
+      "operationId": "listAccounts",
+      "summary": "Montran List accessible accounts (AISP)",
+      "tags": [
+        "Account Information"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/accounts/{accountId}",
+      "operationId": "getAccountDetails",
+      "summary": "Montran Get account details (AISP)",
+      "tags": [
+        "Account Information"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/accounts/{accountId}/balances",
+      "operationId": "getAccountBalances",
+      "summary": "Montran Get account balances (AISP)",
+      "tags": [
+        "Account Information"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/accounts/{accountId}/transactions",
+      "operationId": "getAccountTransactions",
+      "summary": "Montran Get account transactions (AISP)",
+      "tags": [
+        "Account Information"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/accounts/{accountId}/verification",
+      "operationId": "verifyAccountBalance",
+      "summary": "Montran Verify account balance sufficiency",
+      "tags": [
+        "Account Information"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/payments/{paymentId}/status",
+      "operationId": "getPaymentStatus",
+      "summary": "Montran Get payment status",
+      "tags": [
+        "Payment Status"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/ChannelHealth",
+  "title": "ChannelHealth",
+  "type": "object",
+  "description": "Real-time channel health metrics",
+  "properties": {
+    "channelId": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "healthy",
+        "degraded",
+        "down"
+      ]
+    },
+    "latencyMs": {
+      "type": "integer",
+      "description": "Current latency in milliseconds"
+    },
+    "errorRate": {
+      "type": "number",
+      "format": "double",
+      "description": "Error rate percentage over the last hour"
+    },
+    "throughput": {
+      "type": "integer",
+      "description": "Messages processed in the last hour"
+    },
+    "lastActivityAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "checkedAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

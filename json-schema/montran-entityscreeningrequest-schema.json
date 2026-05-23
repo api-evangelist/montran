@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/EntityScreeningRequest",
+  "title": "EntityScreeningRequest",
+  "type": "object",
+  "description": "Entity screening request",
+  "required": [
+    "entityType",
+    "name"
+  ],
+  "properties": {
+    "entityType": {
+      "type": "string",
+      "enum": [
+        "INDIVIDUAL",
+        "ORGANIZATION"
+      ]
+    },
+    "name": {
+      "type": "string",
+      "description": "Full name of the entity"
+    },
+    "aliases": {
+      "type": "array",
+      "description": "Known aliases",
+      "items": {
+        "type": "string"
+      }
+    },
+    "dateOfBirth": {
+      "type": "string",
+      "format": "date",
+      "description": "Date of birth (individuals only)"
+    },
+    "nationality": {
+      "type": "string",
+      "description": "Nationality (ISO 3166-1 alpha-2)"
+    },
+    "country": {
+      "type": "string",
+      "description": "Country of residence/registration"
+    },
+    "address": {
+      "type": "string",
+      "description": "Full address"
+    },
+    "identificationNumber": {
+      "type": "string",
+      "description": "National ID, passport, or registration number"
+    }
+  }
+}

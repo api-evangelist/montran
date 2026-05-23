@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/RequestToPayResponse",
+  "title": "RequestToPayResponse",
+  "type": "object",
+  "description": "Response for a request-to-pay initiation",
+  "properties": {
+    "requestId": {
+      "type": "string",
+      "description": "Unique request-to-pay identifier"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "CREATED",
+        "SENT",
+        "REJECTED"
+      ]
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

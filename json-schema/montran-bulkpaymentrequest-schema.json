@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/BulkPaymentRequest",
+  "title": "BulkPaymentRequest",
+  "type": "object",
+  "description": "Bulk payment submission request",
+  "required": [
+    "payments"
+  ],
+  "properties": {
+    "batchId": {
+      "type": "string",
+      "description": "Client-assigned batch identifier"
+    },
+    "numberOfTransactions": {
+      "type": "integer",
+      "description": "Number of payments in the batch"
+    },
+    "controlSum": {
+      "type": "number",
+      "format": "double",
+      "description": "Sum of all payment amounts for validation"
+    },
+    "payments": {
+      "type": "array",
+      "description": "List of instant payment requests",
+      "items": {
+        "$ref": "#/components/schemas/InstantPaymentRequest"
+      },
+      "minItems": 1
+    }
+  }
+}

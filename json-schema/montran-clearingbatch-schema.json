@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/ClearingBatch",
+  "title": "ClearingBatch",
+  "type": "object",
+  "description": "Clearing batch with settlement information",
+  "properties": {
+    "batchId": {
+      "type": "string",
+      "description": "Unique batch identifier"
+    },
+    "clearingSystem": {
+      "type": "string",
+      "description": "Clearing and settlement mechanism"
+    },
+    "direction": {
+      "type": "string",
+      "description": "Batch direction",
+      "enum": [
+        "inbound",
+        "outbound"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "description": "Batch processing status",
+      "enum": [
+        "pending",
+        "submitted",
+        "accepted",
+        "settled",
+        "rejected"
+      ]
+    },
+    "numberOfTransactions": {
+      "type": "integer",
+      "description": "Number of transactions in the batch"
+    },
+    "totalAmount": {
+      "type": "number",
+      "format": "double",
+      "description": "Total amount of all transactions"
+    },
+    "currency": {
+      "type": "string",
+      "description": "Currency of the batch"
+    },
+    "settlementDate": {
+      "type": "string",
+      "format": "date",
+      "description": "Settlement date"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "payments": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/PaymentDetail"
+      }
+    }
+  }
+}

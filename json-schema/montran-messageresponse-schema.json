@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/MessageResponse",
+  "title": "MessageResponse",
+  "type": "object",
+  "description": "Response after message submission",
+  "properties": {
+    "messageId": {
+      "type": "string",
+      "description": "Unique message identifier assigned by the system"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "RECEIVED",
+        "VALIDATED",
+        "QUEUED"
+      ]
+    },
+    "channel": {
+      "type": "string",
+      "description": "Assigned routing channel"
+    },
+    "destinationSystem": {
+      "type": "string",
+      "description": "Resolved destination system"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

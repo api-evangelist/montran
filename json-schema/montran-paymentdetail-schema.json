@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/PaymentDetail",
+  "title": "PaymentDetail",
+  "type": "object",
+  "description": "Detailed payment information including full processing history",
+  "properties": {
+    "paymentId": {
+      "type": "string",
+      "description": "Unique payment identifier"
+    },
+    "messageId": {
+      "type": "string",
+      "description": "Message identification"
+    },
+    "paymentType": {
+      "type": "string",
+      "description": "Type of payment"
+    },
+    "status": {
+      "type": "string",
+      "description": "Current payment status"
+    },
+    "debtorName": {
+      "type": "string"
+    },
+    "debtorAccount": {
+      "$ref": "#/components/schemas/AccountIdentification"
+    },
+    "debtorAgent": {
+      "$ref": "#/components/schemas/FinancialInstitution"
+    },
+    "creditorName": {
+      "type": "string"
+    },
+    "creditorAccount": {
+      "$ref": "#/components/schemas/AccountIdentification"
+    },
+    "creditorAgent": {
+      "$ref": "#/components/schemas/FinancialInstitution"
+    },
+    "amount": {
+      "type": "number",
+      "format": "double"
+    },
+    "currency": {
+      "type": "string"
+    },
+    "endToEndId": {
+      "type": "string"
+    },
+    "clearingSystem": {
+      "type": "string"
+    },
+    "settlementDate": {
+      "type": "string",
+      "format": "date"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "statusHistory": {
+      "type": "array",
+      "description": "Complete status change history",
+      "items": {
+        "$ref": "#/components/schemas/StatusHistoryEntry"
+      }
+    }
+  }
+}

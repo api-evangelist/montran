@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/InstantPaymentDetail",
+  "title": "InstantPaymentDetail",
+  "type": "object",
+  "description": "Full instant payment details",
+  "properties": {
+    "paymentId": {
+      "type": "string"
+    },
+    "messageId": {
+      "type": "string"
+    },
+    "endToEndId": {
+      "type": "string"
+    },
+    "transactionId": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ACCP",
+        "ACSC",
+        "ACSP",
+        "RJCT",
+        "CANC",
+        "RTND"
+      ]
+    },
+    "debtorName": {
+      "type": "string"
+    },
+    "debtorAccount": {
+      "$ref": "#/components/schemas/AccountIdentification"
+    },
+    "debtorAgent": {
+      "$ref": "#/components/schemas/FinancialInstitution"
+    },
+    "creditorName": {
+      "type": "string"
+    },
+    "creditorAccount": {
+      "$ref": "#/components/schemas/AccountIdentification"
+    },
+    "creditorAgent": {
+      "$ref": "#/components/schemas/FinancialInstitution"
+    },
+    "amount": {
+      "type": "number",
+      "format": "double"
+    },
+    "currency": {
+      "type": "string"
+    },
+    "remittanceInformation": {
+      "type": "string"
+    },
+    "reasonCode": {
+      "type": "string"
+    },
+    "settlementDate": {
+      "type": "string",
+      "format": "date"
+    },
+    "acceptanceDateTime": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

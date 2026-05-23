@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/PaymentResponse",
+  "title": "PaymentResponse",
+  "type": "object",
+  "description": "Response returned after successful payment initiation",
+  "properties": {
+    "paymentId": {
+      "type": "string",
+      "description": "Unique payment identifier assigned by the system"
+    },
+    "messageId": {
+      "type": "string",
+      "description": "Original message identification"
+    },
+    "endToEndId": {
+      "type": "string",
+      "description": "End-to-end identification"
+    },
+    "status": {
+      "type": "string",
+      "description": "Current payment status",
+      "enum": [
+        "RECEIVED",
+        "VALIDATED",
+        "PENDING"
+      ]
+    },
+    "clearingSystem": {
+      "type": "string",
+      "description": "Assigned clearing and settlement mechanism"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when the payment was created"
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/AccountIdentification",
+  "title": "AccountIdentification",
+  "type": "object",
+  "description": "Account identification using IBAN or proprietary account number",
+  "properties": {
+    "iban": {
+      "type": "string",
+      "description": "International Bank Account Number",
+      "pattern": "^[A-Z]{2}[0-9]{2}[A-Z0-9]{4,30}$"
+    },
+    "accountNumber": {
+      "type": "string",
+      "description": "Proprietary account number"
+    },
+    "currency": {
+      "type": "string",
+      "description": "Account currency (ISO 4217)",
+      "pattern": "^[A-Z]{3}$"
+    }
+  }
+}

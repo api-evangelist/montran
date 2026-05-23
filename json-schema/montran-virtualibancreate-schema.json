@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/VirtualIbanCreate",
+  "title": "VirtualIbanCreate",
+  "type": "object",
+  "description": "Virtual IBAN issuance request",
+  "required": [
+    "virtualAccountId"
+  ],
+  "properties": {
+    "virtualAccountId": {
+      "type": "string",
+      "description": "Virtual account to associate the VIBAN with"
+    },
+    "twoWay": {
+      "type": "boolean",
+      "description": "Whether the VIBAN supports both incoming and outgoing",
+      "default": false
+    },
+    "countryCode": {
+      "type": "string",
+      "description": "Country code for IBAN generation",
+      "pattern": "^[A-Z]{2}$"
+    }
+  }
+}

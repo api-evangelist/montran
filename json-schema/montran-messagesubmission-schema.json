@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/MessageSubmission",
+  "title": "MessageSubmission",
+  "type": "object",
+  "description": "Message submission for routing through the connectivity platform",
+  "required": [
+    "format",
+    "messageType",
+    "content"
+  ],
+  "properties": {
+    "format": {
+      "type": "string",
+      "description": "Message format",
+      "enum": [
+        "SWIFT_FIN",
+        "ISO20022",
+        "PROPRIETARY"
+      ]
+    },
+    "messageType": {
+      "type": "string",
+      "description": "Specific message type (e.g., MT103, MT202, pacs.008, pain.001, camt.053)"
+    },
+    "destinationSystem": {
+      "type": "string",
+      "description": "Target clearing or settlement system"
+    },
+    "destinationChannel": {
+      "type": "string",
+      "description": "Target communication channel identifier"
+    },
+    "priority": {
+      "type": "string",
+      "description": "Message priority",
+      "enum": [
+        "NORMAL",
+        "URGENT",
+        "SYSTEM"
+      ]
+    },
+    "content": {
+      "type": "string",
+      "description": "Message content in the specified format"
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Additional routing metadata",
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  }
+}

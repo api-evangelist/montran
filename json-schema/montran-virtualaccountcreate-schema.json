@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/VirtualAccountCreate",
+  "title": "VirtualAccountCreate",
+  "type": "object",
+  "description": "Virtual account creation request",
+  "required": [
+    "name",
+    "physicalAccountId",
+    "currency"
+  ],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Account name or label"
+    },
+    "physicalAccountId": {
+      "type": "string",
+      "description": "ID of the underlying physical bank account"
+    },
+    "currency": {
+      "type": "string",
+      "description": "ISO 4217 currency code",
+      "pattern": "^[A-Z]{3}$"
+    },
+    "accountHolder": {
+      "type": "string",
+      "description": "Name of the virtual account holder"
+    },
+    "purpose": {
+      "type": "string",
+      "description": "Purpose of the virtual account",
+      "enum": [
+        "GENERAL",
+        "POBO",
+        "COBO",
+        "ESCROW",
+        "IN_HOUSE_BANK",
+        "TREASURY"
+      ]
+    },
+    "parentVirtualAccountId": {
+      "type": "string",
+      "description": "Parent virtual account for hierarchical structures"
+    },
+    "autoAllocate": {
+      "type": "boolean",
+      "description": "Whether incoming payments should be auto-allocated",
+      "default": true
+    },
+    "issueViban": {
+      "type": "boolean",
+      "description": "Whether to automatically issue a virtual IBAN",
+      "default": false
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  }
+}

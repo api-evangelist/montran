@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/TransformResponse",
+  "title": "TransformResponse",
+  "type": "object",
+  "description": "Result of message format transformation",
+  "properties": {
+    "sourceFormat": {
+      "type": "string"
+    },
+    "targetFormat": {
+      "type": "string"
+    },
+    "sourceMessageType": {
+      "type": "string"
+    },
+    "targetMessageType": {
+      "type": "string"
+    },
+    "transformedContent": {
+      "type": "string",
+      "description": "Transformed message content"
+    },
+    "warnings": {
+      "type": "array",
+      "description": "Transformation warnings (e.g., data truncation)",
+      "items": {
+        "type": "object",
+        "properties": {
+          "field": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

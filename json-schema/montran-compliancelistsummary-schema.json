@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/ComplianceListSummary",
+  "title": "ComplianceListSummary",
+  "type": "object",
+  "properties": {
+    "lists": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/ComplianceListDetail"
+      }
+    }
+  }
+}

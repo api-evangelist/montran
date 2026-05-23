@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/CorporatePayment",
+  "title": "CorporatePayment",
+  "type": "object",
+  "description": "Corporate payment details",
+  "properties": {
+    "paymentId": {
+      "type": "string"
+    },
+    "paymentType": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "pending_approval",
+        "approved",
+        "submitted",
+        "accepted",
+        "rejected",
+        "settled",
+        "cancelled"
+      ]
+    },
+    "debitAccountId": {
+      "type": "string"
+    },
+    "beneficiaryName": {
+      "type": "string"
+    },
+    "beneficiaryAccount": {
+      "type": "object",
+      "properties": {
+        "iban": {
+          "type": "string"
+        },
+        "accountNumber": {
+          "type": "string"
+        },
+        "bankBic": {
+          "type": "string"
+        }
+      }
+    },
+    "amount": {
+      "type": "number",
+      "format": "double"
+    },
+    "currency": {
+      "type": "string"
+    },
+    "valueDate": {
+      "type": "string",
+      "format": "date"
+    },
+    "reference": {
+      "type": "string"
+    },
+    "approvalStatus": {
+      "type": "object",
+      "properties": {
+        "requiredApprovals": {
+          "type": "integer"
+        },
+        "currentApprovals": {
+          "type": "integer"
+        },
+        "approvers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "userId": {
+                "type": "string"
+              },
+              "approvedAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "comment": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "bankReference": {
+      "type": "string",
+      "description": "Reference assigned by the bank"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

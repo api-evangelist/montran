@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/EntityScreeningResult",
+  "title": "EntityScreeningResult",
+  "type": "object",
+  "description": "Entity screening result",
+  "properties": {
+    "screeningId": {
+      "type": "string"
+    },
+    "result": {
+      "type": "string",
+      "enum": [
+        "CLEAR",
+        "HIT",
+        "POSSIBLE_HIT"
+      ]
+    },
+    "matchCount": {
+      "type": "integer"
+    },
+    "matches": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/ScreeningMatch"
+      }
+    },
+    "screenedAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/InternalTransferResponse",
+  "title": "InternalTransferResponse",
+  "type": "object",
+  "properties": {
+    "transferId": {
+      "type": "string"
+    },
+    "sourceAccountId": {
+      "type": "string"
+    },
+    "destinationAccountId": {
+      "type": "string"
+    },
+    "amount": {
+      "type": "number",
+      "format": "double"
+    },
+    "currency": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "COMPLETED",
+        "FAILED"
+      ]
+    },
+    "processedAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

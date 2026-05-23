@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/BalanceVerificationRequest",
+  "title": "BalanceVerificationRequest",
+  "type": "object",
+  "description": "Request to verify account balance sufficiency",
+  "required": [
+    "amount",
+    "currency"
+  ],
+  "properties": {
+    "amount": {
+      "type": "number",
+      "format": "double",
+      "description": "Amount to verify against the account balance",
+      "minimum": 0.01
+    },
+    "currency": {
+      "type": "string",
+      "description": "Currency of the amount",
+      "pattern": "^[A-Z]{3}$"
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/BeneficiaryList",
+  "title": "BeneficiaryList",
+  "type": "object",
+  "properties": {
+    "beneficiaries": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/Beneficiary"
+      }
+    },
+    "pagination": {
+      "$ref": "#/components/schemas/Pagination"
+    }
+  }
+}

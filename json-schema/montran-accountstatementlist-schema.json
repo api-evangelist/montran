@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/AccountStatementList",
+  "title": "AccountStatementList",
+  "type": "object",
+  "description": "Account statement information aligned with ISO 20022 camt.053 BankToCustomerStatement",
+  "properties": {
+    "accountId": {
+      "type": "string",
+      "description": "Account identifier"
+    },
+    "statements": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "statementId": {
+            "type": "string",
+            "description": "Statement identification"
+          },
+          "fromDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "toDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "openingBalance": {
+            "type": "number",
+            "format": "double"
+          },
+          "closingBalance": {
+            "type": "number",
+            "format": "double"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "entries": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "entryReference": {
+                  "type": "string"
+                },
+                "amount": {
+                  "type": "number",
+                  "format": "double"
+                },
+                "currency": {
+                  "type": "string"
+                },
+                "creditDebitIndicator": {
+                  "type": "string",
+                  "enum": [
+                    "CRDT",
+                    "DBIT"
+                  ]
+                },
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "BOOK",
+                    "PDNG",
+                    "INFO"
+                  ]
+                },
+                "bookingDate": {
+                  "type": "string",
+                  "format": "date"
+                },
+                "valueDate": {
+                  "type": "string",
+                  "format": "date"
+                },
+                "bankTransactionCode": {
+                  "type": "string"
+                },
+                "remittanceInformation": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

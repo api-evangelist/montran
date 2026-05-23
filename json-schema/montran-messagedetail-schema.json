@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/MessageDetail",
+  "title": "MessageDetail",
+  "type": "object",
+  "description": "Full message details including routing information",
+  "properties": {
+    "messageId": {
+      "type": "string"
+    },
+    "format": {
+      "type": "string"
+    },
+    "messageType": {
+      "type": "string"
+    },
+    "direction": {
+      "type": "string",
+      "enum": [
+        "inbound",
+        "outbound"
+      ]
+    },
+    "sourceSystem": {
+      "type": "string"
+    },
+    "destinationSystem": {
+      "type": "string"
+    },
+    "channel": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "received",
+        "validated",
+        "transformed",
+        "routed",
+        "delivered",
+        "acknowledged",
+        "failed"
+      ]
+    },
+    "transformations": {
+      "type": "array",
+      "description": "Format transformations applied",
+      "items": {
+        "type": "object",
+        "properties": {
+          "fromFormat": {
+            "type": "string"
+          },
+          "toFormat": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    },
+    "acknowledgement": {
+      "type": "object",
+      "description": "Acknowledgement from destination system",
+      "properties": {
+        "status": {
+          "type": "string"
+        },
+        "receivedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "reference": {
+          "type": "string"
+        }
+      }
+    },
+    "errorDetails": {
+      "type": "string",
+      "description": "Error details if message processing failed"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

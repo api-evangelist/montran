@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/BatchScreeningResult",
+  "title": "BatchScreeningResult",
+  "type": "object",
+  "description": "Batch screening results",
+  "properties": {
+    "batchId": {
+      "type": "string"
+    },
+    "totalScreened": {
+      "type": "integer"
+    },
+    "passCount": {
+      "type": "integer"
+    },
+    "hitCount": {
+      "type": "integer"
+    },
+    "results": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/ScreeningResult"
+      }
+    },
+    "screenedAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

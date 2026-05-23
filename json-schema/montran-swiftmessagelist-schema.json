@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/SwiftMessageList",
+  "title": "SwiftMessageList",
+  "type": "object",
+  "properties": {
+    "messages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "messageId": {
+            "type": "string"
+          },
+          "swiftMessageType": {
+            "type": "string",
+            "description": "SWIFT MT message type (e.g., MT103, MT202)"
+          },
+          "direction": {
+            "type": "string",
+            "enum": [
+              "sent",
+              "received"
+            ]
+          },
+          "senderBic": {
+            "type": "string"
+          },
+          "receiverBic": {
+            "type": "string"
+          },
+          "reference": {
+            "type": "string"
+          },
+          "gpiUetr": {
+            "type": "string",
+            "description": "SWIFT gpi Unique End-to-end Transaction Reference"
+          },
+          "status": {
+            "type": "string"
+          },
+          "processedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    },
+    "pagination": {
+      "$ref": "#/components/schemas/Pagination"
+    }
+  }
+}

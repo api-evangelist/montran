@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/ChannelList",
+  "title": "ChannelList",
+  "type": "object",
+  "properties": {
+    "channels": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/ChannelDetail"
+      }
+    }
+  }
+}

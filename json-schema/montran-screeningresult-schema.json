@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/ScreeningResult",
+  "title": "ScreeningResult",
+  "type": "object",
+  "description": "Transaction screening result",
+  "properties": {
+    "screeningId": {
+      "type": "string",
+      "description": "Unique screening identifier"
+    },
+    "result": {
+      "type": "string",
+      "description": "Overall screening result",
+      "enum": [
+        "PASS",
+        "HIT",
+        "POSSIBLE_HIT"
+      ]
+    },
+    "matchCount": {
+      "type": "integer",
+      "description": "Number of matches found"
+    },
+    "matches": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/ScreeningMatch"
+      }
+    },
+    "screenedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "latencyMs": {
+      "type": "integer",
+      "description": "Screening processing time in milliseconds"
+    }
+  }
+}

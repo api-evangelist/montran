@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/ChannelDetail",
+  "title": "ChannelDetail",
+  "type": "object",
+  "description": "Communication channel configuration and status",
+  "properties": {
+    "channelId": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "SWIFT",
+        "API_REST",
+        "API_SOAP",
+        "QUEUE_MQ",
+        "QUEUE_KAFKA",
+        "FILE_SFTP",
+        "FILE_SHARED"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "inactive",
+        "degraded",
+        "error"
+      ]
+    },
+    "supportedFormats": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "connectedSystems": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "configuration": {
+      "type": "object",
+      "description": "Channel-specific configuration",
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/FileStatus",
+  "title": "FileStatus",
+  "type": "object",
+  "properties": {
+    "fileId": {
+      "type": "string"
+    },
+    "fileName": {
+      "type": "string"
+    },
+    "format": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "PROCESSING",
+        "COMPLETED",
+        "COMPLETED_WITH_ERRORS",
+        "FAILED"
+      ]
+    },
+    "totalRecords": {
+      "type": "integer"
+    },
+    "successfulRecords": {
+      "type": "integer"
+    },
+    "failedRecords": {
+      "type": "integer"
+    },
+    "errors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "recordNumber": {
+            "type": "integer"
+          },
+          "errorMessage": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "uploadedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "processedAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

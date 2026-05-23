@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/AccountBalances",
+  "title": "AccountBalances",
+  "type": "object",
+  "description": "Account balance information",
+  "properties": {
+    "accountId": {
+      "type": "string"
+    },
+    "balances": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "balanceType": {
+            "type": "string",
+            "enum": [
+              "closingBooked",
+              "expected",
+              "interimAvailable",
+              "interimBooked",
+              "openingBooked"
+            ]
+          },
+          "amount": {
+            "type": "number",
+            "format": "double"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "creditDebitIndicator": {
+            "type": "string",
+            "enum": [
+              "CRDT",
+              "DBIT"
+            ]
+          },
+          "referenceDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "lastChangeDateTime": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    }
+  }
+}

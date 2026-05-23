@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/PaymentReturnResponse",
+  "title": "PaymentReturnResponse",
+  "type": "object",
+  "description": "Response for a payment return",
+  "properties": {
+    "returnId": {
+      "type": "string",
+      "description": "Unique return identifier"
+    },
+    "originalPaymentId": {
+      "type": "string",
+      "description": "Original payment identifier"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "PROCESSED",
+        "REJECTED"
+      ]
+    },
+    "processedAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

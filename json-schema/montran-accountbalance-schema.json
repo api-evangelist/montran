@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/AccountBalance",
+  "title": "AccountBalance",
+  "type": "object",
+  "description": "Account balance information aligned with ISO 20022 camt.052 BankToCustomerAccountReport",
+  "properties": {
+    "accountId": {
+      "type": "string",
+      "description": "Account identifier"
+    },
+    "account": {
+      "$ref": "#/components/schemas/AccountIdentification"
+    },
+    "balances": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "Balance type",
+            "enum": [
+              "CLBD",
+              "ITBD",
+              "OPBD",
+              "PRCD",
+              "XPCD",
+              "ITAV"
+            ]
+          },
+          "amount": {
+            "type": "number",
+            "format": "double",
+            "description": "Balance amount"
+          },
+          "currency": {
+            "type": "string",
+            "description": "Currency code"
+          },
+          "creditDebitIndicator": {
+            "type": "string",
+            "enum": [
+              "CRDT",
+              "DBIT"
+            ]
+          },
+          "dateTime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Balance date and time"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/RequestToPayDetail",
+  "title": "RequestToPayDetail",
+  "type": "object",
+  "description": "Full request-to-pay details with status",
+  "properties": {
+    "requestId": {
+      "type": "string"
+    },
+    "messageId": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "CREATED",
+        "SENT",
+        "ACCEPTED",
+        "REJECTED",
+        "EXPIRED",
+        "CANCELLED"
+      ]
+    },
+    "creditorName": {
+      "type": "string"
+    },
+    "creditorAccount": {
+      "$ref": "#/components/schemas/AccountIdentification"
+    },
+    "debtorName": {
+      "type": "string"
+    },
+    "debtorAccount": {
+      "$ref": "#/components/schemas/AccountIdentification"
+    },
+    "amount": {
+      "type": "number",
+      "format": "double"
+    },
+    "currency": {
+      "type": "string"
+    },
+    "expiryDate": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "resultingPaymentId": {
+      "type": "string",
+      "description": "Payment ID if the request was accepted and payment initiated"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/PaymentReturnRequest",
+  "title": "PaymentReturnRequest",
+  "type": "object",
+  "description": "Payment return request using ISO 20022 pacs.004 PaymentReturn",
+  "required": [
+    "reasonCode"
+  ],
+  "properties": {
+    "reasonCode": {
+      "type": "string",
+      "description": "Return reason code",
+      "enum": [
+        "AC01",
+        "AC04",
+        "AC06",
+        "AG01",
+        "AM05",
+        "BE04",
+        "DNOR",
+        "FOCR",
+        "MD01",
+        "MS02",
+        "RR01"
+      ]
+    },
+    "additionalInformation": {
+      "type": "string",
+      "description": "Additional return reason information"
+    }
+  }
+}
