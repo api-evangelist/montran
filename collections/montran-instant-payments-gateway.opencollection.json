@@ -1,0 +1,410 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Montran Instant Payments Gateway API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "authorization_code",
+      "authorizationUrl": "https://auth.montran.com/oauth2/authorize",
+      "accessTokenUrl": "https://auth.montran.com/oauth2/token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Consent",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Montran Create a PSD2 consent",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.montran.com/ipg/v1/consents",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new PSD2 consent for account access (AISP) or payment initiation (PISP). The consent must be authorized by the payment service user (PSU) before it can be used. Supports Strong Customer Authentication (SCA) flows as required by PSD2."
+        },
+        {
+          "info": {
+            "name": "Montran Get consent status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/ipg/v1/consents/:consentId",
+            "params": [
+              {
+                "name": "consentId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the PSD2 consent"
+              }
+            ]
+          },
+          "docs": "Retrieves the current status and details of a PSD2 consent. Used to check whether the consent has been authorized by the PSU and remains valid for use."
+        },
+        {
+          "info": {
+            "name": "Montran Revoke a consent",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.montran.com/ipg/v1/consents/:consentId",
+            "params": [
+              {
+                "name": "consentId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the PSD2 consent"
+              }
+            ]
+          },
+          "docs": "Revokes an existing PSD2 consent. Once revoked, the consent can no longer be used for account access or payment initiation."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Instant Payments",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Montran Initiate an instant payment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.montran.com/ipg/v1/payments/instant",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Initiates a real-time instant payment with guaranteed end-to-end processing latency of a few seconds. The payment is processed using ISO 20022 pacs.008 FIToFICustomerCreditTransfer messaging. Supports credit transfers across instant payment schemes. Returns the payment status synchronously, including confirmation or rejection."
+        },
+        {
+          "info": {
+            "name": "Montran Get instant payment details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/ipg/v1/payments/instant/:paymentId",
+            "params": [
+              {
+                "name": "paymentId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the payment"
+              }
+            ]
+          },
+          "docs": "Retrieves the full details and current status of a specific instant payment. Returns ISO 20022 pacs.002 status information including acceptance or rejection reason codes."
+        },
+        {
+          "info": {
+            "name": "Montran Return an instant payment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.montran.com/ipg/v1/payments/instant/:paymentId/return",
+            "params": [
+              {
+                "name": "paymentId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the payment"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Initiates the return of a previously received instant payment. Uses ISO 20022 pacs.004 PaymentReturn messaging. The return must specify a valid reason code."
+        },
+        {
+          "info": {
+            "name": "Montran Submit a bulk payment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.montran.com/ipg/v1/payments/bulk",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Submits a batch of instant payments for processing. Each payment in the batch is processed individually in real-time. Supports high-volume use cases such as salary payments and batch collections."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Payment Initiation",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Montran Initiate a PISP credit transfer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.montran.com/ipg/v1/payments/credit-transfer",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Initiates a credit transfer payment on behalf of a Payment Service User (PSU) as a Payment Initiation Service Provider (PISP) under PSD2. Requires valid PSU consent. Uses ISO 20022 pain.001 CustomerCreditTransferInitiation format."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Request to Pay",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Montran Initiate a request to pay",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.montran.com/ipg/v1/payments/request-to-pay",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Initiates a request-to-pay (R2P) message to request payment from a debtor. The debtor receives the request and can accept or reject it. Supports person-to-person, person-to-merchant, and business-to-business use cases. Uses ISO 20022 pain.013 CreditorPaymentActivationRequest."
+        },
+        {
+          "info": {
+            "name": "Montran Get request-to-pay details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/ipg/v1/payments/request-to-pay/:requestId",
+            "params": [
+              {
+                "name": "requestId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the request to pay"
+              }
+            ]
+          },
+          "docs": "Retrieves the details and current status of a request-to-pay. Shows whether the request has been accepted, rejected, or is still pending."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Account Information",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Montran List accessible accounts (AISP)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/ipg/v1/accounts",
+            "params": [
+              {
+                "name": "consentId",
+                "value": "",
+                "type": "query",
+                "description": "PSD2 consent identifier authorizing access"
+              }
+            ]
+          },
+          "docs": "Retrieves a list of payment accounts accessible to the Account Information Service Provider (AISP) under an authorized PSD2 consent. Provides account identification, type, currency, and basic balance information."
+        },
+        {
+          "info": {
+            "name": "Montran Get account details (AISP)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/ipg/v1/accounts/:accountId",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the payment account"
+              },
+              {
+                "name": "consentId",
+                "value": "",
+                "type": "query",
+                "description": "PSD2 consent identifier"
+              }
+            ]
+          },
+          "docs": "Retrieves detailed information about a specific payment account including account holder name, IBAN, currency, and product type. Requires valid PSD2 AISP consent."
+        },
+        {
+          "info": {
+            "name": "Montran Get account balances (AISP)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/ipg/v1/accounts/:accountId/balances",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the payment account"
+              },
+              {
+                "name": "consentId",
+                "value": "",
+                "type": "query",
+                "description": "PSD2 consent identifier"
+              }
+            ]
+          },
+          "docs": "Retrieves the current balances for a specific payment account. Returns available balance, booked balance, and expected balance. Requires valid PSD2 AISP consent."
+        },
+        {
+          "info": {
+            "name": "Montran Get account transactions (AISP)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/ipg/v1/accounts/:accountId/transactions",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the payment account"
+              },
+              {
+                "name": "consentId",
+                "value": "",
+                "type": "query",
+                "description": "PSD2 consent identifier"
+              },
+              {
+                "name": "dateFrom",
+                "value": "",
+                "type": "query",
+                "description": "Start date for transaction filter (ISO 8601)"
+              },
+              {
+                "name": "dateTo",
+                "value": "",
+                "type": "query",
+                "description": "End date for transaction filter (ISO 8601)"
+              },
+              {
+                "name": "bookingStatus",
+                "value": "",
+                "type": "query",
+                "description": "Filter by booking status"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number for pagination"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Number of items per page"
+              }
+            ]
+          },
+          "docs": "Retrieves a list of transactions for a specific payment account. Supports filtering by date range, booking status, and amount. Requires valid PSD2 AISP consent."
+        },
+        {
+          "info": {
+            "name": "Montran Verify account balance sufficiency",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.montran.com/ipg/v1/accounts/:accountId/verification",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the payment account"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Performs a balance sufficiency check on a payment account. Returns whether the account has sufficient funds for the specified amount without disclosing the actual balance. Used for pre-payment validation."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Payment Status",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Montran Get payment status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/ipg/v1/payments/:paymentId/status",
+            "params": [
+              {
+                "name": "paymentId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the payment"
+              }
+            ]
+          },
+          "docs": "Retrieves the real-time processing status of a payment. Returns ISO 20022 pacs.002 status codes including acceptance, rejection, or settlement confirmation."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

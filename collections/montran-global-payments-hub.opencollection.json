@@ -1,0 +1,357 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Montran Global Payments Hub API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Payments",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Montran List payments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/gph/v1/payments",
+            "params": [
+              {
+                "name": "paymentType",
+                "value": "",
+                "type": "query",
+                "description": "Filter by payment type"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by payment processing status"
+              },
+              {
+                "name": "currency",
+                "value": "",
+                "type": "query",
+                "description": "Filter by ISO 4217 currency code"
+              },
+              {
+                "name": "fromDate",
+                "value": "",
+                "type": "query",
+                "description": "Start date for filtering (ISO 8601 format)"
+              },
+              {
+                "name": "toDate",
+                "value": "",
+                "type": "query",
+                "description": "End date for filtering (ISO 8601 format)"
+              },
+              {
+                "name": "clearingSystem",
+                "value": "",
+                "type": "query",
+                "description": "Filter by clearing and settlement mechanism"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number for pagination"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Number of items per page"
+              }
+            ]
+          },
+          "docs": "Retrieves a list of payments processed through the Global Payments Hub. Supports filtering by payment type, status, currency, date range, and clearing system. Returns payments across all supported clearing and settlement mechanisms including SEPA, Target2, Fedwire, CHIPS, RTGS, ACH, and cross-border payments."
+        },
+        {
+          "info": {
+            "name": "Montran Initiate a payment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.montran.com/gph/v1/payments",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Initiates a new payment through the Global Payments Hub. Supports credit transfers, direct debits, cross-border payments, and cheques. The payment is automatically routed to the appropriate clearing and settlement system based on the payment type, currency, and destination. Accepts ISO 20022 pain.001 format for credit transfers and pain.008 for direct debits, as well as SWIFT FIN MT103 format."
+        },
+        {
+          "info": {
+            "name": "Montran Get payment details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/gph/v1/payments/:paymentId",
+            "params": [
+              {
+                "name": "paymentId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the payment"
+              }
+            ]
+          },
+          "docs": "Retrieves the full details of a specific payment including its current status, clearing system assignment, settlement information, and complete audit trail. Returns ISO 20022 pacs.002 status information."
+        },
+        {
+          "info": {
+            "name": "Montran Cancel a payment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.montran.com/gph/v1/payments/:paymentId/cancel",
+            "params": [
+              {
+                "name": "paymentId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the payment"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requests cancellation of a payment that has not yet been settled. Generates an ISO 20022 camt.056 FIToFIPaymentCancellationRequest message. Cancellation availability depends on the payment status and the clearing system rules."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Payment Status",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Montran Get payment status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/gph/v1/payments/:paymentId/status",
+            "params": [
+              {
+                "name": "paymentId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the payment"
+              }
+            ]
+          },
+          "docs": "Retrieves the current processing status of a payment. Returns status information aligned with ISO 20022 pacs.002 Payment Status Report format, including reason codes for rejected or returned payments."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Credit Transfers",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Montran Initiate a credit transfer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.montran.com/gph/v1/credit-transfers",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Initiates a credit transfer payment using ISO 20022 pain.001 CustomerCreditTransferInitiation format. Supports SEPA credit transfers, Target2 high-value payments, Fedwire transfers, CHIPS payments, and cross-border SWIFT transfers. The system automatically routes the payment to the appropriate clearing mechanism."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Direct Debits",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Montran Initiate a direct debit",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.montran.com/gph/v1/direct-debits",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Initiates a direct debit collection using ISO 20022 pain.008 CustomerDirectDebitInitiation format. Supports SEPA Direct Debit (Core and B2B schemes) and local ACH direct debit schemes."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Clearing",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Montran List clearing batches",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/gph/v1/clearing/batches",
+            "params": [
+              {
+                "name": "clearingSystem",
+                "value": "",
+                "type": "query",
+                "description": "Filter by clearing and settlement mechanism"
+              },
+              {
+                "name": "direction",
+                "value": "",
+                "type": "query",
+                "description": "Filter by clearing direction"
+              },
+              {
+                "name": "fromDate",
+                "value": "",
+                "type": "query",
+                "description": "Start date for filtering (ISO 8601 format)"
+              },
+              {
+                "name": "toDate",
+                "value": "",
+                "type": "query",
+                "description": "End date for filtering (ISO 8601 format)"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number for pagination"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Number of items per page"
+              }
+            ]
+          },
+          "docs": "Retrieves a list of clearing batches submitted to or received from clearing and settlement mechanisms. Supports filtering by clearing system (SEPA, Target2, Fedwire, CHIPS, local ACH/RTGS), direction (inbound/outbound), and date range."
+        },
+        {
+          "info": {
+            "name": "Montran Get clearing batch details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/gph/v1/clearing/batches/:batchId",
+            "params": [
+              {
+                "name": "batchId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the clearing batch"
+              }
+            ]
+          },
+          "docs": "Retrieves the details of a specific clearing batch including the list of payments contained within it, settlement status, and clearing system acknowledgement information."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Accounts",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Montran Get account balance",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/gph/v1/accounts/:accountId/balance",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the account"
+              }
+            ]
+          },
+          "docs": "Retrieves the current balance of an account including available balance, booked balance, and pending transactions. Aligned with ISO 20022 camt.052 BankToCustomerAccountReport format."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Statements",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Montran Get account statements",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/gph/v1/accounts/:accountId/statements",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the account"
+              },
+              {
+                "name": "fromDate",
+                "value": "",
+                "type": "query",
+                "description": "Start date for filtering (ISO 8601 format)"
+              },
+              {
+                "name": "toDate",
+                "value": "",
+                "type": "query",
+                "description": "End date for filtering (ISO 8601 format)"
+              }
+            ]
+          },
+          "docs": "Retrieves account statements for a specified date range. Returns statement information aligned with ISO 20022 camt.053 BankToCustomerStatement format including all credit and debit entries, opening and closing balances."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

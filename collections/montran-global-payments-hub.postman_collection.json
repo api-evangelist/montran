@@ -1,0 +1,3685 @@
+{
+  "item": [
+    {
+      "id": "4a28d3a7-18c5-49db-9238-e9c255baeb23",
+      "name": "Accounts",
+      "description": {
+        "content": "Account information and balance inquiry operations",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "7f4918bb-bfb2-47c1-a94d-eec78d7a3c63",
+          "name": "Montran Get account balance",
+          "request": {
+            "name": "Montran Get account balance",
+            "description": {
+              "content": "Retrieves the current balance of an account including available balance, booked balance, and pending transactions. Aligned with ISO 20022 camt.052 BankToCustomerAccountReport format.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":accountId",
+                "balance"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "accountId",
+                  "description": "(Required) Unique identifier of the account"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "bfb8a697-cbcd-4bc2-a3a0-6872aff87840",
+              "name": "Successfully retrieved account balance",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":accountId",
+                    "balance"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "accountId",
+                      "description": "(Required) Unique identifier of the account"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"accountId\": \"string\",\n  \"account\": {\n    \"iban\": \"IG34YKAV5\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"IXY\"\n  },\n  \"balances\": [\n    {\n      \"type\": \"CLBD\",\n      \"amount\": 6974.461401260404,\n      \"currency\": \"string\",\n      \"creditDebitIndicator\": \"DBIT\",\n      \"dateTime\": \"1998-10-11T18:26:45.718Z\"\n    },\n    {\n      \"type\": \"PRCD\",\n      \"amount\": 1300.6383195707626,\n      \"currency\": \"string\",\n      \"creditDebitIndicator\": \"DBIT\",\n      \"dateTime\": \"2015-09-15T19:01:17.844Z\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "70f1240c-83df-48c3-94e5-dc6da524ac7e",
+              "name": "Authentication required or credentials invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":accountId",
+                    "balance"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "accountId",
+                      "description": "(Required) Unique identifier of the account"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "820f9186-7f01-40c0-a263-7e0864531226",
+              "name": "Requested resource not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":accountId",
+                    "balance"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "accountId",
+                      "description": "(Required) Unique identifier of the account"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8835b513-2326-4579-9f2a-9caa3791b7e3",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":accountId",
+                    "balance"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "accountId",
+                      "description": "(Required) Unique identifier of the account"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "7408bc4e-b22d-4a4a-be7f-7e92ef91ec54",
+      "name": "Clearing",
+      "description": {
+        "content": "Clearing and settlement operations across multiple CSMs",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "eeb9e725-2469-4364-9743-30fb3802243f",
+          "name": "Montran List clearing batches",
+          "request": {
+            "name": "Montran List clearing batches",
+            "description": {
+              "content": "Retrieves a list of clearing batches submitted to or received from clearing and settlement mechanisms. Supports filtering by clearing system (SEPA, Target2, Fedwire, CHIPS, local ACH/RTGS), direction (inbound/outbound), and date range.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "clearing",
+                "batches"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "clearingSystem",
+                  "value": "<string>",
+                  "description": "Filter by clearing and settlement mechanism"
+                },
+                {
+                  "disabled": false,
+                  "key": "direction",
+                  "value": "<string>",
+                  "description": "Filter by clearing direction"
+                },
+                {
+                  "disabled": false,
+                  "key": "fromDate",
+                  "value": "<date>",
+                  "description": "Start date for filtering (ISO 8601 format)"
+                },
+                {
+                  "disabled": false,
+                  "key": "toDate",
+                  "value": "<date>",
+                  "description": "End date for filtering (ISO 8601 format)"
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number for pagination"
+                },
+                {
+                  "disabled": false,
+                  "key": "pageSize",
+                  "value": "20",
+                  "description": "Number of items per page"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "cc4a09fb-271b-4825-b674-4e2061ffc08a",
+              "name": "Successfully retrieved clearing batches",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clearing",
+                    "batches"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "clearingSystem",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "direction",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "fromDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "toDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "20"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"batches\": [\n    {\n      \"batchId\": \"string\",\n      \"clearingSystem\": \"string\",\n      \"direction\": \"outbound\",\n      \"status\": \"rejected\",\n      \"numberOfTransactions\": 574,\n      \"totalAmount\": 6666.296735696321,\n      \"currency\": \"string\",\n      \"settlementDate\": \"1964-03-23\",\n      \"createdAt\": \"2006-09-20T07:59:48.714Z\",\n      \"payments\": [\n        {\n          \"paymentId\": \"string\",\n          \"messageId\": \"string\",\n          \"paymentType\": \"string\",\n          \"status\": \"string\",\n          \"debtorName\": \"string\",\n          \"debtorAccount\": {\n            \"iban\": \"DN49G6NV2GXIT\",\n            \"accountNumber\": \"string\",\n            \"currency\": \"WWK\"\n          },\n          \"debtorAgent\": {\n            \"bic\": \"VZXHRO16\",\n            \"name\": \"string\",\n            \"clearingSystemMemberId\": \"string\"\n          },\n          \"creditorName\": \"string\",\n          \"creditorAccount\": {\n            \"iban\": \"QO98EPBQPBANBBQFRZH4\",\n            \"accountNumber\": \"string\",\n            \"currency\": \"UUN\"\n          },\n          \"creditorAgent\": {\n            \"bic\": \"CTAWICAX\",\n            \"name\": \"string\",\n            \"clearingSystemMemberId\": \"string\"\n          },\n          \"amount\": 7328.628393562395,\n          \"currency\": \"string\",\n          \"endToEndId\": \"string\",\n          \"clearingSystem\": \"string\",\n          \"settlementDate\": \"2021-03-11\",\n          \"createdAt\": \"1994-05-13T03:33:49.504Z\",\n          \"updatedAt\": \"1983-12-28T06:46:14.847Z\",\n          \"statusHistory\": [\n            {\n              \"status\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"timestamp\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"reasonCode\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"description\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"status\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"timestamp\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"reasonCode\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"description\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ]\n        },\n        {\n          \"paymentId\": \"string\",\n          \"messageId\": \"string\",\n          \"paymentType\": \"string\",\n          \"status\": \"string\",\n          \"debtorName\": \"string\",\n          \"debtorAccount\": {\n            \"iban\": \"IU19LTCX5KT0\",\n            \"accountNumber\": \"string\",\n            \"currency\": \"TZQ\"\n          },\n          \"debtorAgent\": {\n            \"bic\": \"YFSHZKOC\",\n            \"name\": \"string\",\n            \"clearingSystemMemberId\": \"string\"\n          },\n          \"creditorName\": \"string\",\n          \"creditorAccount\": {\n            \"iban\": \"WQ51VIFOY9WVV7RCU3HW4AVWHHL3FH\",\n            \"accountNumber\": \"string\",\n            \"currency\": \"JAO\"\n          },\n          \"creditorAgent\": {\n            \"bic\": \"BLBNJPD7\",\n            \"name\": \"string\",\n            \"clearingSystemMemberId\": \"string\"\n          },\n          \"amount\": 7771.422145659693,\n          \"currency\": \"string\",\n          \"endToEndId\": \"string\",\n          \"clearingSystem\": \"string\",\n          \"settlementDate\": \"2004-02-02\",\n          \"createdAt\": \"1992-12-05T19:45:39.160Z\",\n          \"updatedAt\": \"1984-01-28T00:20:07.643Z\",\n          \"statusHistory\": [\n            {\n              \"status\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"timestamp\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"reasonCode\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"description\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"status\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"timestamp\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"reasonCode\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"description\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ]\n        }\n      ]\n    },\n    {\n      \"batchId\": \"string\",\n      \"clearingSystem\": \"string\",\n      \"direction\": \"outbound\",\n      \"status\": \"pending\",\n      \"numberOfTransactions\": 3798,\n      \"totalAmount\": 2833.516575203967,\n      \"currency\": \"string\",\n      \"settlementDate\": \"1979-10-05\",\n      \"createdAt\": \"1967-12-23T18:22:43.078Z\",\n      \"payments\": [\n        {\n          \"paymentId\": \"string\",\n          \"messageId\": \"string\",\n          \"paymentType\": \"string\",\n          \"status\": \"string\",\n          \"debtorName\": \"string\",\n          \"debtorAccount\": {\n            \"iban\": \"EJ36NU0TNL2IU\",\n            \"accountNumber\": \"string\",\n            \"currency\": \"ADK\"\n          },\n          \"debtorAgent\": {\n            \"bic\": \"VRVZAI53\",\n            \"name\": \"string\",\n            \"clearingSystemMemberId\": \"string\"\n          },\n          \"creditorName\": \"string\",\n          \"creditorAccount\": {\n            \"iban\": \"BX75KHSTT96TREUQJYCT5RDYC8UQLRKURO\",\n            \"accountNumber\": \"string\",\n            \"currency\": \"HTQ\"\n          },\n          \"creditorAgent\": {\n            \"bic\": \"QDAGWVB6YK6\",\n            \"name\": \"string\",\n            \"clearingSystemMemberId\": \"string\"\n          },\n          \"amount\": 868.2595843132157,\n          \"currency\": \"string\",\n          \"endToEndId\": \"string\",\n          \"clearingSystem\": \"string\",\n          \"settlementDate\": \"2023-07-11\",\n          \"createdAt\": \"1996-11-30T21:45:30.995Z\",\n          \"updatedAt\": \"2021-05-25T00:40:22.598Z\",\n          \"statusHistory\": [\n            {\n              \"status\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"timestamp\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"reasonCode\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"description\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"status\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"timestamp\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"reasonCode\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"description\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ]\n        },\n        {\n          \"paymentId\": \"string\",\n          \"messageId\": \"string\",\n          \"paymentType\": \"string\",\n          \"status\": \"string\",\n          \"debtorName\": \"string\",\n          \"debtorAccount\": {\n            \"iban\": \"ZE45EMQUDMO8SC832SM06Z6733X1JH5CL8\",\n            \"accountNumber\": \"string\",\n            \"currency\": \"RRM\"\n          },\n          \"debtorAgent\": {\n            \"bic\": \"QSEPJTM2TSE\",\n            \"name\": \"string\",\n            \"clearingSystemMemberId\": \"string\"\n          },\n          \"creditorName\": \"string\",\n          \"creditorAccount\": {\n            \"iban\": \"UC570CTK0B2VX2MLRTPI\",\n            \"accountNumber\": \"string\",\n            \"currency\": \"WMQ\"\n          },\n          \"creditorAgent\": {\n            \"bic\": \"THOVANJE\",\n            \"name\": \"string\",\n            \"clearingSystemMemberId\": \"string\"\n          },\n          \"amount\": 1871.8983400458278,\n          \"currency\": \"string\",\n          \"endToEndId\": \"string\",\n          \"clearingSystem\": \"string\",\n          \"settlementDate\": \"1955-03-04\",\n          \"createdAt\": \"1972-10-15T19:46:11.361Z\",\n          \"updatedAt\": \"2017-05-24T05:31:00.604Z\",\n          \"statusHistory\": [\n            {\n              \"status\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"timestamp\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"reasonCode\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"description\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"status\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"timestamp\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"reasonCode\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"description\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ]\n        }\n      ]\n    }\n  ],\n  \"pagination\": {\n    \"page\": 1474,\n    \"pageSize\": 5059,\n    \"totalItems\": 8301,\n    \"totalPages\": 1539\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f87cc25d-e6a6-4536-b914-ba55739fd6b2",
+              "name": "Bad request - invalid parameters or malformed request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clearing",
+                    "batches"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "clearingSystem",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "direction",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "fromDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "toDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "20"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "280d6a93-ef90-46b9-b15a-77299bad067b",
+              "name": "Authentication required or credentials invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clearing",
+                    "batches"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "clearingSystem",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "direction",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "fromDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "toDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "20"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a62e3c46-1df7-4b8f-89ea-7fe05e87de11",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clearing",
+                    "batches"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "clearingSystem",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "direction",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "fromDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "toDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "20"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2653f360-c572-4daf-9990-d6e03b9fd2f3",
+          "name": "Montran Get clearing batch details",
+          "request": {
+            "name": "Montran Get clearing batch details",
+            "description": {
+              "content": "Retrieves the details of a specific clearing batch including the list of payments contained within it, settlement status, and clearing system acknowledgement information.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "clearing",
+                "batches",
+                ":batchId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "batchId",
+                  "description": "(Required) Unique identifier of the clearing batch"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "f86b1fc3-e61c-4a83-9e81-000e6eea9f6d",
+              "name": "Successfully retrieved clearing batch details",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clearing",
+                    "batches",
+                    ":batchId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "batchId",
+                      "description": "(Required) Unique identifier of the clearing batch"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"batchId\": \"string\",\n  \"clearingSystem\": \"string\",\n  \"direction\": \"inbound\",\n  \"status\": \"rejected\",\n  \"numberOfTransactions\": 8488,\n  \"totalAmount\": 6989.317335331448,\n  \"currency\": \"string\",\n  \"settlementDate\": \"1995-02-23\",\n  \"createdAt\": \"1983-02-19T23:01:15.966Z\",\n  \"payments\": [\n    {\n      \"paymentId\": \"string\",\n      \"messageId\": \"string\",\n      \"paymentType\": \"string\",\n      \"status\": \"string\",\n      \"debtorName\": \"string\",\n      \"debtorAccount\": {\n        \"iban\": \"NV184CMKZ0SVE1ZT0RUWKS\",\n        \"accountNumber\": \"string\",\n        \"currency\": \"EHD\"\n      },\n      \"debtorAgent\": {\n        \"bic\": \"LHULCWLC\",\n        \"name\": \"string\",\n        \"clearingSystemMemberId\": \"string\"\n      },\n      \"creditorName\": \"string\",\n      \"creditorAccount\": {\n        \"iban\": \"AD22GWSZT\",\n        \"accountNumber\": \"string\",\n        \"currency\": \"AZR\"\n      },\n      \"creditorAgent\": {\n        \"bic\": \"HJLDSKGXVQG\",\n        \"name\": \"string\",\n        \"clearingSystemMemberId\": \"string\"\n      },\n      \"amount\": 5115.567663093537,\n      \"currency\": \"string\",\n      \"endToEndId\": \"string\",\n      \"clearingSystem\": \"string\",\n      \"settlementDate\": \"1958-12-28\",\n      \"createdAt\": \"1992-04-22T23:40:17.581Z\",\n      \"updatedAt\": \"2002-08-29T05:03:40.348Z\",\n      \"statusHistory\": [\n        {\n          \"status\": \"string\",\n          \"timestamp\": \"2021-09-05T03:34:17.070Z\",\n          \"reasonCode\": \"string\",\n          \"description\": \"string\"\n        },\n        {\n          \"status\": \"string\",\n          \"timestamp\": \"1998-12-06T05:49:09.043Z\",\n          \"reasonCode\": \"string\",\n          \"description\": \"string\"\n        }\n      ]\n    },\n    {\n      \"paymentId\": \"string\",\n      \"messageId\": \"string\",\n      \"paymentType\": \"string\",\n      \"status\": \"string\",\n      \"debtorName\": \"string\",\n      \"debtorAccount\": {\n        \"iban\": \"MJ7989J4AT2N\",\n        \"accountNumber\": \"string\",\n        \"currency\": \"PYY\"\n      },\n      \"debtorAgent\": {\n        \"bic\": \"WFMMWDDD\",\n        \"name\": \"string\",\n        \"clearingSystemMemberId\": \"string\"\n      },\n      \"creditorName\": \"string\",\n      \"creditorAccount\": {\n        \"iban\": \"HV535IJLTXX8X91C8XXL9RTEXSFCT14AYA\",\n        \"accountNumber\": \"string\",\n        \"currency\": \"HGP\"\n      },\n      \"creditorAgent\": {\n        \"bic\": \"STWZIZ0B\",\n        \"name\": \"string\",\n        \"clearingSystemMemberId\": \"string\"\n      },\n      \"amount\": 9896.608566365048,\n      \"currency\": \"string\",\n      \"endToEndId\": \"string\",\n      \"clearingSystem\": \"string\",\n      \"settlementDate\": \"1981-03-11\",\n      \"createdAt\": \"2016-01-16T14:58:21.742Z\",\n      \"updatedAt\": \"1967-02-06T18:52:30.020Z\",\n      \"statusHistory\": [\n        {\n          \"status\": \"string\",\n          \"timestamp\": \"2014-06-16T07:26:29.650Z\",\n          \"reasonCode\": \"string\",\n          \"description\": \"string\"\n        },\n        {\n          \"status\": \"string\",\n          \"timestamp\": \"1946-11-06T03:35:39.557Z\",\n          \"reasonCode\": \"string\",\n          \"description\": \"string\"\n        }\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7dcd7c52-b6d0-47be-9dd7-d82070d2b424",
+              "name": "Authentication required or credentials invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clearing",
+                    "batches",
+                    ":batchId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "batchId",
+                      "description": "(Required) Unique identifier of the clearing batch"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e13a6db5-04c5-4ae7-8e8f-72a3b12110c7",
+              "name": "Requested resource not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clearing",
+                    "batches",
+                    ":batchId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "batchId",
+                      "description": "(Required) Unique identifier of the clearing batch"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cab7f187-a558-4db5-964f-7bce7f3bce80",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clearing",
+                    "batches",
+                    ":batchId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "batchId",
+                      "description": "(Required) Unique identifier of the clearing batch"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "9c77acfa-69a5-48dd-a45b-e255979b2612",
+      "name": "Credit Transfers",
+      "description": {
+        "content": "Credit transfer payment operations including SEPA and cross-border",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "c7164296-1bfc-44f8-8bd7-c86bf494175e",
+          "name": "Montran Initiate a credit transfer",
+          "request": {
+            "name": "Montran Initiate a credit transfer",
+            "description": {
+              "content": "Initiates a credit transfer payment using ISO 20022 pain.001 CustomerCreditTransferInitiation format. Supports SEPA credit transfers, Target2 high-value payments, Fedwire transfers, CHIPS payments, and cross-border SWIFT transfers. The system automatically routes the payment to the appropriate clearing mechanism.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "credit-transfers"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"debtorAccount\": {\n    \"iban\": \"<string>\",\n    \"accountNumber\": \"<string>\",\n    \"currency\": \"<string>\"\n  },\n  \"creditorAccount\": {\n    \"iban\": \"<string>\",\n    \"accountNumber\": \"<string>\",\n    \"currency\": \"<string>\"\n  },\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"messageId\": \"<string>\",\n  \"paymentInformationId\": \"<string>\",\n  \"numberOfTransactions\": \"<integer>\",\n  \"controlSum\": \"<double>\",\n  \"debtorName\": \"<string>\",\n  \"debtorAgent\": {\n    \"bic\": \"<string>\",\n    \"name\": \"<string>\",\n    \"clearingSystemMemberId\": \"<string>\"\n  },\n  \"creditorName\": \"<string>\",\n  \"creditorAgent\": {\n    \"bic\": \"<string>\",\n    \"name\": \"<string>\",\n    \"clearingSystemMemberId\": \"<string>\"\n  },\n  \"requestedExecutionDate\": \"<date>\",\n  \"endToEndId\": \"<string>\",\n  \"remittanceInformation\": \"<string>\",\n  \"chargeBearer\": \"<string>\",\n  \"categoryPurpose\": \"<string>\",\n  \"serviceLevel\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "bbab9086-888b-4551-9863-19b583d40526",
+              "name": "Credit transfer successfully initiated",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "credit-transfers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"debtorAccount\": {\n    \"iban\": \"OH1134LSZYNJ29E259P9U8I2GD4R99\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"WBW\"\n  },\n  \"creditorAccount\": {\n    \"iban\": \"EO313C3YD8DD3CW6T8P\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"YLD\"\n  },\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"messageId\": \"<string>\",\n  \"paymentInformationId\": \"<string>\",\n  \"numberOfTransactions\": \"<integer>\",\n  \"controlSum\": \"<double>\",\n  \"debtorName\": \"<string>\",\n  \"debtorAgent\": {\n    \"bic\": \"YOBHMISPY4A\",\n    \"name\": \"string\",\n    \"clearingSystemMemberId\": \"string\"\n  },\n  \"creditorName\": \"<string>\",\n  \"creditorAgent\": {\n    \"bic\": \"MHYGOKQRLTZ\",\n    \"name\": \"string\",\n    \"clearingSystemMemberId\": \"string\"\n  },\n  \"requestedExecutionDate\": \"<date>\",\n  \"endToEndId\": \"<string>\",\n  \"remittanceInformation\": \"<string>\",\n  \"chargeBearer\": \"<string>\",\n  \"categoryPurpose\": \"<string>\",\n  \"serviceLevel\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"paymentId\": \"string\",\n  \"messageId\": \"string\",\n  \"endToEndId\": \"string\",\n  \"status\": \"PENDING\",\n  \"clearingSystem\": \"string\",\n  \"createdAt\": \"1977-11-07T01:09:03.045Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "656e8d97-93d1-4232-aed4-7c547997dd11",
+              "name": "Bad request - invalid parameters or malformed request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "credit-transfers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"debtorAccount\": {\n    \"iban\": \"OH1134LSZYNJ29E259P9U8I2GD4R99\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"WBW\"\n  },\n  \"creditorAccount\": {\n    \"iban\": \"EO313C3YD8DD3CW6T8P\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"YLD\"\n  },\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"messageId\": \"<string>\",\n  \"paymentInformationId\": \"<string>\",\n  \"numberOfTransactions\": \"<integer>\",\n  \"controlSum\": \"<double>\",\n  \"debtorName\": \"<string>\",\n  \"debtorAgent\": {\n    \"bic\": \"YOBHMISPY4A\",\n    \"name\": \"string\",\n    \"clearingSystemMemberId\": \"string\"\n  },\n  \"creditorName\": \"<string>\",\n  \"creditorAgent\": {\n    \"bic\": \"MHYGOKQRLTZ\",\n    \"name\": \"string\",\n    \"clearingSystemMemberId\": \"string\"\n  },\n  \"requestedExecutionDate\": \"<date>\",\n  \"endToEndId\": \"<string>\",\n  \"remittanceInformation\": \"<string>\",\n  \"chargeBearer\": \"<string>\",\n  \"categoryPurpose\": \"<string>\",\n  \"serviceLevel\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d81175cd-d661-4818-b0e8-cfbfa24ade92",
+              "name": "Authentication required or credentials invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "credit-transfers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"debtorAccount\": {\n    \"iban\": \"OH1134LSZYNJ29E259P9U8I2GD4R99\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"WBW\"\n  },\n  \"creditorAccount\": {\n    \"iban\": \"EO313C3YD8DD3CW6T8P\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"YLD\"\n  },\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"messageId\": \"<string>\",\n  \"paymentInformationId\": \"<string>\",\n  \"numberOfTransactions\": \"<integer>\",\n  \"controlSum\": \"<double>\",\n  \"debtorName\": \"<string>\",\n  \"debtorAgent\": {\n    \"bic\": \"YOBHMISPY4A\",\n    \"name\": \"string\",\n    \"clearingSystemMemberId\": \"string\"\n  },\n  \"creditorName\": \"<string>\",\n  \"creditorAgent\": {\n    \"bic\": \"MHYGOKQRLTZ\",\n    \"name\": \"string\",\n    \"clearingSystemMemberId\": \"string\"\n  },\n  \"requestedExecutionDate\": \"<date>\",\n  \"endToEndId\": \"<string>\",\n  \"remittanceInformation\": \"<string>\",\n  \"chargeBearer\": \"<string>\",\n  \"categoryPurpose\": \"<string>\",\n  \"serviceLevel\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3f326fea-132b-4443-9996-05958fd831e9",
+              "name": "Request validation failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "credit-transfers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"debtorAccount\": {\n    \"iban\": \"OH1134LSZYNJ29E259P9U8I2GD4R99\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"WBW\"\n  },\n  \"creditorAccount\": {\n    \"iban\": \"EO313C3YD8DD3CW6T8P\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"YLD\"\n  },\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"messageId\": \"<string>\",\n  \"paymentInformationId\": \"<string>\",\n  \"numberOfTransactions\": \"<integer>\",\n  \"controlSum\": \"<double>\",\n  \"debtorName\": \"<string>\",\n  \"debtorAgent\": {\n    \"bic\": \"YOBHMISPY4A\",\n    \"name\": \"string\",\n    \"clearingSystemMemberId\": \"string\"\n  },\n  \"creditorName\": \"<string>\",\n  \"creditorAgent\": {\n    \"bic\": \"MHYGOKQRLTZ\",\n    \"name\": \"string\",\n    \"clearingSystemMemberId\": \"string\"\n  },\n  \"requestedExecutionDate\": \"<date>\",\n  \"endToEndId\": \"<string>\",\n  \"remittanceInformation\": \"<string>\",\n  \"chargeBearer\": \"<string>\",\n  \"categoryPurpose\": \"<string>\",\n  \"serviceLevel\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "278850bf-2feb-42f1-aeea-a1a20e0d35cc",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "credit-transfers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"debtorAccount\": {\n    \"iban\": \"OH1134LSZYNJ29E259P9U8I2GD4R99\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"WBW\"\n  },\n  \"creditorAccount\": {\n    \"iban\": \"EO313C3YD8DD3CW6T8P\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"YLD\"\n  },\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"messageId\": \"<string>\",\n  \"paymentInformationId\": \"<string>\",\n  \"numberOfTransactions\": \"<integer>\",\n  \"controlSum\": \"<double>\",\n  \"debtorName\": \"<string>\",\n  \"debtorAgent\": {\n    \"bic\": \"YOBHMISPY4A\",\n    \"name\": \"string\",\n    \"clearingSystemMemberId\": \"string\"\n  },\n  \"creditorName\": \"<string>\",\n  \"creditorAgent\": {\n    \"bic\": \"MHYGOKQRLTZ\",\n    \"name\": \"string\",\n    \"clearingSystemMemberId\": \"string\"\n  },\n  \"requestedExecutionDate\": \"<date>\",\n  \"endToEndId\": \"<string>\",\n  \"remittanceInformation\": \"<string>\",\n  \"chargeBearer\": \"<string>\",\n  \"categoryPurpose\": \"<string>\",\n  \"serviceLevel\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "0f0073c4-0114-452b-9aea-0aeaa8a21412",
+      "name": "Direct Debits",
+      "description": {
+        "content": "Direct debit payment operations",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "3ccc3968-b7d8-4c4e-8481-98877c114985",
+          "name": "Montran Initiate a direct debit",
+          "request": {
+            "name": "Montran Initiate a direct debit",
+            "description": {
+              "content": "Initiates a direct debit collection using ISO 20022 pain.008 CustomerDirectDebitInitiation format. Supports SEPA Direct Debit (Core and B2B schemes) and local ACH direct debit schemes.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "direct-debits"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"creditorAccount\": {\n    \"iban\": \"<string>\",\n    \"accountNumber\": \"<string>\",\n    \"currency\": \"<string>\"\n  },\n  \"debtorAccount\": {\n    \"iban\": \"<string>\",\n    \"accountNumber\": \"<string>\",\n    \"currency\": \"<string>\"\n  },\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"mandateId\": \"<string>\",\n  \"messageId\": \"<string>\",\n  \"creditorName\": \"<string>\",\n  \"creditorAgent\": {\n    \"bic\": \"<string>\",\n    \"name\": \"<string>\",\n    \"clearingSystemMemberId\": \"<string>\"\n  },\n  \"debtorName\": \"<string>\",\n  \"debtorAgent\": {\n    \"bic\": \"<string>\",\n    \"name\": \"<string>\",\n    \"clearingSystemMemberId\": \"<string>\"\n  },\n  \"requestedCollectionDate\": \"<date>\",\n  \"mandateDateOfSignature\": \"<date>\",\n  \"sequenceType\": \"<string>\",\n  \"schemeType\": \"<string>\",\n  \"endToEndId\": \"<string>\",\n  \"remittanceInformation\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "82d803b2-c176-46cf-979c-f0e8242d7a1c",
+              "name": "Direct debit successfully initiated",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "direct-debits"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"creditorAccount\": {\n    \"iban\": \"AE02OCULP\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"CKS\"\n  },\n  \"debtorAccount\": {\n    \"iban\": \"WY11EGO5LYH7TS4E76CHT0\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"GDN\"\n  },\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"mandateId\": \"<string>\",\n  \"messageId\": \"<string>\",\n  \"creditorName\": \"<string>\",\n  \"creditorAgent\": {\n    \"bic\": \"KBBDMJ18NNW\",\n    \"name\": \"string\",\n    \"clearingSystemMemberId\": \"string\"\n  },\n  \"debtorName\": \"<string>\",\n  \"debtorAgent\": {\n    \"bic\": \"FZIKJYAO\",\n    \"name\": \"string\",\n    \"clearingSystemMemberId\": \"string\"\n  },\n  \"requestedCollectionDate\": \"<date>\",\n  \"mandateDateOfSignature\": \"<date>\",\n  \"sequenceType\": \"<string>\",\n  \"schemeType\": \"<string>\",\n  \"endToEndId\": \"<string>\",\n  \"remittanceInformation\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"paymentId\": \"string\",\n  \"messageId\": \"string\",\n  \"endToEndId\": \"string\",\n  \"status\": \"PENDING\",\n  \"clearingSystem\": \"string\",\n  \"createdAt\": \"1977-11-07T01:09:03.045Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8024565a-b644-478e-af96-ed4b2c96ae45",
+              "name": "Bad request - invalid parameters or malformed request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "direct-debits"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"creditorAccount\": {\n    \"iban\": \"AE02OCULP\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"CKS\"\n  },\n  \"debtorAccount\": {\n    \"iban\": \"WY11EGO5LYH7TS4E76CHT0\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"GDN\"\n  },\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"mandateId\": \"<string>\",\n  \"messageId\": \"<string>\",\n  \"creditorName\": \"<string>\",\n  \"creditorAgent\": {\n    \"bic\": \"KBBDMJ18NNW\",\n    \"name\": \"string\",\n    \"clearingSystemMemberId\": \"string\"\n  },\n  \"debtorName\": \"<string>\",\n  \"debtorAgent\": {\n    \"bic\": \"FZIKJYAO\",\n    \"name\": \"string\",\n    \"clearingSystemMemberId\": \"string\"\n  },\n  \"requestedCollectionDate\": \"<date>\",\n  \"mandateDateOfSignature\": \"<date>\",\n  \"sequenceType\": \"<string>\",\n  \"schemeType\": \"<string>\",\n  \"endToEndId\": \"<string>\",\n  \"remittanceInformation\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e109b94f-354b-44e7-a102-921b88a64c09",
+              "name": "Authentication required or credentials invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "direct-debits"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"creditorAccount\": {\n    \"iban\": \"AE02OCULP\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"CKS\"\n  },\n  \"debtorAccount\": {\n    \"iban\": \"WY11EGO5LYH7TS4E76CHT0\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"GDN\"\n  },\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"mandateId\": \"<string>\",\n  \"messageId\": \"<string>\",\n  \"creditorName\": \"<string>\",\n  \"creditorAgent\": {\n    \"bic\": \"KBBDMJ18NNW\",\n    \"name\": \"string\",\n    \"clearingSystemMemberId\": \"string\"\n  },\n  \"debtorName\": \"<string>\",\n  \"debtorAgent\": {\n    \"bic\": \"FZIKJYAO\",\n    \"name\": \"string\",\n    \"clearingSystemMemberId\": \"string\"\n  },\n  \"requestedCollectionDate\": \"<date>\",\n  \"mandateDateOfSignature\": \"<date>\",\n  \"sequenceType\": \"<string>\",\n  \"schemeType\": \"<string>\",\n  \"endToEndId\": \"<string>\",\n  \"remittanceInformation\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3ee746f9-c637-4908-ac14-cd226983557a",
+              "name": "Request validation failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "direct-debits"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"creditorAccount\": {\n    \"iban\": \"AE02OCULP\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"CKS\"\n  },\n  \"debtorAccount\": {\n    \"iban\": \"WY11EGO5LYH7TS4E76CHT0\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"GDN\"\n  },\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"mandateId\": \"<string>\",\n  \"messageId\": \"<string>\",\n  \"creditorName\": \"<string>\",\n  \"creditorAgent\": {\n    \"bic\": \"KBBDMJ18NNW\",\n    \"name\": \"string\",\n    \"clearingSystemMemberId\": \"string\"\n  },\n  \"debtorName\": \"<string>\",\n  \"debtorAgent\": {\n    \"bic\": \"FZIKJYAO\",\n    \"name\": \"string\",\n    \"clearingSystemMemberId\": \"string\"\n  },\n  \"requestedCollectionDate\": \"<date>\",\n  \"mandateDateOfSignature\": \"<date>\",\n  \"sequenceType\": \"<string>\",\n  \"schemeType\": \"<string>\",\n  \"endToEndId\": \"<string>\",\n  \"remittanceInformation\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1869da94-2bdf-4e61-8963-056f3ddafbdb",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "direct-debits"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"creditorAccount\": {\n    \"iban\": \"AE02OCULP\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"CKS\"\n  },\n  \"debtorAccount\": {\n    \"iban\": \"WY11EGO5LYH7TS4E76CHT0\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"GDN\"\n  },\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"mandateId\": \"<string>\",\n  \"messageId\": \"<string>\",\n  \"creditorName\": \"<string>\",\n  \"creditorAgent\": {\n    \"bic\": \"KBBDMJ18NNW\",\n    \"name\": \"string\",\n    \"clearingSystemMemberId\": \"string\"\n  },\n  \"debtorName\": \"<string>\",\n  \"debtorAgent\": {\n    \"bic\": \"FZIKJYAO\",\n    \"name\": \"string\",\n    \"clearingSystemMemberId\": \"string\"\n  },\n  \"requestedCollectionDate\": \"<date>\",\n  \"mandateDateOfSignature\": \"<date>\",\n  \"sequenceType\": \"<string>\",\n  \"schemeType\": \"<string>\",\n  \"endToEndId\": \"<string>\",\n  \"remittanceInformation\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "b5b57129-01fd-415a-8738-3619a3147859",
+      "name": "Payment Status",
+      "description": {
+        "content": "Payment status inquiry and tracking operations",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "465de474-2fa8-4091-a776-5abfa86d86ae",
+          "name": "Montran Get payment status",
+          "request": {
+            "name": "Montran Get payment status",
+            "description": {
+              "content": "Retrieves the current processing status of a payment. Returns status information aligned with ISO 20022 pacs.002 Payment Status Report format, including reason codes for rejected or returned payments.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "payments",
+                ":paymentId",
+                "status"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "paymentId",
+                  "description": "(Required) Unique identifier of the payment"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "229ef340-9bfd-451f-9146-f8419b84ba19",
+              "name": "Successfully retrieved payment status",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    ":paymentId",
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "paymentId",
+                      "description": "(Required) Unique identifier of the payment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"paymentId\": \"string\",\n  \"originalMessageId\": \"string\",\n  \"originalEndToEndId\": \"string\",\n  \"status\": \"ACWC\",\n  \"reasonCode\": \"string\",\n  \"reasonDescription\": \"string\",\n  \"statusDateTime\": \"2009-10-22T23:11:37.150Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f068f08f-5755-4ebd-aa6b-b566bf98c507",
+              "name": "Authentication required or credentials invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    ":paymentId",
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "paymentId",
+                      "description": "(Required) Unique identifier of the payment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5c1d1a57-cdf4-481d-b6a8-3f8bb21b3425",
+              "name": "Requested resource not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    ":paymentId",
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "paymentId",
+                      "description": "(Required) Unique identifier of the payment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "dba0fbcb-8005-4ed2-8c34-f183cde80b45",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    ":paymentId",
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "paymentId",
+                      "description": "(Required) Unique identifier of the payment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "82ba0a79-c931-422f-b2e9-019eba6eec0a",
+      "name": "Payments",
+      "description": {
+        "content": "Payment initiation, submission, and management operations",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "1541cd4a-7ec3-4d5f-b581-cd2bd9b53f51",
+          "name": "Montran List payments",
+          "request": {
+            "name": "Montran List payments",
+            "description": {
+              "content": "Retrieves a list of payments processed through the Global Payments Hub. Supports filtering by payment type, status, currency, date range, and clearing system. Returns payments across all supported clearing and settlement mechanisms including SEPA, Target2, Fedwire, CHIPS, RTGS, ACH, and cross-border payments.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "payments"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "paymentType",
+                  "value": "<string>",
+                  "description": "Filter by payment type"
+                },
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>",
+                  "description": "Filter by payment processing status"
+                },
+                {
+                  "disabled": false,
+                  "key": "currency",
+                  "value": "<string>",
+                  "description": "Filter by ISO 4217 currency code"
+                },
+                {
+                  "disabled": false,
+                  "key": "fromDate",
+                  "value": "<date>",
+                  "description": "Start date for filtering (ISO 8601 format)"
+                },
+                {
+                  "disabled": false,
+                  "key": "toDate",
+                  "value": "<date>",
+                  "description": "End date for filtering (ISO 8601 format)"
+                },
+                {
+                  "disabled": false,
+                  "key": "clearingSystem",
+                  "value": "<string>",
+                  "description": "Filter by clearing and settlement mechanism"
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number for pagination"
+                },
+                {
+                  "disabled": false,
+                  "key": "pageSize",
+                  "value": "20",
+                  "description": "Number of items per page"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "cb8a019a-a70b-48a5-a3a6-629e500941fb",
+              "name": "Successfully retrieved list of payments",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "paymentType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "currency",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "fromDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "toDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "clearingSystem",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "20"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"payments\": [\n    {\n      \"paymentId\": \"string\",\n      \"messageId\": \"string\",\n      \"paymentType\": \"string\",\n      \"status\": \"string\",\n      \"debtorName\": \"string\",\n      \"debtorAccount\": {\n        \"iban\": \"XK89ZVD447SB0AC44EGS6PJ6JTQG46N\",\n        \"accountNumber\": \"string\",\n        \"currency\": \"LHU\"\n      },\n      \"debtorAgent\": {\n        \"bic\": \"GEDZJJHA\",\n        \"name\": \"string\",\n        \"clearingSystemMemberId\": \"string\"\n      },\n      \"creditorName\": \"string\",\n      \"creditorAccount\": {\n        \"iban\": \"NZ779HWYVWHAWY61B11FG\",\n        \"accountNumber\": \"string\",\n        \"currency\": \"WDQ\"\n      },\n      \"creditorAgent\": {\n        \"bic\": \"CUGJJZS1\",\n        \"name\": \"string\",\n        \"clearingSystemMemberId\": \"string\"\n      },\n      \"amount\": 7804.892610786946,\n      \"currency\": \"string\",\n      \"endToEndId\": \"string\",\n      \"clearingSystem\": \"string\",\n      \"settlementDate\": \"1947-12-05\",\n      \"createdAt\": \"1998-11-18T07:36:06.867Z\",\n      \"updatedAt\": \"1990-01-28T15:37:14.698Z\",\n      \"statusHistory\": [\n        {\n          \"status\": \"string\",\n          \"timestamp\": \"1949-10-08T13:01:03.261Z\",\n          \"reasonCode\": \"string\",\n          \"description\": \"string\"\n        },\n        {\n          \"status\": \"string\",\n          \"timestamp\": \"1961-07-02T10:44:42.811Z\",\n          \"reasonCode\": \"string\",\n          \"description\": \"string\"\n        }\n      ]\n    },\n    {\n      \"paymentId\": \"string\",\n      \"messageId\": \"string\",\n      \"paymentType\": \"string\",\n      \"status\": \"string\",\n      \"debtorName\": \"string\",\n      \"debtorAccount\": {\n        \"iban\": \"WU87G5CKHR9KOKXFTRFFO29ILLKMQEFCIN\",\n        \"accountNumber\": \"string\",\n        \"currency\": \"TRK\"\n      },\n      \"debtorAgent\": {\n        \"bic\": \"ISADOUHM\",\n        \"name\": \"string\",\n        \"clearingSystemMemberId\": \"string\"\n      },\n      \"creditorName\": \"string\",\n      \"creditorAccount\": {\n        \"iban\": \"KK28Q49LK4EZ\",\n        \"accountNumber\": \"string\",\n        \"currency\": \"SHW\"\n      },\n      \"creditorAgent\": {\n        \"bic\": \"WFRFRA66\",\n        \"name\": \"string\",\n        \"clearingSystemMemberId\": \"string\"\n      },\n      \"amount\": 5167.816994130681,\n      \"currency\": \"string\",\n      \"endToEndId\": \"string\",\n      \"clearingSystem\": \"string\",\n      \"settlementDate\": \"2008-03-08\",\n      \"createdAt\": \"1977-04-29T05:35:44.804Z\",\n      \"updatedAt\": \"2014-10-27T20:37:51.032Z\",\n      \"statusHistory\": [\n        {\n          \"status\": \"string\",\n          \"timestamp\": \"1980-11-21T19:06:53.649Z\",\n          \"reasonCode\": \"string\",\n          \"description\": \"string\"\n        },\n        {\n          \"status\": \"string\",\n          \"timestamp\": \"1961-02-20T11:13:23.365Z\",\n          \"reasonCode\": \"string\",\n          \"description\": \"string\"\n        }\n      ]\n    }\n  ],\n  \"pagination\": {\n    \"page\": 5082,\n    \"pageSize\": 312,\n    \"totalItems\": 876,\n    \"totalPages\": 9973\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2608a5c3-3056-47af-9c24-cee52e3ba284",
+              "name": "Bad request - invalid parameters or malformed request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "paymentType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "currency",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "fromDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "toDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "clearingSystem",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "20"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "11a14df2-e914-467d-982f-691218403261",
+              "name": "Authentication required or credentials invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "paymentType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "currency",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "fromDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "toDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "clearingSystem",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "20"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "76350571-1273-49f8-a086-626bec9c92c6",
+              "name": "Insufficient permissions for the requested operation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "paymentType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "currency",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "fromDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "toDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "clearingSystem",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "20"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e61408c0-b5db-439f-a79f-b2040efda746",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "paymentType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "currency",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "fromDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "toDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "clearingSystem",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "20"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "fa3d6afb-855b-4412-8510-bb7cf0b15d23",
+          "name": "Montran Initiate a payment",
+          "request": {
+            "name": "Montran Initiate a payment",
+            "description": {
+              "content": "Initiates a new payment through the Global Payments Hub. Supports credit transfers, direct debits, cross-border payments, and cheques. The payment is automatically routed to the appropriate clearing and settlement system based on the payment type, currency, and destination. Accepts ISO 20022 pain.001 format for credit transfers and pain.008 for direct debits, as well as SWIFT FIN MT103 format.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "payments"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"paymentType\": \"<string>\",\n  \"debtorAccount\": {\n    \"iban\": \"<string>\",\n    \"accountNumber\": \"<string>\",\n    \"currency\": \"<string>\"\n  },\n  \"creditorAccount\": {\n    \"iban\": \"<string>\",\n    \"accountNumber\": \"<string>\",\n    \"currency\": \"<string>\"\n  },\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"messageId\": \"<string>\",\n  \"debtorName\": \"<string>\",\n  \"debtorAgent\": {\n    \"bic\": \"<string>\",\n    \"name\": \"<string>\",\n    \"clearingSystemMemberId\": \"<string>\"\n  },\n  \"creditorName\": \"<string>\",\n  \"creditorAgent\": {\n    \"bic\": \"<string>\",\n    \"name\": \"<string>\",\n    \"clearingSystemMemberId\": \"<string>\"\n  },\n  \"requestedExecutionDate\": \"<date>\",\n  \"endToEndId\": \"<string>\",\n  \"remittanceInformation\": \"<string>\",\n  \"chargeBearer\": \"<string>\",\n  \"urgency\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "5198c31f-ae2b-4a6e-9226-0a01f9b74223",
+              "name": "Payment successfully initiated",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"paymentType\": \"<string>\",\n  \"debtorAccount\": {\n    \"iban\": \"PR16SYXJCWP6F0GAIMSLV\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"IDP\"\n  },\n  \"creditorAccount\": {\n    \"iban\": \"DB70EE4QJYJIVZ783P\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"MVQ\"\n  },\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"messageId\": \"<string>\",\n  \"debtorName\": \"<string>\",\n  \"debtorAgent\": {\n    \"bic\": \"WQVWNX33NL1\",\n    \"name\": \"string\",\n    \"clearingSystemMemberId\": \"string\"\n  },\n  \"creditorName\": \"<string>\",\n  \"creditorAgent\": {\n    \"bic\": \"FALJKLHJ\",\n    \"name\": \"string\",\n    \"clearingSystemMemberId\": \"string\"\n  },\n  \"requestedExecutionDate\": \"<date>\",\n  \"endToEndId\": \"<string>\",\n  \"remittanceInformation\": \"<string>\",\n  \"chargeBearer\": \"<string>\",\n  \"urgency\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"paymentId\": \"string\",\n  \"messageId\": \"string\",\n  \"endToEndId\": \"string\",\n  \"status\": \"PENDING\",\n  \"clearingSystem\": \"string\",\n  \"createdAt\": \"1977-11-07T01:09:03.045Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "64af18e9-fd2b-4c4c-aea1-005d08ff1616",
+              "name": "Bad request - invalid parameters or malformed request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"paymentType\": \"<string>\",\n  \"debtorAccount\": {\n    \"iban\": \"PR16SYXJCWP6F0GAIMSLV\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"IDP\"\n  },\n  \"creditorAccount\": {\n    \"iban\": \"DB70EE4QJYJIVZ783P\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"MVQ\"\n  },\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"messageId\": \"<string>\",\n  \"debtorName\": \"<string>\",\n  \"debtorAgent\": {\n    \"bic\": \"WQVWNX33NL1\",\n    \"name\": \"string\",\n    \"clearingSystemMemberId\": \"string\"\n  },\n  \"creditorName\": \"<string>\",\n  \"creditorAgent\": {\n    \"bic\": \"FALJKLHJ\",\n    \"name\": \"string\",\n    \"clearingSystemMemberId\": \"string\"\n  },\n  \"requestedExecutionDate\": \"<date>\",\n  \"endToEndId\": \"<string>\",\n  \"remittanceInformation\": \"<string>\",\n  \"chargeBearer\": \"<string>\",\n  \"urgency\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6fe31788-c827-4e8c-a41f-3877fd6e3dc7",
+              "name": "Authentication required or credentials invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"paymentType\": \"<string>\",\n  \"debtorAccount\": {\n    \"iban\": \"PR16SYXJCWP6F0GAIMSLV\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"IDP\"\n  },\n  \"creditorAccount\": {\n    \"iban\": \"DB70EE4QJYJIVZ783P\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"MVQ\"\n  },\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"messageId\": \"<string>\",\n  \"debtorName\": \"<string>\",\n  \"debtorAgent\": {\n    \"bic\": \"WQVWNX33NL1\",\n    \"name\": \"string\",\n    \"clearingSystemMemberId\": \"string\"\n  },\n  \"creditorName\": \"<string>\",\n  \"creditorAgent\": {\n    \"bic\": \"FALJKLHJ\",\n    \"name\": \"string\",\n    \"clearingSystemMemberId\": \"string\"\n  },\n  \"requestedExecutionDate\": \"<date>\",\n  \"endToEndId\": \"<string>\",\n  \"remittanceInformation\": \"<string>\",\n  \"chargeBearer\": \"<string>\",\n  \"urgency\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "557c3ec5-26bc-497e-bf27-975011c02086",
+              "name": "Insufficient permissions for the requested operation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"paymentType\": \"<string>\",\n  \"debtorAccount\": {\n    \"iban\": \"PR16SYXJCWP6F0GAIMSLV\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"IDP\"\n  },\n  \"creditorAccount\": {\n    \"iban\": \"DB70EE4QJYJIVZ783P\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"MVQ\"\n  },\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"messageId\": \"<string>\",\n  \"debtorName\": \"<string>\",\n  \"debtorAgent\": {\n    \"bic\": \"WQVWNX33NL1\",\n    \"name\": \"string\",\n    \"clearingSystemMemberId\": \"string\"\n  },\n  \"creditorName\": \"<string>\",\n  \"creditorAgent\": {\n    \"bic\": \"FALJKLHJ\",\n    \"name\": \"string\",\n    \"clearingSystemMemberId\": \"string\"\n  },\n  \"requestedExecutionDate\": \"<date>\",\n  \"endToEndId\": \"<string>\",\n  \"remittanceInformation\": \"<string>\",\n  \"chargeBearer\": \"<string>\",\n  \"urgency\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "136bee85-c996-456e-9757-61c42f05da21",
+              "name": "Request validation failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"paymentType\": \"<string>\",\n  \"debtorAccount\": {\n    \"iban\": \"PR16SYXJCWP6F0GAIMSLV\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"IDP\"\n  },\n  \"creditorAccount\": {\n    \"iban\": \"DB70EE4QJYJIVZ783P\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"MVQ\"\n  },\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"messageId\": \"<string>\",\n  \"debtorName\": \"<string>\",\n  \"debtorAgent\": {\n    \"bic\": \"WQVWNX33NL1\",\n    \"name\": \"string\",\n    \"clearingSystemMemberId\": \"string\"\n  },\n  \"creditorName\": \"<string>\",\n  \"creditorAgent\": {\n    \"bic\": \"FALJKLHJ\",\n    \"name\": \"string\",\n    \"clearingSystemMemberId\": \"string\"\n  },\n  \"requestedExecutionDate\": \"<date>\",\n  \"endToEndId\": \"<string>\",\n  \"remittanceInformation\": \"<string>\",\n  \"chargeBearer\": \"<string>\",\n  \"urgency\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0bd9f62d-2c55-4578-a6a4-41019089a115",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"paymentType\": \"<string>\",\n  \"debtorAccount\": {\n    \"iban\": \"PR16SYXJCWP6F0GAIMSLV\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"IDP\"\n  },\n  \"creditorAccount\": {\n    \"iban\": \"DB70EE4QJYJIVZ783P\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"MVQ\"\n  },\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"messageId\": \"<string>\",\n  \"debtorName\": \"<string>\",\n  \"debtorAgent\": {\n    \"bic\": \"WQVWNX33NL1\",\n    \"name\": \"string\",\n    \"clearingSystemMemberId\": \"string\"\n  },\n  \"creditorName\": \"<string>\",\n  \"creditorAgent\": {\n    \"bic\": \"FALJKLHJ\",\n    \"name\": \"string\",\n    \"clearingSystemMemberId\": \"string\"\n  },\n  \"requestedExecutionDate\": \"<date>\",\n  \"endToEndId\": \"<string>\",\n  \"remittanceInformation\": \"<string>\",\n  \"chargeBearer\": \"<string>\",\n  \"urgency\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "eb3bcbfe-6adb-4a79-a6eb-3242b6e3bfd9",
+          "name": "Montran Get payment details",
+          "request": {
+            "name": "Montran Get payment details",
+            "description": {
+              "content": "Retrieves the full details of a specific payment including its current status, clearing system assignment, settlement information, and complete audit trail. Returns ISO 20022 pacs.002 status information.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "payments",
+                ":paymentId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "paymentId",
+                  "description": "(Required) Unique identifier of the payment"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d90da83d-e1fa-49f4-8e17-b81e21879c00",
+              "name": "Successfully retrieved payment details",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    ":paymentId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "paymentId",
+                      "description": "(Required) Unique identifier of the payment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"paymentId\": \"string\",\n  \"messageId\": \"string\",\n  \"paymentType\": \"string\",\n  \"status\": \"string\",\n  \"debtorName\": \"string\",\n  \"debtorAccount\": {\n    \"iban\": \"ZV44VOFO\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"YZI\"\n  },\n  \"debtorAgent\": {\n    \"bic\": \"KYWZXR1ZM47\",\n    \"name\": \"string\",\n    \"clearingSystemMemberId\": \"string\"\n  },\n  \"creditorName\": \"string\",\n  \"creditorAccount\": {\n    \"iban\": \"DS93GCS2WK9TDDK8DG\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"QWX\"\n  },\n  \"creditorAgent\": {\n    \"bic\": \"ZDGTEQL109D\",\n    \"name\": \"string\",\n    \"clearingSystemMemberId\": \"string\"\n  },\n  \"amount\": 1478.4295248174285,\n  \"currency\": \"string\",\n  \"endToEndId\": \"string\",\n  \"clearingSystem\": \"string\",\n  \"settlementDate\": \"2006-03-01\",\n  \"createdAt\": \"2018-04-27T01:35:49.846Z\",\n  \"updatedAt\": \"1964-06-23T00:12:36.177Z\",\n  \"statusHistory\": [\n    {\n      \"status\": \"string\",\n      \"timestamp\": \"1998-07-12T23:31:41.983Z\",\n      \"reasonCode\": \"string\",\n      \"description\": \"string\"\n    },\n    {\n      \"status\": \"string\",\n      \"timestamp\": \"1997-11-11T15:34:34.278Z\",\n      \"reasonCode\": \"string\",\n      \"description\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2600232f-5da6-4295-8cfa-e99dfc7f4685",
+              "name": "Authentication required or credentials invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    ":paymentId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "paymentId",
+                      "description": "(Required) Unique identifier of the payment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bbb26dbf-5542-4638-a8a8-a3739ff0cadc",
+              "name": "Insufficient permissions for the requested operation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    ":paymentId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "paymentId",
+                      "description": "(Required) Unique identifier of the payment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4fbc4683-7934-48fd-a886-fdaf73596547",
+              "name": "Requested resource not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    ":paymentId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "paymentId",
+                      "description": "(Required) Unique identifier of the payment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e10ce09f-3f90-4772-86f0-386e70cf90a2",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    ":paymentId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "paymentId",
+                      "description": "(Required) Unique identifier of the payment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f524a2f4-3fd5-4e2e-bf70-35d1ce90ba23",
+          "name": "Montran Cancel a payment",
+          "request": {
+            "name": "Montran Cancel a payment",
+            "description": {
+              "content": "Requests cancellation of a payment that has not yet been settled. Generates an ISO 20022 camt.056 FIToFIPaymentCancellationRequest message. Cancellation availability depends on the payment status and the clearing system rules.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "payments",
+                ":paymentId",
+                "cancel"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "paymentId",
+                  "description": "(Required) Unique identifier of the payment"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"<string>\",\n  \"additionalInformation\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "df4c75cb-c52b-47de-a1ee-330a69604e9a",
+              "name": "Cancellation request successfully submitted",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    ":paymentId",
+                    "cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "paymentId",
+                      "description": "(Required) Unique identifier of the payment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reason\": \"<string>\",\n  \"additionalInformation\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"paymentId\": \"string\",\n  \"cancellationStatus\": \"REJECTED\",\n  \"reasonCode\": \"string\",\n  \"processedAt\": \"1984-03-08T00:03:27.510Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "51db6dea-8823-4906-8e7a-e49377e2b5ce",
+              "name": "Bad request - invalid parameters or malformed request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    ":paymentId",
+                    "cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "paymentId",
+                      "description": "(Required) Unique identifier of the payment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reason\": \"<string>\",\n  \"additionalInformation\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8cf67d14-6e87-438b-873c-34612aa65951",
+              "name": "Authentication required or credentials invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    ":paymentId",
+                    "cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "paymentId",
+                      "description": "(Required) Unique identifier of the payment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reason\": \"<string>\",\n  \"additionalInformation\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "724f7305-377d-4583-b35d-07bc4ae01abf",
+              "name": "Requested resource not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    ":paymentId",
+                    "cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "paymentId",
+                      "description": "(Required) Unique identifier of the payment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reason\": \"<string>\",\n  \"additionalInformation\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "14cc23c3-4b9f-4897-aa15-67f45efb404d",
+              "name": "Payment cannot be cancelled in its current state",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    ":paymentId",
+                    "cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "paymentId",
+                      "description": "(Required) Unique identifier of the payment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reason\": \"<string>\",\n  \"additionalInformation\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5ede7ed6-3788-4293-84b1-61d41ec38729",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    ":paymentId",
+                    "cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "paymentId",
+                      "description": "(Required) Unique identifier of the payment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reason\": \"<string>\",\n  \"additionalInformation\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "c7e8f071-8fe2-4006-87cf-c20115c3da5c",
+      "name": "Statements",
+      "description": {
+        "content": "Account statement and reporting operations",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "14f06bf2-3c09-49c9-a47e-02cfa413a139",
+          "name": "Montran Get account statements",
+          "request": {
+            "name": "Montran Get account statements",
+            "description": {
+              "content": "Retrieves account statements for a specified date range. Returns statement information aligned with ISO 20022 camt.053 BankToCustomerStatement format including all credit and debit entries, opening and closing balances.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":accountId",
+                "statements"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "fromDate",
+                  "value": "<date>",
+                  "description": "Start date for filtering (ISO 8601 format)"
+                },
+                {
+                  "disabled": false,
+                  "key": "toDate",
+                  "value": "<date>",
+                  "description": "End date for filtering (ISO 8601 format)"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "accountId",
+                  "description": "(Required) Unique identifier of the account"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "5d978d65-007e-4c6f-ad11-68dfbaeb2cc4",
+              "name": "Successfully retrieved account statements",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":accountId",
+                    "statements"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fromDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "toDate",
+                      "value": "<date>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "accountId",
+                      "description": "(Required) Unique identifier of the account"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"accountId\": \"string\",\n  \"statements\": [\n    {\n      \"statementId\": \"string\",\n      \"fromDate\": \"1975-08-17\",\n      \"toDate\": \"1999-09-23\",\n      \"openingBalance\": 8941.613925467276,\n      \"closingBalance\": 3454.870353808158,\n      \"currency\": \"string\",\n      \"entries\": [\n        {\n          \"entryReference\": \"string\",\n          \"amount\": 2173.8100639296085,\n          \"currency\": \"string\",\n          \"creditDebitIndicator\": \"CRDT\",\n          \"status\": \"INFO\",\n          \"bookingDate\": \"1964-04-18\",\n          \"valueDate\": \"1999-11-27\",\n          \"bankTransactionCode\": \"string\",\n          \"remittanceInformation\": \"string\"\n        },\n        {\n          \"entryReference\": \"string\",\n          \"amount\": 8558.493202820138,\n          \"currency\": \"string\",\n          \"creditDebitIndicator\": \"DBIT\",\n          \"status\": \"BOOK\",\n          \"bookingDate\": \"2005-05-07\",\n          \"valueDate\": \"1985-10-08\",\n          \"bankTransactionCode\": \"string\",\n          \"remittanceInformation\": \"string\"\n        }\n      ]\n    },\n    {\n      \"statementId\": \"string\",\n      \"fromDate\": \"1970-11-17\",\n      \"toDate\": \"2019-08-29\",\n      \"openingBalance\": 4871.863342141215,\n      \"closingBalance\": 9201.90176498098,\n      \"currency\": \"string\",\n      \"entries\": [\n        {\n          \"entryReference\": \"string\",\n          \"amount\": 7959.026434985568,\n          \"currency\": \"string\",\n          \"creditDebitIndicator\": \"CRDT\",\n          \"status\": \"PDNG\",\n          \"bookingDate\": \"1994-01-16\",\n          \"valueDate\": \"1972-01-14\",\n          \"bankTransactionCode\": \"string\",\n          \"remittanceInformation\": \"string\"\n        },\n        {\n          \"entryReference\": \"string\",\n          \"amount\": 7353.699886647884,\n          \"currency\": \"string\",\n          \"creditDebitIndicator\": \"CRDT\",\n          \"status\": \"INFO\",\n          \"bookingDate\": \"1994-05-10\",\n          \"valueDate\": \"1988-12-11\",\n          \"bankTransactionCode\": \"string\",\n          \"remittanceInformation\": \"string\"\n        }\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b50c95d6-20da-48ec-845a-98a700029a0b",
+              "name": "Authentication required or credentials invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":accountId",
+                    "statements"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fromDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "toDate",
+                      "value": "<date>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "accountId",
+                      "description": "(Required) Unique identifier of the account"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "07d6141f-247f-4f9c-87cd-8cef97eb41eb",
+              "name": "Requested resource not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":accountId",
+                    "statements"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fromDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "toDate",
+                      "value": "<date>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "accountId",
+                      "description": "(Required) Unique identifier of the account"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3cbc2de7-4471-4e22-9885-e356c1aa9b60",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":accountId",
+                    "statements"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fromDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "toDate",
+                      "value": "<date>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "accountId",
+                      "description": "(Required) Unique identifier of the account"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.montran.com/gph/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "61cc1e1b-7576-4a29-8518-fd6702a8830d",
+    "name": "Montran Global Payments Hub API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Montran Global Payments Hub (GPH) is a global, highly secure payment solution that consolidates all payment infrastructures into a payment hub supporting multiple banks, branches, countries, currencies, and languages. It processes clearing and settlement transactions including SEPA credit transfers and direct debits, Target2, Fedwire, CHIPS, foreign currency transactions, cross-border payments, remittances, local ACH, RTGS, and cheques. The application is ISO 20022 native and supports all major financial formats such as SWIFT FIN, pain, pacs, and camt messages and local proprietary formats. The GPH supports REST and SOAP APIs, queue-based (IBM MQ, Kafka), and file-based (SFTP) integration protocols.\n\nContact Support:\n Name: Montran Corporation",
+      "type": "text/plain"
+    }
+  }
+}

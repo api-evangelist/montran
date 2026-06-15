@@ -1,0 +1,375 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Montran Virtual Accounts API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Virtual Accounts",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Montran List virtual accounts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/vam/v1/virtual-accounts",
+            "params": [
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by account status"
+              },
+              {
+                "name": "currency",
+                "value": "",
+                "type": "query",
+                "description": "Filter by ISO 4217 currency code"
+              },
+              {
+                "name": "parentAccountId",
+                "value": "",
+                "type": "query",
+                "description": "Filter by parent physical account"
+              },
+              {
+                "name": "accountHolder",
+                "value": "",
+                "type": "query",
+                "description": "Filter by account holder name"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Retrieves a list of virtual accounts managed on the platform. Supports filtering by status, currency, parent account, and account holder. Returns account details including virtual IBAN, balance, and hierarchy information."
+        },
+        {
+          "info": {
+            "name": "Montran Create a virtual account",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.montran.com/vam/v1/virtual-accounts",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new virtual account mapped to an existing physical bank account. The virtual account can optionally be assigned a Virtual IBAN for receiving incoming payments. Supports multi-currency virtual accounts and can be configured for POBO/COBO, escrow, or general segregation purposes."
+        },
+        {
+          "info": {
+            "name": "Montran Get virtual account details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/vam/v1/virtual-accounts/:accountId",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the virtual account"
+              }
+            ]
+          },
+          "docs": "Retrieves the full details of a specific virtual account including its virtual IBAN, mapped physical account, balance, transaction history summary, and position within the account hierarchy."
+        },
+        {
+          "info": {
+            "name": "Montran Update a virtual account",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.montran.com/vam/v1/virtual-accounts/:accountId",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the virtual account"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates the configuration of a virtual account including its name, metadata, and allocation rules. Cannot change the mapped physical account or virtual IBAN."
+        },
+        {
+          "info": {
+            "name": "Montran Close a virtual account",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.montran.com/vam/v1/virtual-accounts/:accountId/close",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the virtual account"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Closes a virtual account. The account must have a zero balance before it can be closed. Any associated virtual IBANs are deactivated upon closure."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Balances",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Montran Get virtual account balance",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/vam/v1/virtual-accounts/:accountId/balance",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the virtual account"
+              }
+            ]
+          },
+          "docs": "Retrieves the current balance of a virtual account including available balance, booked balance, and pending transactions. Provides real-time reconciliation data."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Transactions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Montran List virtual account transactions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/vam/v1/virtual-accounts/:accountId/transactions",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the virtual account"
+              },
+              {
+                "name": "fromDate",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "toDate",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "Filter by transaction type"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Retrieves transactions for a specific virtual account. Includes both automatically allocated incoming payments and manually posted internal transfers. Supports date range filtering."
+        },
+        {
+          "info": {
+            "name": "Montran Create an internal transfer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.montran.com/vam/v1/internal-transfers",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a transfer between two virtual accounts within the same physical account structure. Internal transfers are processed instantly as book transfers without requiring external clearing."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Virtual IBANs",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Montran List virtual IBANs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/vam/v1/virtual-ibans",
+            "params": [
+              {
+                "name": "status",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "virtualAccountId",
+                "value": "",
+                "type": "query",
+                "description": "Filter by associated virtual account"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Retrieves a list of issued virtual IBANs. Supports filtering by status and associated virtual account. Virtual IBANs enable incoming payments to be automatically routed and allocated to the correct virtual account."
+        },
+        {
+          "info": {
+            "name": "Montran Issue a virtual IBAN",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.montran.com/vam/v1/virtual-ibans",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Issues a new virtual IBAN and associates it with a virtual account. The VIBAN can be used for receiving incoming payments that are automatically allocated to the linked virtual account. Supports 2-way VIBANs for both receiving and sending."
+        },
+        {
+          "info": {
+            "name": "Montran Get virtual IBAN details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/vam/v1/virtual-ibans/:vibanId",
+            "params": [
+              {
+                "name": "vibanId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the virtual IBAN"
+              }
+            ]
+          },
+          "docs": "Retrieves the details of a specific virtual IBAN including its associated virtual account, status, and usage statistics."
+        },
+        {
+          "info": {
+            "name": "Montran Deactivate a virtual IBAN",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.montran.com/vam/v1/virtual-ibans/:vibanId/deactivate",
+            "params": [
+              {
+                "name": "vibanId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the virtual IBAN"
+              }
+            ]
+          },
+          "docs": "Deactivates a virtual IBAN so it can no longer receive incoming payments. The IBAN remains in the system for historical reference but new payments referencing it will be rejected."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Account Structures",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Montran List account structures",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/vam/v1/account-structures"
+          },
+          "docs": "Retrieves virtual account hierarchy structures. Account structures define the organizational grouping of virtual accounts for corporate clients, enabling POBO/COBO, in-house banking, and treasury centralization use cases."
+        },
+        {
+          "info": {
+            "name": "Montran Create an account structure",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.montran.com/vam/v1/account-structures",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new virtual account hierarchy structure mapping virtual accounts to physical bank accounts. Supports multi-bank, multi- currency structures for POBO/COBO, in-house banking, and escrow use cases."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

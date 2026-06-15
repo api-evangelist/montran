@@ -1,0 +1,328 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Montran Payments Connectivity API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Message Routing",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Montran List processed messages",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/connectivity/v1/messages",
+            "params": [
+              {
+                "name": "sourceSystem",
+                "value": "",
+                "type": "query",
+                "description": "Filter by source system identifier"
+              },
+              {
+                "name": "destinationSystem",
+                "value": "",
+                "type": "query",
+                "description": "Filter by destination system identifier"
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Filter by message format"
+              },
+              {
+                "name": "messageType",
+                "value": "",
+                "type": "query",
+                "description": "Filter by specific message type (e.g., MT103, pacs.008, pain.001, camt.053)"
+              },
+              {
+                "name": "direction",
+                "value": "",
+                "type": "query",
+                "description": "Filter by message direction"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by processing status"
+              },
+              {
+                "name": "fromDate",
+                "value": "",
+                "type": "query",
+                "description": "Start date filter (ISO 8601)"
+              },
+              {
+                "name": "toDate",
+                "value": "",
+                "type": "query",
+                "description": "End date filter (ISO 8601)"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Retrieves a list of messages processed through the connectivity platform. Supports filtering by source system, destination system, message format (SWIFT FIN, ISO 20022, proprietary), direction, and processing status."
+        },
+        {
+          "info": {
+            "name": "Montran Submit a message for routing",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.montran.com/connectivity/v1/messages",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Submits a payment or financial message for routing through the connectivity platform. The message is validated, transformed to the required format, and routed to the appropriate destination system. Supports SWIFT FIN (MT series), ISO 20022 (pain, pacs, camt), and proprietary formats. The system automatically determines the appropriate channel and format transformation."
+        },
+        {
+          "info": {
+            "name": "Montran Get message details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/connectivity/v1/messages/:messageId",
+            "params": [
+              {
+                "name": "messageId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the message"
+              }
+            ]
+          },
+          "docs": "Retrieves the full details of a specific message including its routing path, format transformations applied, delivery status, and any acknowledgements received from destination systems."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Message Formats",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Montran Transform a message between formats",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.montran.com/connectivity/v1/messages/transform",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Transforms a financial message between supported formats without routing it. Supports conversion between SWIFT FIN MT and ISO 20022 MX formats, as well as local proprietary formats. Useful for validating format transformations before submission."
+        },
+        {
+          "info": {
+            "name": "Montran Validate a message",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.montran.com/connectivity/v1/messages/validate",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Validates a financial message against the rules for its message type and format. Checks structural validity, field content, and business rules without submitting the message for routing. Supports SWIFT FIN, ISO 20022, and proprietary format validation."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Channels",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Montran List communication channels",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/connectivity/v1/channels",
+            "params": [
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "Filter by channel type"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by channel status"
+              }
+            ]
+          },
+          "docs": "Retrieves a list of configured communication channels including SWIFT connections, clearing system interfaces, API endpoints, queue-based channels (IBM MQ, Kafka), and file-based channels (SFTP). Shows channel status and connectivity health."
+        },
+        {
+          "info": {
+            "name": "Montran Get channel details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/connectivity/v1/channels/:channelId",
+            "params": [
+              {
+                "name": "channelId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the channel"
+              }
+            ]
+          },
+          "docs": "Retrieves the configuration and current status of a specific communication channel including connection parameters, supported message formats, throughput statistics, and health metrics."
+        },
+        {
+          "info": {
+            "name": "Montran Get channel health status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/connectivity/v1/channels/:channelId/health",
+            "params": [
+              {
+                "name": "channelId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the channel"
+              }
+            ]
+          },
+          "docs": "Retrieves the real-time health and connectivity status of a communication channel including latency metrics, error rates, and throughput statistics."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "SWIFT",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Montran List SWIFT messages",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/connectivity/v1/swift/messages",
+            "params": [
+              {
+                "name": "messageType",
+                "value": "",
+                "type": "query",
+                "description": "SWIFT MT message type filter"
+              },
+              {
+                "name": "direction",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "fromDate",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "toDate",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Retrieves SWIFT FIN messages processed through the connectivity platform. Supports filtering by message type (MT103, MT202, etc.), direction, and date range. Includes SWIFT gpi tracking information where available."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Clearing Systems",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Montran List connected clearing systems",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/connectivity/v1/clearing-systems"
+          },
+          "docs": "Retrieves a list of clearing and settlement systems connected through the platform including SEPA (Step1, Step2), Target2, TIPS, RT1, Fedwire, CHIPS, CHAPS, Faster Payments, and local RTGS and ACH systems. Shows connection status and supported message formats."
+        },
+        {
+          "info": {
+            "name": "Montran Get clearing system details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/connectivity/v1/clearing-systems/:systemId",
+            "params": [
+              {
+                "name": "systemId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the clearing system"
+              }
+            ]
+          },
+          "docs": "Retrieves the details of a specific clearing and settlement system connection including supported message types, operating hours, settlement windows, and current connectivity status."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
