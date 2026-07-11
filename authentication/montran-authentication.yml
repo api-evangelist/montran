@@ -1,0 +1,46 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/montran-corporate-payments-portal-openapi.yml, openapi/montran-global-payments-hub-openapi.yml,
+  openapi/montran-instant-payments-gateway-openapi.yml, openapi/montran-payments-connectivity-openapi.yml,
+  openapi/montran-sanctions-screening-openapi.yml, openapi/montran-virtual-accounts-openapi.yml
+summary:
+  types:
+  - apiKey
+  - http
+  - oauth2
+  api_key_in:
+  - header
+  oauth2_flows:
+  - authorizationCode
+schemes:
+- name: bearerAuth
+  type: http
+  scheme: bearer
+  bearerFormat: JWT
+  sources:
+  - openapi/montran-corporate-payments-portal-openapi.yml
+  - openapi/montran-global-payments-hub-openapi.yml
+  - openapi/montran-instant-payments-gateway-openapi.yml
+  - openapi/montran-payments-connectivity-openapi.yml
+  - openapi/montran-sanctions-screening-openapi.yml
+  - openapi/montran-virtual-accounts-openapi.yml
+- name: apiKey
+  type: apiKey
+  in: header
+  parameter: X-API-Key
+  sources:
+  - openapi/montran-corporate-payments-portal-openapi.yml
+  - openapi/montran-global-payments-hub-openapi.yml
+  - openapi/montran-payments-connectivity-openapi.yml
+  - openapi/montran-sanctions-screening-openapi.yml
+  - openapi/montran-virtual-accounts-openapi.yml
+- name: oauth2
+  type: oauth2
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://auth.montran.com/oauth2/authorize
+    tokenUrl: https://auth.montran.com/oauth2/token
+    scopes: 2
+  description: OAuth 2.0 authorization for PSD2 AISP/PISP access
+  sources:
+  - openapi/montran-instant-payments-gateway-openapi.yml
