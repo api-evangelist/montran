@@ -1,0 +1,24 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/montran-instant-payments-gateway-openapi.yml
+schemes:
+- name: oauth2
+  source: openapi/montran-instant-payments-gateway-openapi.yml
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://auth.montran.com/oauth2/authorize
+    tokenUrl: https://auth.montran.com/oauth2/token
+  description: OAuth 2.0 authorization for PSD2 AISP/PISP access
+scopes:
+- scope: aisp
+  description: Account Information Service Provider access
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/montran-instant-payments-gateway-openapi.yml
+- scope: pisp
+  description: Payment Initiation Service Provider access
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/montran-instant-payments-gateway-openapi.yml
