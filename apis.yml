@@ -365,6 +365,8 @@ apis:
       - type: Documentation
         url: https://www.montran.com/solutions/backup-rtgs/
 common:
+  - type: AgenticAccess
+    url: agentic-access/montran-agentic-access.yml
   - type: DomainSecurity
     url: security/montran-domain-security.yml
   - type: Authentication
