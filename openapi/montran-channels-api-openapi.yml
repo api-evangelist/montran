@@ -1,0 +1,244 @@
+openapi: 3.1.0
+info:
+  title: Montran Corporate Payments Portal Account Information Channels API
+  description: The Montran Corporate Payments Portal enables corporates to exercise complete control over accounts at their various bank relationships, with the ability to make secure payments over the Internet. It supports SWIFT payments and local clearing delivery through API integration and H2H (Host-to-Host) protocols. Corporates can connect their ERP systems and manually or automatically upload invoices for payments and collections management. The portal provides multi-bank visibility and supports secure payment initiation across multiple currencies and payment types.
+  version: 1.0.0
+  contact:
+    name: Montran Corporation
+    url: https://www.montran.com/contact-us/
+  license:
+    name: Proprietary
+    url: https://www.montran.com/terms-conditions/
+  x-logo:
+    url: https://www.montran.com/logo.png
+servers:
+- url: https://api.montran.com/corporate/v1
+  description: Montran Corporate Payments Portal API Server
+security:
+- bearerAuth: []
+- apiKey: []
+tags:
+- name: Channels
+  description: Communication channel management and monitoring
+paths:
+  /channels:
+    get:
+      operationId: listChannels
+      summary: Montran List communication channels
+      description: Retrieves a list of configured communication channels including SWIFT connections, clearing system interfaces, API endpoints, queue-based channels (IBM MQ, Kafka), and file-based channels (SFTP). Shows channel status and connectivity health.
+      tags:
+      - Channels
+      parameters:
+      - name: type
+        in: query
+        description: Filter by channel type
+        schema:
+          type: string
+          enum:
+          - SWIFT
+          - API_REST
+          - API_SOAP
+          - QUEUE_MQ
+          - QUEUE_KAFKA
+          - FILE_SFTP
+          - FILE_SHARED
+      - name: status
+        in: query
+        description: Filter by channel status
+        schema:
+          type: string
+          enum:
+          - active
+          - inactive
+          - degraded
+          - error
+      responses:
+        '200':
+          description: Successfully retrieved channel list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChannelList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /channels/{channelId}:
+    get:
+      operationId: getChannel
+      summary: Montran Get channel details
+      description: Retrieves the configuration and current status of a specific communication channel including connection parameters, supported message formats, throughput statistics, and health metrics.
+      tags:
+      - Channels
+      parameters:
+      - name: channelId
+        in: path
+        required: true
+        description: Unique identifier of the channel
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successfully retrieved channel details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChannelDetail'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /channels/{channelId}/health:
+    get:
+      operationId: getChannelHealth
+      summary: Montran Get channel health status
+      description: Retrieves the real-time health and connectivity status of a communication channel including latency metrics, error rates, and throughput statistics.
+      tags:
+      - Channels
+      parameters:
+      - name: channelId
+        in: path
+        required: true
+        description: Unique identifier of the channel
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successfully retrieved channel health
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChannelHealth'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  schemas:
+    ChannelDetail:
+      type: object
+      description: Communication channel configuration and status
+      properties:
+        channelId:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+          enum:
+          - SWIFT
+          - API_REST
+          - API_SOAP
+          - QUEUE_MQ
+          - QUEUE_KAFKA
+          - FILE_SFTP
+          - FILE_SHARED
+        status:
+          type: string
+          enum:
+          - active
+          - inactive
+          - degraded
+          - error
+        supportedFormats:
+          type: array
+          items:
+            type: string
+        connectedSystems:
+          type: array
+          items:
+            type: string
+        configuration:
+          type: object
+          description: Channel-specific configuration
+          additionalProperties:
+            type: string
+    ChannelList:
+      type: object
+      properties:
+        channels:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChannelDetail'
+    Error:
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
+    ChannelHealth:
+      type: object
+      description: Real-time channel health metrics
+      properties:
+        channelId:
+          type: string
+        status:
+          type: string
+          enum:
+          - healthy
+          - degraded
+          - down
+        latencyMs:
+          type: integer
+          description: Current latency in milliseconds
+        errorRate:
+          type: number
+          format: double
+          description: Error rate percentage over the last hour
+        throughput:
+          type: integer
+          description: Messages processed in the last hour
+        lastActivityAt:
+          type: string
+          format: date-time
+        checkedAt:
+          type: string
+          format: date-time
+  responses:
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    apiKey:
+      type: apiKey
+      in: header
+      name: X-API-Key
+externalDocs:
+  description: Montran Corporate Payments Portal Documentation
+  url: https://www.montran.com/solutions/corporate-payments-portal/

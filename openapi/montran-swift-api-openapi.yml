@@ -1,0 +1,168 @@
+openapi: 3.1.0
+info:
+  title: Montran Corporate Payments Portal Account Information SWIFT API
+  description: The Montran Corporate Payments Portal enables corporates to exercise complete control over accounts at their various bank relationships, with the ability to make secure payments over the Internet. It supports SWIFT payments and local clearing delivery through API integration and H2H (Host-to-Host) protocols. Corporates can connect their ERP systems and manually or automatically upload invoices for payments and collections management. The portal provides multi-bank visibility and supports secure payment initiation across multiple currencies and payment types.
+  version: 1.0.0
+  contact:
+    name: Montran Corporation
+    url: https://www.montran.com/contact-us/
+  license:
+    name: Proprietary
+    url: https://www.montran.com/terms-conditions/
+  x-logo:
+    url: https://www.montran.com/logo.png
+servers:
+- url: https://api.montran.com/corporate/v1
+  description: Montran Corporate Payments Portal API Server
+security:
+- bearerAuth: []
+- apiKey: []
+tags:
+- name: SWIFT
+  description: SWIFT network connectivity and message management
+paths:
+  /swift/messages:
+    get:
+      operationId: listSwiftMessages
+      summary: Montran List SWIFT messages
+      description: Retrieves SWIFT FIN messages processed through the connectivity platform. Supports filtering by message type (MT103, MT202, etc.), direction, and date range. Includes SWIFT gpi tracking information where available.
+      tags:
+      - SWIFT
+      parameters:
+      - name: messageType
+        in: query
+        description: SWIFT MT message type filter
+        schema:
+          type: string
+      - name: direction
+        in: query
+        schema:
+          type: string
+          enum:
+          - sent
+          - received
+      - name: fromDate
+        in: query
+        schema:
+          type: string
+          format: date
+      - name: toDate
+        in: query
+        schema:
+          type: string
+          format: date
+      - name: page
+        in: query
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 20
+      responses:
+        '200':
+          description: Successfully retrieved SWIFT messages
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SwiftMessageList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  schemas:
+    Error:
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+        pageSize:
+          type: integer
+        totalItems:
+          type: integer
+        totalPages:
+          type: integer
+    SwiftMessageList:
+      type: object
+      properties:
+        messages:
+          type: array
+          items:
+            type: object
+            properties:
+              messageId:
+                type: string
+              swiftMessageType:
+                type: string
+                description: SWIFT MT message type (e.g., MT103, MT202)
+              direction:
+                type: string
+                enum:
+                - sent
+                - received
+              senderBic:
+                type: string
+              receiverBic:
+                type: string
+              reference:
+                type: string
+              gpiUetr:
+                type: string
+                description: SWIFT gpi Unique End-to-end Transaction Reference
+              status:
+                type: string
+              processedAt:
+                type: string
+                format: date-time
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+  responses:
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    apiKey:
+      type: apiKey
+      in: header
+      name: X-API-Key
+externalDocs:
+  description: Montran Corporate Payments Portal Documentation
+  url: https://www.montran.com/solutions/corporate-payments-portal/

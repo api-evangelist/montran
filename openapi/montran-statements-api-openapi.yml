@@ -1,0 +1,187 @@
+openapi: 3.1.0
+info:
+  title: Montran Corporate Payments Portal Account Information Statements API
+  description: The Montran Corporate Payments Portal enables corporates to exercise complete control over accounts at their various bank relationships, with the ability to make secure payments over the Internet. It supports SWIFT payments and local clearing delivery through API integration and H2H (Host-to-Host) protocols. Corporates can connect their ERP systems and manually or automatically upload invoices for payments and collections management. The portal provides multi-bank visibility and supports secure payment initiation across multiple currencies and payment types.
+  version: 1.0.0
+  contact:
+    name: Montran Corporation
+    url: https://www.montran.com/contact-us/
+  license:
+    name: Proprietary
+    url: https://www.montran.com/terms-conditions/
+  x-logo:
+    url: https://www.montran.com/logo.png
+servers:
+- url: https://api.montran.com/corporate/v1
+  description: Montran Corporate Payments Portal API Server
+security:
+- bearerAuth: []
+- apiKey: []
+tags:
+- name: Statements
+  description: Account statement and reporting operations
+paths:
+  /accounts/{accountId}/statements:
+    get:
+      operationId: getAccountStatements
+      summary: Montran Get account statements
+      description: Retrieves account statements for a specified date range. Returns statement information aligned with ISO 20022 camt.053 BankToCustomerStatement format including all credit and debit entries, opening and closing balances.
+      tags:
+      - Statements
+      parameters:
+      - name: accountId
+        in: path
+        required: true
+        description: Unique identifier of the account
+        schema:
+          type: string
+      - $ref: '#/components/parameters/FromDateParam'
+      - $ref: '#/components/parameters/ToDateParam'
+      responses:
+        '200':
+          description: Successfully retrieved account statements
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountStatementList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  parameters:
+    FromDateParam:
+      name: fromDate
+      in: query
+      description: Start date for filtering (ISO 8601 format)
+      schema:
+        type: string
+        format: date
+    ToDateParam:
+      name: toDate
+      in: query
+      description: End date for filtering (ISO 8601 format)
+      schema:
+        type: string
+        format: date
+  schemas:
+    Error:
+      type: object
+      description: Standard error response
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Human-readable error message
+        details:
+          type: array
+          description: Detailed error information
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+                description: Field that caused the error
+              message:
+                type: string
+                description: Error detail message
+    AccountStatementList:
+      type: object
+      description: Account statement information aligned with ISO 20022 camt.053 BankToCustomerStatement
+      properties:
+        accountId:
+          type: string
+          description: Account identifier
+        statements:
+          type: array
+          items:
+            type: object
+            properties:
+              statementId:
+                type: string
+                description: Statement identification
+              fromDate:
+                type: string
+                format: date
+              toDate:
+                type: string
+                format: date
+              openingBalance:
+                type: number
+                format: double
+              closingBalance:
+                type: number
+                format: double
+              currency:
+                type: string
+              entries:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    entryReference:
+                      type: string
+                    amount:
+                      type: number
+                      format: double
+                    currency:
+                      type: string
+                    creditDebitIndicator:
+                      type: string
+                      enum:
+                      - CRDT
+                      - DBIT
+                    status:
+                      type: string
+                      enum:
+                      - BOOK
+                      - PDNG
+                      - INFO
+                    bookingDate:
+                      type: string
+                      format: date
+                    valueDate:
+                      type: string
+                      format: date
+                    bankTransactionCode:
+                      type: string
+                    remittanceInformation:
+                      type: string
+  responses:
+    Unauthorized:
+      description: Authentication required or credentials invalid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Requested resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    apiKey:
+      type: apiKey
+      in: header
+      name: X-API-Key
+externalDocs:
+  description: Montran Corporate Payments Portal Documentation
+  url: https://www.montran.com/solutions/corporate-payments-portal/

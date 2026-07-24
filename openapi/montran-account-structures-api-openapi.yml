@@ -1,0 +1,219 @@
+openapi: 3.1.0
+info:
+  title: Montran Corporate Payments Portal Account Information Account Structures API
+  description: The Montran Corporate Payments Portal enables corporates to exercise complete control over accounts at their various bank relationships, with the ability to make secure payments over the Internet. It supports SWIFT payments and local clearing delivery through API integration and H2H (Host-to-Host) protocols. Corporates can connect their ERP systems and manually or automatically upload invoices for payments and collections management. The portal provides multi-bank visibility and supports secure payment initiation across multiple currencies and payment types.
+  version: 1.0.0
+  contact:
+    name: Montran Corporation
+    url: https://www.montran.com/contact-us/
+  license:
+    name: Proprietary
+    url: https://www.montran.com/terms-conditions/
+  x-logo:
+    url: https://www.montran.com/logo.png
+servers:
+- url: https://api.montran.com/corporate/v1
+  description: Montran Corporate Payments Portal API Server
+security:
+- bearerAuth: []
+- apiKey: []
+tags:
+- name: Account Structures
+  description: Virtual account hierarchy and structure management
+paths:
+  /account-structures:
+    get:
+      operationId: listAccountStructures
+      summary: Montran List account structures
+      description: Retrieves virtual account hierarchy structures. Account structures define the organizational grouping of virtual accounts for corporate clients, enabling POBO/COBO, in-house banking, and treasury centralization use cases.
+      tags:
+      - Account Structures
+      responses:
+        '200':
+          description: Successfully retrieved account structures
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountStructureList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      operationId: createAccountStructure
+      summary: Montran Create an account structure
+      description: Creates a new virtual account hierarchy structure mapping virtual accounts to physical bank accounts. Supports multi-bank, multi- currency structures for POBO/COBO, in-house banking, and escrow use cases.
+      tags:
+      - Account Structures
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountStructureCreate'
+      responses:
+        '201':
+          description: Account structure successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountStructure'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  schemas:
+    AccountStructureCreate:
+      type: object
+      description: Account structure creation request
+      required:
+      - name
+      - physicalAccountId
+      properties:
+        name:
+          type: string
+          description: Structure name
+        physicalAccountId:
+          type: string
+          description: Root physical account
+        type:
+          type: string
+          enum:
+          - POBO
+          - COBO
+          - IN_HOUSE_BANK
+          - ESCROW
+          - GENERAL
+        description:
+          type: string
+    Error:
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
+    AccountStructure:
+      type: object
+      description: Account hierarchy structure
+      properties:
+        structureId:
+          type: string
+        name:
+          type: string
+        physicalAccountId:
+          type: string
+        type:
+          type: string
+        virtualAccounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/VirtualAccount'
+        createdAt:
+          type: string
+          format: date-time
+    VirtualAccount:
+      type: object
+      description: Virtual account details
+      properties:
+        accountId:
+          type: string
+          description: Unique virtual account identifier
+        name:
+          type: string
+        physicalAccountId:
+          type: string
+        currency:
+          type: string
+        accountHolder:
+          type: string
+        purpose:
+          type: string
+        status:
+          type: string
+          enum:
+          - active
+          - suspended
+          - closed
+        virtualIban:
+          type: string
+          description: Associated virtual IBAN if issued
+        balance:
+          type: number
+          format: double
+          description: Current balance
+        parentVirtualAccountId:
+          type: string
+        autoAllocate:
+          type: boolean
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    AccountStructureList:
+      type: object
+      properties:
+        structures:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountStructure'
+  responses:
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    UnprocessableEntity:
+      description: Validation failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    apiKey:
+      type: apiKey
+      in: header
+      name: X-API-Key
+externalDocs:
+  description: Montran Corporate Payments Portal Documentation
+  url: https://www.montran.com/solutions/corporate-payments-portal/

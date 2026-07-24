@@ -1,0 +1,401 @@
+openapi: 3.1.0
+info:
+  title: Montran Corporate Payments Portal Account Information Screening API
+  description: The Montran Corporate Payments Portal enables corporates to exercise complete control over accounts at their various bank relationships, with the ability to make secure payments over the Internet. It supports SWIFT payments and local clearing delivery through API integration and H2H (Host-to-Host) protocols. Corporates can connect their ERP systems and manually or automatically upload invoices for payments and collections management. The portal provides multi-bank visibility and supports secure payment initiation across multiple currencies and payment types.
+  version: 1.0.0
+  contact:
+    name: Montran Corporation
+    url: https://www.montran.com/contact-us/
+  license:
+    name: Proprietary
+    url: https://www.montran.com/terms-conditions/
+  x-logo:
+    url: https://www.montran.com/logo.png
+servers:
+- url: https://api.montran.com/corporate/v1
+  description: Montran Corporate Payments Portal API Server
+security:
+- bearerAuth: []
+- apiKey: []
+tags:
+- name: Screening
+  description: Transaction and entity screening operations
+paths:
+  /screen:
+    post:
+      operationId: screenTransaction
+      summary: Montran Screen a transaction
+      description: Submits a payment transaction for real-time sanctions screening. The transaction is screened against all configured compliance lists (OFAC, EU, OFSI, etc.) for the specified channel. Supports ISO 20022 pacs and pain messages, SWIFT FIN MT messages, ISO 8583, NACHA, and local CSM formats. Returns screening results synchronously for instant payment use cases with sub-second response times.
+      tags:
+      - Screening
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScreeningRequest'
+      responses:
+        '200':
+          description: Screening completed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScreeningResult'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /screen/batch:
+    post:
+      operationId: screenBatch
+      summary: Montran Screen a batch of transactions
+      description: Submits a batch of payment transactions for sanctions screening. Each transaction is individually screened against the configured compliance lists. Returns results for all transactions in the batch.
+      tags:
+      - Screening
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchScreeningRequest'
+      responses:
+        '200':
+          description: Batch screening completed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BatchScreeningResult'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /screen/entity:
+    post:
+      operationId: screenEntity
+      summary: Montran Screen an entity
+      description: Screens an individual or organization entity against configured sanctions and compliance lists. Used for customer onboarding, periodic review, and ad-hoc screening independent of a specific payment transaction.
+      tags:
+      - Screening
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EntityScreeningRequest'
+      responses:
+        '200':
+          description: Entity screening completed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityScreeningResult'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  schemas:
+    ScreeningResult:
+      type: object
+      description: Transaction screening result
+      properties:
+        screeningId:
+          type: string
+          description: Unique screening identifier
+        result:
+          type: string
+          description: Overall screening result
+          enum:
+          - PASS
+          - HIT
+          - POSSIBLE_HIT
+        matchCount:
+          type: integer
+          description: Number of matches found
+        matches:
+          type: array
+          items:
+            $ref: '#/components/schemas/ScreeningMatch'
+        screenedAt:
+          type: string
+          format: date-time
+        latencyMs:
+          type: integer
+          description: Screening processing time in milliseconds
+    TransactionData:
+      type: object
+      description: Structured transaction data for screening
+      properties:
+        transactionId:
+          type: string
+          description: Transaction reference
+        debtorName:
+          type: string
+          description: Name of the debtor/originator
+        debtorAddress:
+          type: string
+          description: Address of the debtor
+        debtorCountry:
+          type: string
+          description: Country of the debtor (ISO 3166-1 alpha-2)
+        debtorAccountIban:
+          type: string
+          description: Debtor IBAN
+        debtorAgentBic:
+          type: string
+          description: Debtor agent BIC
+        creditorName:
+          type: string
+          description: Name of the creditor/beneficiary
+        creditorAddress:
+          type: string
+          description: Address of the creditor
+        creditorCountry:
+          type: string
+          description: Country of the creditor (ISO 3166-1 alpha-2)
+        creditorAccountIban:
+          type: string
+          description: Creditor IBAN
+        creditorAgentBic:
+          type: string
+          description: Creditor agent BIC
+        amount:
+          type: number
+          format: double
+          description: Transaction amount
+        currency:
+          type: string
+          description: Currency code (ISO 4217)
+        remittanceInformation:
+          type: string
+          description: Remittance information / purpose
+    BatchScreeningResult:
+      type: object
+      description: Batch screening results
+      properties:
+        batchId:
+          type: string
+        totalScreened:
+          type: integer
+        passCount:
+          type: integer
+        hitCount:
+          type: integer
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ScreeningResult'
+        screenedAt:
+          type: string
+          format: date-time
+    Error:
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
+    BatchScreeningRequest:
+      type: object
+      description: Batch screening request
+      required:
+      - channelId
+      - transactions
+      properties:
+        channelId:
+          type: string
+        transactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionData'
+          minItems: 1
+    EntityScreeningRequest:
+      type: object
+      description: Entity screening request
+      required:
+      - entityType
+      - name
+      properties:
+        entityType:
+          type: string
+          enum:
+          - INDIVIDUAL
+          - ORGANIZATION
+        name:
+          type: string
+          description: Full name of the entity
+        aliases:
+          type: array
+          description: Known aliases
+          items:
+            type: string
+        dateOfBirth:
+          type: string
+          format: date
+          description: Date of birth (individuals only)
+        nationality:
+          type: string
+          description: Nationality (ISO 3166-1 alpha-2)
+        country:
+          type: string
+          description: Country of residence/registration
+        address:
+          type: string
+          description: Full address
+        identificationNumber:
+          type: string
+          description: National ID, passport, or registration number
+    EntityScreeningResult:
+      type: object
+      description: Entity screening result
+      properties:
+        screeningId:
+          type: string
+        result:
+          type: string
+          enum:
+          - CLEAR
+          - HIT
+          - POSSIBLE_HIT
+        matchCount:
+          type: integer
+        matches:
+          type: array
+          items:
+            $ref: '#/components/schemas/ScreeningMatch'
+        screenedAt:
+          type: string
+          format: date-time
+    ScreeningMatch:
+      type: object
+      description: Individual screening match details
+      properties:
+        matchId:
+          type: string
+        matchedField:
+          type: string
+          description: Transaction field that triggered the match
+          enum:
+          - debtorName
+          - creditorName
+          - debtorAddress
+          - creditorAddress
+          - debtorCountry
+          - creditorCountry
+          - remittanceInformation
+        matchedValue:
+          type: string
+          description: Value from the transaction that matched
+        listName:
+          type: string
+          description: Name of the compliance list
+        listEntryId:
+          type: string
+          description: Entry identifier in the compliance list
+        listedName:
+          type: string
+          description: Name on the sanctions list
+        matchScore:
+          type: number
+          format: double
+          description: Match confidence score (0-100)
+          minimum: 0
+          maximum: 100
+        matchType:
+          type: string
+          description: Type of match
+          enum:
+          - EXACT
+          - FUZZY
+          - PHONETIC
+          - PARTIAL
+        severity:
+          type: string
+          enum:
+          - high
+          - medium
+          - low
+    ScreeningRequest:
+      type: object
+      description: Transaction screening request
+      required:
+      - channelId
+      - transaction
+      properties:
+        channelId:
+          type: string
+          description: Screening channel identifier
+        messageFormat:
+          type: string
+          description: Format of the transaction message
+          enum:
+          - ISO20022
+          - SWIFT_FIN
+          - ISO8583
+          - NACHA
+          - PROPRIETARY
+        messageType:
+          type: string
+          description: Specific message type (e.g., pacs.008, MT103)
+        transaction:
+          $ref: '#/components/schemas/TransactionData'
+        rawMessage:
+          type: string
+          description: Raw message content for format-native screening
+  responses:
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    UnprocessableEntity:
+      description: Validation failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    apiKey:
+      type: apiKey
+      in: header
+      name: X-API-Key
+externalDocs:
+  description: Montran Corporate Payments Portal Documentation
+  url: https://www.montran.com/solutions/corporate-payments-portal/

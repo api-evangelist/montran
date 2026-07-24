@@ -1,0 +1,366 @@
+openapi: 3.1.0
+info:
+  title: Montran Corporate Payments Portal Account Information Clearing API
+  description: The Montran Corporate Payments Portal enables corporates to exercise complete control over accounts at their various bank relationships, with the ability to make secure payments over the Internet. It supports SWIFT payments and local clearing delivery through API integration and H2H (Host-to-Host) protocols. Corporates can connect their ERP systems and manually or automatically upload invoices for payments and collections management. The portal provides multi-bank visibility and supports secure payment initiation across multiple currencies and payment types.
+  version: 1.0.0
+  contact:
+    name: Montran Corporation
+    url: https://www.montran.com/contact-us/
+  license:
+    name: Proprietary
+    url: https://www.montran.com/terms-conditions/
+  x-logo:
+    url: https://www.montran.com/logo.png
+servers:
+- url: https://api.montran.com/corporate/v1
+  description: Montran Corporate Payments Portal API Server
+security:
+- bearerAuth: []
+- apiKey: []
+tags:
+- name: Clearing
+  description: Clearing and settlement operations across multiple CSMs
+paths:
+  /clearing/batches:
+    get:
+      operationId: listClearingBatches
+      summary: Montran List clearing batches
+      description: Retrieves a list of clearing batches submitted to or received from clearing and settlement mechanisms. Supports filtering by clearing system (SEPA, Target2, Fedwire, CHIPS, local ACH/RTGS), direction (inbound/outbound), and date range.
+      tags:
+      - Clearing
+      parameters:
+      - $ref: '#/components/parameters/ClearingSystemParam'
+      - name: direction
+        in: query
+        description: Filter by clearing direction
+        schema:
+          type: string
+          enum:
+          - inbound
+          - outbound
+      - $ref: '#/components/parameters/FromDateParam'
+      - $ref: '#/components/parameters/ToDateParam'
+      - $ref: '#/components/parameters/PageParam'
+      - $ref: '#/components/parameters/PageSizeParam'
+      responses:
+        '200':
+          description: Successfully retrieved clearing batches
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClearingBatchList'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /clearing/batches/{batchId}:
+    get:
+      operationId: getClearingBatch
+      summary: Montran Get clearing batch details
+      description: Retrieves the details of a specific clearing batch including the list of payments contained within it, settlement status, and clearing system acknowledgement information.
+      tags:
+      - Clearing
+      parameters:
+      - name: batchId
+        in: path
+        required: true
+        description: Unique identifier of the clearing batch
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successfully retrieved clearing batch details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClearingBatch'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  parameters:
+    PageParam:
+      name: page
+      in: query
+      description: Page number for pagination
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+    FromDateParam:
+      name: fromDate
+      in: query
+      description: Start date for filtering (ISO 8601 format)
+      schema:
+        type: string
+        format: date
+    ClearingSystemParam:
+      name: clearingSystem
+      in: query
+      description: Filter by clearing and settlement mechanism
+      schema:
+        type: string
+        enum:
+        - SEPA
+        - TARGET2
+        - FEDWIRE
+        - CHIPS
+        - RTGS
+        - ACH
+        - CHAPS
+        - FASTER_PAYMENTS
+        - TIPS
+        - RT1
+    ToDateParam:
+      name: toDate
+      in: query
+      description: End date for filtering (ISO 8601 format)
+      schema:
+        type: string
+        format: date
+    PageSizeParam:
+      name: pageSize
+      in: query
+      description: Number of items per page
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 20
+  schemas:
+    Pagination:
+      type: object
+      description: Pagination information for list responses
+      properties:
+        page:
+          type: integer
+          description: Current page number
+        pageSize:
+          type: integer
+          description: Number of items per page
+        totalItems:
+          type: integer
+          description: Total number of items
+        totalPages:
+          type: integer
+          description: Total number of pages
+    PaymentDetail:
+      type: object
+      description: Detailed payment information including full processing history
+      properties:
+        paymentId:
+          type: string
+          description: Unique payment identifier
+        messageId:
+          type: string
+          description: Message identification
+        paymentType:
+          type: string
+          description: Type of payment
+        status:
+          type: string
+          description: Current payment status
+        debtorName:
+          type: string
+        debtorAccount:
+          $ref: '#/components/schemas/AccountIdentification'
+        debtorAgent:
+          $ref: '#/components/schemas/FinancialInstitution'
+        creditorName:
+          type: string
+        creditorAccount:
+          $ref: '#/components/schemas/AccountIdentification'
+        creditorAgent:
+          $ref: '#/components/schemas/FinancialInstitution'
+        amount:
+          type: number
+          format: double
+        currency:
+          type: string
+        endToEndId:
+          type: string
+        clearingSystem:
+          type: string
+        settlementDate:
+          type: string
+          format: date
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        statusHistory:
+          type: array
+          description: Complete status change history
+          items:
+            $ref: '#/components/schemas/StatusHistoryEntry'
+    Error:
+      type: object
+      description: Standard error response
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Human-readable error message
+        details:
+          type: array
+          description: Detailed error information
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+                description: Field that caused the error
+              message:
+                type: string
+                description: Error detail message
+    ClearingBatch:
+      type: object
+      description: Clearing batch with settlement information
+      properties:
+        batchId:
+          type: string
+          description: Unique batch identifier
+        clearingSystem:
+          type: string
+          description: Clearing and settlement mechanism
+        direction:
+          type: string
+          description: Batch direction
+          enum:
+          - inbound
+          - outbound
+        status:
+          type: string
+          description: Batch processing status
+          enum:
+          - pending
+          - submitted
+          - accepted
+          - settled
+          - rejected
+        numberOfTransactions:
+          type: integer
+          description: Number of transactions in the batch
+        totalAmount:
+          type: number
+          format: double
+          description: Total amount of all transactions
+        currency:
+          type: string
+          description: Currency of the batch
+        settlementDate:
+          type: string
+          format: date
+          description: Settlement date
+        createdAt:
+          type: string
+          format: date-time
+        payments:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentDetail'
+    FinancialInstitution:
+      type: object
+      description: Financial institution identification
+      properties:
+        bic:
+          type: string
+          description: Bank Identifier Code (SWIFT/BIC)
+          pattern: ^[A-Z]{4}[A-Z]{2}[A-Z0-9]{2}([A-Z0-9]{3})?$
+        name:
+          type: string
+          description: Name of the financial institution
+        clearingSystemMemberId:
+          type: string
+          description: Clearing system member identification
+    StatusHistoryEntry:
+      type: object
+      description: A single entry in the payment status history
+      properties:
+        status:
+          type: string
+          description: Payment status at this point
+        timestamp:
+          type: string
+          format: date-time
+          description: When the status changed
+        reasonCode:
+          type: string
+          description: Reason code if applicable
+        description:
+          type: string
+          description: Description of the status change
+    AccountIdentification:
+      type: object
+      description: Account identification using IBAN or proprietary account number
+      properties:
+        iban:
+          type: string
+          description: International Bank Account Number
+          pattern: ^[A-Z]{2}[0-9]{2}[A-Z0-9]{4,30}$
+        accountNumber:
+          type: string
+          description: Proprietary account number
+        currency:
+          type: string
+          description: Account currency (ISO 4217)
+          pattern: ^[A-Z]{3}$
+    ClearingBatchList:
+      type: object
+      description: Paginated list of clearing batches
+      properties:
+        batches:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClearingBatch'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+  responses:
+    Unauthorized:
+      description: Authentication required or credentials invalid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Bad request - invalid parameters or malformed request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Requested resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    apiKey:
+      type: apiKey
+      in: header
+      name: X-API-Key
+externalDocs:
+  description: Montran Corporate Payments Portal Documentation
+  url: https://www.montran.com/solutions/corporate-payments-portal/

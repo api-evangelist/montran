@@ -1,0 +1,172 @@
+openapi: 3.1.0
+info:
+  title: Montran Corporate Payments Portal Account Information Clearing Systems API
+  description: The Montran Corporate Payments Portal enables corporates to exercise complete control over accounts at their various bank relationships, with the ability to make secure payments over the Internet. It supports SWIFT payments and local clearing delivery through API integration and H2H (Host-to-Host) protocols. Corporates can connect their ERP systems and manually or automatically upload invoices for payments and collections management. The portal provides multi-bank visibility and supports secure payment initiation across multiple currencies and payment types.
+  version: 1.0.0
+  contact:
+    name: Montran Corporation
+    url: https://www.montran.com/contact-us/
+  license:
+    name: Proprietary
+    url: https://www.montran.com/terms-conditions/
+  x-logo:
+    url: https://www.montran.com/logo.png
+servers:
+- url: https://api.montran.com/corporate/v1
+  description: Montran Corporate Payments Portal API Server
+security:
+- bearerAuth: []
+- apiKey: []
+tags:
+- name: Clearing Systems
+  description: Clearing and settlement system connectivity
+paths:
+  /clearing-systems:
+    get:
+      operationId: listClearingSystems
+      summary: Montran List connected clearing systems
+      description: Retrieves a list of clearing and settlement systems connected through the platform including SEPA (Step1, Step2), Target2, TIPS, RT1, Fedwire, CHIPS, CHAPS, Faster Payments, and local RTGS and ACH systems. Shows connection status and supported message formats.
+      tags:
+      - Clearing Systems
+      responses:
+        '200':
+          description: Successfully retrieved clearing systems
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClearingSystemList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /clearing-systems/{systemId}:
+    get:
+      operationId: getClearingSystem
+      summary: Montran Get clearing system details
+      description: Retrieves the details of a specific clearing and settlement system connection including supported message types, operating hours, settlement windows, and current connectivity status.
+      tags:
+      - Clearing Systems
+      parameters:
+      - name: systemId
+        in: path
+        required: true
+        description: Unique identifier of the clearing system
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successfully retrieved clearing system details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClearingSystemDetail'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  schemas:
+    Error:
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
+    ClearingSystemList:
+      type: object
+      properties:
+        clearingSystems:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClearingSystemDetail'
+    ClearingSystemDetail:
+      type: object
+      description: Clearing and settlement system details
+      properties:
+        systemId:
+          type: string
+        name:
+          type: string
+          description: Clearing system name
+        type:
+          type: string
+          description: System type
+          enum:
+          - RTGS
+          - ACH
+          - INSTANT
+          - HYBRID
+        country:
+          type: string
+          description: Country of the clearing system
+        status:
+          type: string
+          enum:
+          - connected
+          - disconnected
+          - maintenance
+        supportedFormats:
+          type: array
+          items:
+            type: string
+        supportedMessageTypes:
+          type: array
+          items:
+            type: string
+        operatingHours:
+          type: object
+          properties:
+            is24x7:
+              type: boolean
+            openTime:
+              type: string
+            closeTime:
+              type: string
+            timezone:
+              type: string
+  responses:
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    apiKey:
+      type: apiKey
+      in: header
+      name: X-API-Key
+externalDocs:
+  description: Montran Corporate Payments Portal Documentation
+  url: https://www.montran.com/solutions/corporate-payments-portal/

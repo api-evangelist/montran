@@ -1,0 +1,376 @@
+openapi: 3.1.0
+info:
+  title: Montran Corporate Payments Portal Account Information Message Routing API
+  description: The Montran Corporate Payments Portal enables corporates to exercise complete control over accounts at their various bank relationships, with the ability to make secure payments over the Internet. It supports SWIFT payments and local clearing delivery through API integration and H2H (Host-to-Host) protocols. Corporates can connect their ERP systems and manually or automatically upload invoices for payments and collections management. The portal provides multi-bank visibility and supports secure payment initiation across multiple currencies and payment types.
+  version: 1.0.0
+  contact:
+    name: Montran Corporation
+    url: https://www.montran.com/contact-us/
+  license:
+    name: Proprietary
+    url: https://www.montran.com/terms-conditions/
+  x-logo:
+    url: https://www.montran.com/logo.png
+servers:
+- url: https://api.montran.com/corporate/v1
+  description: Montran Corporate Payments Portal API Server
+security:
+- bearerAuth: []
+- apiKey: []
+tags:
+- name: Message Routing
+  description: Message routing and transformation between systems
+paths:
+  /messages:
+    get:
+      operationId: listMessages
+      summary: Montran List processed messages
+      description: Retrieves a list of messages processed through the connectivity platform. Supports filtering by source system, destination system, message format (SWIFT FIN, ISO 20022, proprietary), direction, and processing status.
+      tags:
+      - Message Routing
+      parameters:
+      - name: sourceSystem
+        in: query
+        description: Filter by source system identifier
+        schema:
+          type: string
+      - name: destinationSystem
+        in: query
+        description: Filter by destination system identifier
+        schema:
+          type: string
+      - name: format
+        in: query
+        description: Filter by message format
+        schema:
+          type: string
+          enum:
+          - SWIFT_FIN
+          - ISO20022
+          - PROPRIETARY
+      - name: messageType
+        in: query
+        description: Filter by specific message type (e.g., MT103, pacs.008, pain.001, camt.053)
+        schema:
+          type: string
+      - name: direction
+        in: query
+        description: Filter by message direction
+        schema:
+          type: string
+          enum:
+          - inbound
+          - outbound
+      - name: status
+        in: query
+        description: Filter by processing status
+        schema:
+          type: string
+          enum:
+          - received
+          - validated
+          - transformed
+          - routed
+          - delivered
+          - failed
+      - name: fromDate
+        in: query
+        description: Start date filter (ISO 8601)
+        schema:
+          type: string
+          format: date-time
+      - name: toDate
+        in: query
+        description: End date filter (ISO 8601)
+        schema:
+          type: string
+          format: date-time
+      - name: page
+        in: query
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 20
+      responses:
+        '200':
+          description: Successfully retrieved message list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageList'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      operationId: submitMessage
+      summary: Montran Submit a message for routing
+      description: Submits a payment or financial message for routing through the connectivity platform. The message is validated, transformed to the required format, and routed to the appropriate destination system. Supports SWIFT FIN (MT series), ISO 20022 (pain, pacs, camt), and proprietary formats. The system automatically determines the appropriate channel and format transformation.
+      tags:
+      - Message Routing
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MessageSubmission'
+      responses:
+        '201':
+          description: Message accepted for routing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /messages/{messageId}:
+    get:
+      operationId: getMessage
+      summary: Montran Get message details
+      description: Retrieves the full details of a specific message including its routing path, format transformations applied, delivery status, and any acknowledgements received from destination systems.
+      tags:
+      - Message Routing
+      parameters:
+      - name: messageId
+        in: path
+        required: true
+        description: Unique identifier of the message
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successfully retrieved message details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageDetail'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  responses:
+    UnprocessableEntity:
+      description: Validation failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Error:
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
+    MessageSubmission:
+      type: object
+      description: Message submission for routing through the connectivity platform
+      required:
+      - format
+      - messageType
+      - content
+      properties:
+        format:
+          type: string
+          description: Message format
+          enum:
+          - SWIFT_FIN
+          - ISO20022
+          - PROPRIETARY
+        messageType:
+          type: string
+          description: Specific message type (e.g., MT103, MT202, pacs.008, pain.001, camt.053)
+        destinationSystem:
+          type: string
+          description: Target clearing or settlement system
+        destinationChannel:
+          type: string
+          description: Target communication channel identifier
+        priority:
+          type: string
+          description: Message priority
+          enum:
+          - NORMAL
+          - URGENT
+          - SYSTEM
+        content:
+          type: string
+          description: Message content in the specified format
+        metadata:
+          type: object
+          description: Additional routing metadata
+          additionalProperties:
+            type: string
+    MessageResponse:
+      type: object
+      description: Response after message submission
+      properties:
+        messageId:
+          type: string
+          description: Unique message identifier assigned by the system
+        status:
+          type: string
+          enum:
+          - RECEIVED
+          - VALIDATED
+          - QUEUED
+        channel:
+          type: string
+          description: Assigned routing channel
+        destinationSystem:
+          type: string
+          description: Resolved destination system
+        createdAt:
+          type: string
+          format: date-time
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+        pageSize:
+          type: integer
+        totalItems:
+          type: integer
+        totalPages:
+          type: integer
+    MessageList:
+      type: object
+      properties:
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/MessageDetail'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+    MessageDetail:
+      type: object
+      description: Full message details including routing information
+      properties:
+        messageId:
+          type: string
+        format:
+          type: string
+        messageType:
+          type: string
+        direction:
+          type: string
+          enum:
+          - inbound
+          - outbound
+        sourceSystem:
+          type: string
+        destinationSystem:
+          type: string
+        channel:
+          type: string
+        status:
+          type: string
+          enum:
+          - received
+          - validated
+          - transformed
+          - routed
+          - delivered
+          - acknowledged
+          - failed
+        transformations:
+          type: array
+          description: Format transformations applied
+          items:
+            type: object
+            properties:
+              fromFormat:
+                type: string
+              toFormat:
+                type: string
+              timestamp:
+                type: string
+                format: date-time
+        acknowledgement:
+          type: object
+          description: Acknowledgement from destination system
+          properties:
+            status:
+              type: string
+            receivedAt:
+              type: string
+              format: date-time
+            reference:
+              type: string
+        errorDetails:
+          type: string
+          description: Error details if message processing failed
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    apiKey:
+      type: apiKey
+      in: header
+      name: X-API-Key
+externalDocs:
+  description: Montran Corporate Payments Portal Documentation
+  url: https://www.montran.com/solutions/corporate-payments-portal/

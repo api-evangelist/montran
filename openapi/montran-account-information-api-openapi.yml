@@ -1,0 +1,459 @@
+openapi: 3.1.0
+info:
+  title: Montran Corporate Payments Portal Account Information API
+  description: The Montran Corporate Payments Portal enables corporates to exercise complete control over accounts at their various bank relationships, with the ability to make secure payments over the Internet. It supports SWIFT payments and local clearing delivery through API integration and H2H (Host-to-Host) protocols. Corporates can connect their ERP systems and manually or automatically upload invoices for payments and collections management. The portal provides multi-bank visibility and supports secure payment initiation across multiple currencies and payment types.
+  version: 1.0.0
+  contact:
+    name: Montran Corporation
+    url: https://www.montran.com/contact-us/
+  license:
+    name: Proprietary
+    url: https://www.montran.com/terms-conditions/
+  x-logo:
+    url: https://www.montran.com/logo.png
+servers:
+- url: https://api.montran.com/corporate/v1
+  description: Montran Corporate Payments Portal API Server
+security:
+- bearerAuth: []
+- apiKey: []
+tags:
+- name: Account Information
+  description: PSD2-compliant account information operations for AISP integration. Provides account details, balances, and transaction history.
+paths:
+  /accounts:
+    get:
+      operationId: listAccounts
+      summary: Montran List accessible accounts (AISP)
+      description: Retrieves a list of payment accounts accessible to the Account Information Service Provider (AISP) under an authorized PSD2 consent. Provides account identification, type, currency, and basic balance information.
+      tags:
+      - Account Information
+      parameters:
+      - name: consentId
+        in: query
+        required: true
+        description: PSD2 consent identifier authorizing access
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successfully retrieved list of accounts
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /accounts/{accountId}:
+    get:
+      operationId: getAccountDetails
+      summary: Montran Get account details (AISP)
+      description: Retrieves detailed information about a specific payment account including account holder name, IBAN, currency, and product type. Requires valid PSD2 AISP consent.
+      tags:
+      - Account Information
+      parameters:
+      - $ref: '#/components/parameters/AccountIdParam'
+      - name: consentId
+        in: query
+        required: true
+        description: PSD2 consent identifier
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successfully retrieved account details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountDetail'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /accounts/{accountId}/balances:
+    get:
+      operationId: getAccountBalances
+      summary: Montran Get account balances (AISP)
+      description: Retrieves the current balances for a specific payment account. Returns available balance, booked balance, and expected balance. Requires valid PSD2 AISP consent.
+      tags:
+      - Account Information
+      parameters:
+      - $ref: '#/components/parameters/AccountIdParam'
+      - name: consentId
+        in: query
+        required: true
+        description: PSD2 consent identifier
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successfully retrieved account balances
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountBalances'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /accounts/{accountId}/transactions:
+    get:
+      operationId: getAccountTransactions
+      summary: Montran Get account transactions (AISP)
+      description: Retrieves a list of transactions for a specific payment account. Supports filtering by date range, booking status, and amount. Requires valid PSD2 AISP consent.
+      tags:
+      - Account Information
+      parameters:
+      - $ref: '#/components/parameters/AccountIdParam'
+      - name: consentId
+        in: query
+        required: true
+        description: PSD2 consent identifier
+        schema:
+          type: string
+      - name: dateFrom
+        in: query
+        description: Start date for transaction filter (ISO 8601)
+        schema:
+          type: string
+          format: date
+      - name: dateTo
+        in: query
+        description: End date for transaction filter (ISO 8601)
+        schema:
+          type: string
+          format: date
+      - name: bookingStatus
+        in: query
+        description: Filter by booking status
+        schema:
+          type: string
+          enum:
+          - booked
+          - pending
+          - both
+      - $ref: '#/components/parameters/PageParam'
+      - $ref: '#/components/parameters/PageSizeParam'
+      responses:
+        '200':
+          description: Successfully retrieved transactions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /accounts/{accountId}/verification:
+    post:
+      operationId: verifyAccountBalance
+      summary: Montran Verify account balance sufficiency
+      description: Performs a balance sufficiency check on a payment account. Returns whether the account has sufficient funds for the specified amount without disclosing the actual balance. Used for pre-payment validation.
+      tags:
+      - Account Information
+      parameters:
+      - $ref: '#/components/parameters/AccountIdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BalanceVerificationRequest'
+      responses:
+        '200':
+          description: Balance verification result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BalanceVerificationResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  schemas:
+    TransactionList:
+      type: object
+      description: Paginated list of account transactions
+      properties:
+        accountId:
+          type: string
+        transactions:
+          type: object
+          properties:
+            booked:
+              type: array
+              items:
+                $ref: '#/components/schemas/Transaction'
+            pending:
+              type: array
+              items:
+                $ref: '#/components/schemas/Transaction'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+    Transaction:
+      type: object
+      description: A single account transaction
+      properties:
+        transactionId:
+          type: string
+          description: Unique transaction identifier
+        endToEndId:
+          type: string
+        amount:
+          type: number
+          format: double
+        currency:
+          type: string
+        creditDebitIndicator:
+          type: string
+          enum:
+          - CRDT
+          - DBIT
+        bookingDate:
+          type: string
+          format: date
+        valueDate:
+          type: string
+          format: date
+        debtorName:
+          type: string
+        debtorAccount:
+          $ref: '#/components/schemas/AccountIdentification'
+        creditorName:
+          type: string
+        creditorAccount:
+          $ref: '#/components/schemas/AccountIdentification'
+        remittanceInformation:
+          type: string
+        bankTransactionCode:
+          type: string
+    BalanceVerificationRequest:
+      type: object
+      description: Request to verify account balance sufficiency
+      required:
+      - amount
+      - currency
+      properties:
+        amount:
+          type: number
+          format: double
+          description: Amount to verify against the account balance
+          minimum: 0.01
+        currency:
+          type: string
+          description: Currency of the amount
+          pattern: ^[A-Z]{3}$
+    Error:
+      type: object
+      description: Standard error response
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Human-readable error message
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
+    BalanceVerificationResponse:
+      type: object
+      description: Result of account balance verification
+      properties:
+        sufficient:
+          type: boolean
+          description: Whether the account has sufficient funds
+        verifiedAt:
+          type: string
+          format: date-time
+    AccountBalances:
+      type: object
+      description: Account balance information
+      properties:
+        accountId:
+          type: string
+        balances:
+          type: array
+          items:
+            type: object
+            properties:
+              balanceType:
+                type: string
+                enum:
+                - closingBooked
+                - expected
+                - interimAvailable
+                - interimBooked
+                - openingBooked
+              amount:
+                type: number
+                format: double
+              currency:
+                type: string
+              creditDebitIndicator:
+                type: string
+                enum:
+                - CRDT
+                - DBIT
+              referenceDate:
+                type: string
+                format: date
+              lastChangeDateTime:
+                type: string
+                format: date-time
+    AccountIdentification:
+      type: object
+      description: Account identification using IBAN or proprietary identifier
+      properties:
+        iban:
+          type: string
+          description: International Bank Account Number
+          pattern: ^[A-Z]{2}[0-9]{2}[A-Z0-9]{4,30}$
+        accountNumber:
+          type: string
+          description: Proprietary account number
+        currency:
+          type: string
+          description: Account currency (ISO 4217)
+          pattern: ^[A-Z]{3}$
+    Pagination:
+      type: object
+      description: Pagination metadata
+      properties:
+        page:
+          type: integer
+        pageSize:
+          type: integer
+        totalItems:
+          type: integer
+        totalPages:
+          type: integer
+    AccountDetail:
+      type: object
+      description: Payment account details
+      properties:
+        accountId:
+          type: string
+          description: Unique account identifier
+        iban:
+          type: string
+          description: International Bank Account Number
+        currency:
+          type: string
+          description: Account currency (ISO 4217)
+        name:
+          type: string
+          description: Account name or description
+        ownerName:
+          type: string
+          description: Name of the account owner
+        product:
+          type: string
+          description: Product name of the account
+        status:
+          type: string
+          enum:
+          - enabled
+          - deleted
+          - blocked
+    AccountList:
+      type: object
+      description: List of accessible payment accounts
+      properties:
+        accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountDetail'
+  parameters:
+    PageParam:
+      name: page
+      in: query
+      description: Page number for pagination
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+    AccountIdParam:
+      name: accountId
+      in: path
+      required: true
+      description: Unique identifier of the payment account
+      schema:
+        type: string
+    PageSizeParam:
+      name: pageSize
+      in: query
+      description: Number of items per page
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 20
+  responses:
+    Unauthorized:
+      description: Authentication required or credentials invalid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Requested resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: Insufficient permissions or invalid consent
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    apiKey:
+      type: apiKey
+      in: header
+      name: X-API-Key
+externalDocs:
+  description: Montran Corporate Payments Portal Documentation
+  url: https://www.montran.com/solutions/corporate-payments-portal/

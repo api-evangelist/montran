@@ -1,0 +1,232 @@
+openapi: 3.1.0
+info:
+  title: Montran Corporate Payments Portal Account Information Message Formats API
+  description: The Montran Corporate Payments Portal enables corporates to exercise complete control over accounts at their various bank relationships, with the ability to make secure payments over the Internet. It supports SWIFT payments and local clearing delivery through API integration and H2H (Host-to-Host) protocols. Corporates can connect their ERP systems and manually or automatically upload invoices for payments and collections management. The portal provides multi-bank visibility and supports secure payment initiation across multiple currencies and payment types.
+  version: 1.0.0
+  contact:
+    name: Montran Corporation
+    url: https://www.montran.com/contact-us/
+  license:
+    name: Proprietary
+    url: https://www.montran.com/terms-conditions/
+  x-logo:
+    url: https://www.montran.com/logo.png
+servers:
+- url: https://api.montran.com/corporate/v1
+  description: Montran Corporate Payments Portal API Server
+security:
+- bearerAuth: []
+- apiKey: []
+tags:
+- name: Message Formats
+  description: Message format conversion and validation
+paths:
+  /messages/transform:
+    post:
+      operationId: transformMessage
+      summary: Montran Transform a message between formats
+      description: Transforms a financial message between supported formats without routing it. Supports conversion between SWIFT FIN MT and ISO 20022 MX formats, as well as local proprietary formats. Useful for validating format transformations before submission.
+      tags:
+      - Message Formats
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransformRequest'
+      responses:
+        '200':
+          description: Message successfully transformed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransformResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /messages/validate:
+    post:
+      operationId: validateMessage
+      summary: Montran Validate a message
+      description: Validates a financial message against the rules for its message type and format. Checks structural validity, field content, and business rules without submitting the message for routing. Supports SWIFT FIN, ISO 20022, and proprietary format validation.
+      tags:
+      - Message Formats
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidateRequest'
+      responses:
+        '200':
+          description: Validation result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationResult'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  schemas:
+    TransformRequest:
+      type: object
+      description: Request to transform a message between formats
+      required:
+      - sourceFormat
+      - targetFormat
+      - content
+      properties:
+        sourceFormat:
+          type: string
+          description: Source message format
+          enum:
+          - SWIFT_FIN
+          - ISO20022
+          - PROPRIETARY
+        sourceMessageType:
+          type: string
+          description: Source message type (e.g., MT103, pacs.008)
+        targetFormat:
+          type: string
+          description: Target message format
+          enum:
+          - SWIFT_FIN
+          - ISO20022
+          - PROPRIETARY
+        targetMessageType:
+          type: string
+          description: Target message type
+        content:
+          type: string
+          description: Source message content
+    Error:
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
+    ValidationResult:
+      type: object
+      description: Message validation result
+      properties:
+        valid:
+          type: boolean
+          description: Whether the message is valid
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              severity:
+                type: string
+                enum:
+                - ERROR
+                - WARNING
+              field:
+                type: string
+              rule:
+                type: string
+              message:
+                type: string
+    TransformResponse:
+      type: object
+      description: Result of message format transformation
+      properties:
+        sourceFormat:
+          type: string
+        targetFormat:
+          type: string
+        sourceMessageType:
+          type: string
+        targetMessageType:
+          type: string
+        transformedContent:
+          type: string
+          description: Transformed message content
+        warnings:
+          type: array
+          description: Transformation warnings (e.g., data truncation)
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
+    ValidateRequest:
+      type: object
+      description: Request to validate a message
+      required:
+      - format
+      - messageType
+      - content
+      properties:
+        format:
+          type: string
+          enum:
+          - SWIFT_FIN
+          - ISO20022
+          - PROPRIETARY
+        messageType:
+          type: string
+        content:
+          type: string
+  responses:
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    UnprocessableEntity:
+      description: Validation failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    apiKey:
+      type: apiKey
+      in: header
+      name: X-API-Key
+externalDocs:
+  description: Montran Corporate Payments Portal Documentation
+  url: https://www.montran.com/solutions/corporate-payments-portal/

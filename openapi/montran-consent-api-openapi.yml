@@ -1,0 +1,221 @@
+openapi: 3.1.0
+info:
+  title: Montran Corporate Payments Portal Account Information Consent API
+  description: The Montran Corporate Payments Portal enables corporates to exercise complete control over accounts at their various bank relationships, with the ability to make secure payments over the Internet. It supports SWIFT payments and local clearing delivery through API integration and H2H (Host-to-Host) protocols. Corporates can connect their ERP systems and manually or automatically upload invoices for payments and collections management. The portal provides multi-bank visibility and supports secure payment initiation across multiple currencies and payment types.
+  version: 1.0.0
+  contact:
+    name: Montran Corporation
+    url: https://www.montran.com/contact-us/
+  license:
+    name: Proprietary
+    url: https://www.montran.com/terms-conditions/
+  x-logo:
+    url: https://www.montran.com/logo.png
+servers:
+- url: https://api.montran.com/corporate/v1
+  description: Montran Corporate Payments Portal API Server
+security:
+- bearerAuth: []
+- apiKey: []
+tags:
+- name: Consent
+  description: PSD2 consent management for AISP and PISP access
+paths:
+  /consents:
+    post:
+      operationId: createConsent
+      summary: Montran Create a PSD2 consent
+      description: Creates a new PSD2 consent for account access (AISP) or payment initiation (PISP). The consent must be authorized by the payment service user (PSU) before it can be used. Supports Strong Customer Authentication (SCA) flows as required by PSD2.
+      tags:
+      - Consent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConsentRequest'
+      responses:
+        '201':
+          description: Consent successfully created, pending PSU authorization
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConsentResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /consents/{consentId}:
+    get:
+      operationId: getConsent
+      summary: Montran Get consent status
+      description: Retrieves the current status and details of a PSD2 consent. Used to check whether the consent has been authorized by the PSU and remains valid for use.
+      tags:
+      - Consent
+      parameters:
+      - $ref: '#/components/parameters/ConsentIdParam'
+      responses:
+        '200':
+          description: Successfully retrieved consent details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConsentResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      operationId: revokeConsent
+      summary: Montran Revoke a consent
+      description: Revokes an existing PSD2 consent. Once revoked, the consent can no longer be used for account access or payment initiation.
+      tags:
+      - Consent
+      parameters:
+      - $ref: '#/components/parameters/ConsentIdParam'
+      responses:
+        '204':
+          description: Consent successfully revoked
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  schemas:
+    Error:
+      type: object
+      description: Standard error response
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Human-readable error message
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
+    ConsentResponse:
+      type: object
+      description: PSD2 consent details
+      properties:
+        consentId:
+          type: string
+          description: Unique consent identifier
+        consentType:
+          type: string
+          enum:
+          - AISP
+          - PISP
+        status:
+          type: string
+          description: Consent status
+          enum:
+          - received
+          - valid
+          - rejected
+          - expired
+          - revokedByPsu
+          - terminatedByTpp
+        scaRedirectUrl:
+          type: string
+          format: uri
+          description: URL for SCA redirect flow
+        validUntil:
+          type: string
+          format: date
+        createdAt:
+          type: string
+          format: date-time
+    ConsentRequest:
+      type: object
+      description: PSD2 consent creation request
+      required:
+      - consentType
+      - psuId
+      properties:
+        consentType:
+          type: string
+          description: Type of PSD2 consent
+          enum:
+          - AISP
+          - PISP
+        psuId:
+          type: string
+          description: Payment Service User identifier
+        accountIds:
+          type: array
+          description: List of account IDs for AISP consent
+          items:
+            type: string
+        validUntil:
+          type: string
+          format: date
+          description: Expiration date of the consent
+        frequencyPerDay:
+          type: integer
+          description: Maximum number of access requests per day
+          minimum: 1
+        recurringIndicator:
+          type: boolean
+          description: Whether the consent is for recurring access
+  parameters:
+    ConsentIdParam:
+      name: consentId
+      in: path
+      required: true
+      description: Unique identifier of the PSD2 consent
+      schema:
+        type: string
+  responses:
+    Unauthorized:
+      description: Authentication required or credentials invalid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Bad request - invalid parameters or malformed request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Requested resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    apiKey:
+      type: apiKey
+      in: header
+      name: X-API-Key
+externalDocs:
+  description: Montran Corporate Payments Portal Documentation
+  url: https://www.montran.com/solutions/corporate-payments-portal/

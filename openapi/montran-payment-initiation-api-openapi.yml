@@ -1,0 +1,327 @@
+openapi: 3.1.0
+info:
+  title: Montran Corporate Payments Portal Account Information Payment Initiation API
+  description: The Montran Corporate Payments Portal enables corporates to exercise complete control over accounts at their various bank relationships, with the ability to make secure payments over the Internet. It supports SWIFT payments and local clearing delivery through API integration and H2H (Host-to-Host) protocols. Corporates can connect their ERP systems and manually or automatically upload invoices for payments and collections management. The portal provides multi-bank visibility and supports secure payment initiation across multiple currencies and payment types.
+  version: 1.0.0
+  contact:
+    name: Montran Corporation
+    url: https://www.montran.com/contact-us/
+  license:
+    name: Proprietary
+    url: https://www.montran.com/terms-conditions/
+  x-logo:
+    url: https://www.montran.com/logo.png
+servers:
+- url: https://api.montran.com/corporate/v1
+  description: Montran Corporate Payments Portal API Server
+security:
+- bearerAuth: []
+- apiKey: []
+tags:
+- name: Payment Initiation
+  description: PSD2-compliant payment initiation operations for PISP integration. Supports instant credit transfers and request-to-pay flows.
+paths:
+  /payments/instant:
+    post:
+      operationId: initiateInstantPayment
+      summary: Montran Initiate an instant payment
+      description: Initiates a real-time instant payment with guaranteed end-to-end processing latency of a few seconds. The payment is processed using ISO 20022 pacs.008 FIToFICustomerCreditTransfer messaging. Supports credit transfers across instant payment schemes. Returns the payment status synchronously, including confirmation or rejection.
+      tags:
+      - Payment Initiation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InstantPaymentRequest'
+      responses:
+        '201':
+          description: Instant payment successfully processed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InstantPaymentResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          description: Service temporarily unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /payments/credit-transfer:
+    post:
+      operationId: initiateCreditTransfer
+      summary: Montran Initiate a PISP credit transfer
+      description: Initiates a credit transfer payment on behalf of a Payment Service User (PSU) as a Payment Initiation Service Provider (PISP) under PSD2. Requires valid PSU consent. Uses ISO 20022 pain.001 CustomerCreditTransferInitiation format.
+      tags:
+      - Payment Initiation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreditTransferRequest'
+      responses:
+        '201':
+          description: Credit transfer successfully initiated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentInitiationResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  responses:
+    UnprocessableEntity:
+      description: Request validation failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication required or credentials invalid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Bad request - invalid parameters or malformed request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: Insufficient permissions or invalid consent
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Error:
+      type: object
+      description: Standard error response
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Human-readable error message
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
+    InstantPaymentResponse:
+      type: object
+      description: Response for an instant payment including real-time status
+      properties:
+        paymentId:
+          type: string
+          description: Unique payment identifier
+        messageId:
+          type: string
+          description: Message identification
+        endToEndId:
+          type: string
+          description: End-to-end identification
+        transactionId:
+          type: string
+          description: Transaction identification
+        status:
+          type: string
+          description: Payment processing status (ISO 20022 status codes)
+          enum:
+          - ACCP
+          - ACSC
+          - ACSP
+          - RJCT
+        reasonCode:
+          type: string
+          description: Rejection reason code if status is RJCT
+        settlementDate:
+          type: string
+          format: date
+          description: Settlement date
+        acceptanceDateTime:
+          type: string
+          format: date-time
+          description: Timestamp of payment acceptance
+    CreditTransferRequest:
+      type: object
+      description: PSD2 PISP credit transfer request using ISO 20022 pain.001 CustomerCreditTransferInitiation
+      required:
+      - consentId
+      - debtorAccount
+      - creditorAccount
+      - amount
+      - currency
+      properties:
+        consentId:
+          type: string
+          description: PSD2 consent identifier authorizing the payment
+        debtorAccount:
+          $ref: '#/components/schemas/AccountIdentification'
+        creditorName:
+          type: string
+          description: Name of the creditor
+        creditorAccount:
+          $ref: '#/components/schemas/AccountIdentification'
+        creditorAgent:
+          $ref: '#/components/schemas/FinancialInstitution'
+        amount:
+          type: number
+          format: double
+          description: Payment amount
+          minimum: 0.01
+        currency:
+          type: string
+          description: ISO 4217 currency code
+          pattern: ^[A-Z]{3}$
+        endToEndId:
+          type: string
+          description: End-to-end identification
+        remittanceInformation:
+          type: string
+          description: Remittance information
+    FinancialInstitution:
+      type: object
+      description: Financial institution identification
+      properties:
+        bic:
+          type: string
+          description: Bank Identifier Code (SWIFT/BIC)
+          pattern: ^[A-Z]{4}[A-Z]{2}[A-Z0-9]{2}([A-Z0-9]{3})?$
+        name:
+          type: string
+          description: Name of the financial institution
+    AccountIdentification:
+      type: object
+      description: Account identification using IBAN or proprietary identifier
+      properties:
+        iban:
+          type: string
+          description: International Bank Account Number
+          pattern: ^[A-Z]{2}[0-9]{2}[A-Z0-9]{4,30}$
+        accountNumber:
+          type: string
+          description: Proprietary account number
+        currency:
+          type: string
+          description: Account currency (ISO 4217)
+          pattern: ^[A-Z]{3}$
+    PaymentInitiationResponse:
+      type: object
+      description: Response for a PISP-initiated payment
+      properties:
+        paymentId:
+          type: string
+          description: Unique payment identifier
+        status:
+          type: string
+          description: Payment initiation status
+          enum:
+          - RCVD
+          - PDNG
+          - ACCP
+          - RJCT
+        scaRedirectUrl:
+          type: string
+          format: uri
+          description: URL for SCA redirect if required
+        createdAt:
+          type: string
+          format: date-time
+    InstantPaymentRequest:
+      type: object
+      description: Instant payment initiation request using ISO 20022 pacs.008 FIToFICustomerCreditTransfer structure
+      required:
+      - debtorAccount
+      - creditorAccount
+      - amount
+      - currency
+      properties:
+        messageId:
+          type: string
+          description: Unique message identification
+        endToEndId:
+          type: string
+          description: End-to-end identification assigned by the initiating party
+        transactionId:
+          type: string
+          description: Unique transaction identification
+        debtorName:
+          type: string
+          description: Name of the debtor (payer)
+        debtorAccount:
+          $ref: '#/components/schemas/AccountIdentification'
+        debtorAgent:
+          $ref: '#/components/schemas/FinancialInstitution'
+        creditorName:
+          type: string
+          description: Name of the creditor (payee)
+        creditorAccount:
+          $ref: '#/components/schemas/AccountIdentification'
+        creditorAgent:
+          $ref: '#/components/schemas/FinancialInstitution'
+        amount:
+          type: number
+          format: double
+          description: Payment amount
+          minimum: 0.01
+        currency:
+          type: string
+          description: ISO 4217 currency code
+          pattern: ^[A-Z]{3}$
+        remittanceInformation:
+          type: string
+          description: Remittance information or payment reference
+        purpose:
+          type: string
+          description: Purpose code for the payment
+        chargeBearer:
+          type: string
+          enum:
+          - SLEV
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    apiKey:
+      type: apiKey
+      in: header
+      name: X-API-Key
+externalDocs:
+  description: Montran Corporate Payments Portal Documentation
+  url: https://www.montran.com/solutions/corporate-payments-portal/

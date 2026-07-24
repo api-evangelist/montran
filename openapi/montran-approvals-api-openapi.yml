@@ -1,0 +1,224 @@
+openapi: 3.1.0
+info:
+  title: Montran Corporate Payments Portal Account Information Approvals API
+  description: The Montran Corporate Payments Portal enables corporates to exercise complete control over accounts at their various bank relationships, with the ability to make secure payments over the Internet. It supports SWIFT payments and local clearing delivery through API integration and H2H (Host-to-Host) protocols. Corporates can connect their ERP systems and manually or automatically upload invoices for payments and collections management. The portal provides multi-bank visibility and supports secure payment initiation across multiple currencies and payment types.
+  version: 1.0.0
+  contact:
+    name: Montran Corporation
+    url: https://www.montran.com/contact-us/
+  license:
+    name: Proprietary
+    url: https://www.montran.com/terms-conditions/
+  x-logo:
+    url: https://www.montran.com/logo.png
+servers:
+- url: https://api.montran.com/corporate/v1
+  description: Montran Corporate Payments Portal API Server
+security:
+- bearerAuth: []
+- apiKey: []
+tags:
+- name: Approvals
+  description: Payment approval workflow management
+paths:
+  /payments/{paymentId}/approve:
+    post:
+      operationId: approvePayment
+      summary: Montran Approve a payment
+      description: Approves a payment that is pending approval. Multi-level approval workflows are supported based on the corporate's configured authorization matrix. Once all required approvals are obtained, the payment is automatically submitted to the bank.
+      tags:
+      - Approvals
+      parameters:
+      - $ref: '#/components/parameters/PaymentIdParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                comment:
+                  type: string
+                  description: Approval comment
+      responses:
+        '200':
+          description: Payment approved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CorporatePayment'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          description: Payment not in approvable state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /payments/{paymentId}/reject:
+    post:
+      operationId: rejectPayment
+      summary: Montran Reject a payment
+      description: Rejects a payment that is pending approval. The payment is returned to the initiator with the rejection reason.
+      tags:
+      - Approvals
+      parameters:
+      - $ref: '#/components/parameters/PaymentIdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - reason
+              properties:
+                reason:
+                  type: string
+                  description: Rejection reason
+      responses:
+        '200':
+          description: Payment rejected
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CorporatePayment'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  responses:
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Error:
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
+    CorporatePayment:
+      type: object
+      description: Corporate payment details
+      properties:
+        paymentId:
+          type: string
+        paymentType:
+          type: string
+        status:
+          type: string
+          enum:
+          - draft
+          - pending_approval
+          - approved
+          - submitted
+          - accepted
+          - rejected
+          - settled
+          - cancelled
+        debitAccountId:
+          type: string
+        beneficiaryName:
+          type: string
+        beneficiaryAccount:
+          type: object
+          properties:
+            iban:
+              type: string
+            accountNumber:
+              type: string
+            bankBic:
+              type: string
+        amount:
+          type: number
+          format: double
+        currency:
+          type: string
+        valueDate:
+          type: string
+          format: date
+        reference:
+          type: string
+        approvalStatus:
+          type: object
+          properties:
+            requiredApprovals:
+              type: integer
+            currentApprovals:
+              type: integer
+            approvers:
+              type: array
+              items:
+                type: object
+                properties:
+                  userId:
+                    type: string
+                  approvedAt:
+                    type: string
+                    format: date-time
+                  comment:
+                    type: string
+        bankReference:
+          type: string
+          description: Reference assigned by the bank
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+  parameters:
+    PaymentIdParam:
+      name: paymentId
+      in: path
+      required: true
+      description: Unique payment identifier
+      schema:
+        type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    apiKey:
+      type: apiKey
+      in: header
+      name: X-API-Key
+externalDocs:
+  description: Montran Corporate Payments Portal Documentation
+  url: https://www.montran.com/solutions/corporate-payments-portal/

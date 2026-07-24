@@ -1,0 +1,128 @@
+openapi: 3.1.0
+info:
+  title: Montran Corporate Payments Portal Account Information Balances API
+  description: The Montran Corporate Payments Portal enables corporates to exercise complete control over accounts at their various bank relationships, with the ability to make secure payments over the Internet. It supports SWIFT payments and local clearing delivery through API integration and H2H (Host-to-Host) protocols. Corporates can connect their ERP systems and manually or automatically upload invoices for payments and collections management. The portal provides multi-bank visibility and supports secure payment initiation across multiple currencies and payment types.
+  version: 1.0.0
+  contact:
+    name: Montran Corporation
+    url: https://www.montran.com/contact-us/
+  license:
+    name: Proprietary
+    url: https://www.montran.com/terms-conditions/
+  x-logo:
+    url: https://www.montran.com/logo.png
+servers:
+- url: https://api.montran.com/corporate/v1
+  description: Montran Corporate Payments Portal API Server
+security:
+- bearerAuth: []
+- apiKey: []
+tags:
+- name: Balances
+  description: Balance inquiry and reconciliation operations
+paths:
+  /virtual-accounts/{accountId}/balance:
+    get:
+      operationId: getVirtualAccountBalance
+      summary: Montran Get virtual account balance
+      description: Retrieves the current balance of a virtual account including available balance, booked balance, and pending transactions. Provides real-time reconciliation data.
+      tags:
+      - Balances
+      parameters:
+      - $ref: '#/components/parameters/AccountIdParam'
+      responses:
+        '200':
+          description: Successfully retrieved balance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VirtualAccountBalance'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  parameters:
+    AccountIdParam:
+      name: accountId
+      in: path
+      required: true
+      description: Unique identifier of the virtual account
+      schema:
+        type: string
+  schemas:
+    Error:
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
+    VirtualAccountBalance:
+      type: object
+      description: Virtual account balance information
+      properties:
+        accountId:
+          type: string
+        currency:
+          type: string
+        availableBalance:
+          type: number
+          format: double
+        bookedBalance:
+          type: number
+          format: double
+        pendingCredits:
+          type: number
+          format: double
+        pendingDebits:
+          type: number
+          format: double
+        asOf:
+          type: string
+          format: date-time
+  responses:
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    apiKey:
+      type: apiKey
+      in: header
+      name: X-API-Key
+externalDocs:
+  description: Montran Corporate Payments Portal Documentation
+  url: https://www.montran.com/solutions/corporate-payments-portal/

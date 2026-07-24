@@ -1,0 +1,272 @@
+openapi: 3.1.0
+info:
+  title: Montran Corporate Payments Portal Account Information Virtual IBANs API
+  description: The Montran Corporate Payments Portal enables corporates to exercise complete control over accounts at their various bank relationships, with the ability to make secure payments over the Internet. It supports SWIFT payments and local clearing delivery through API integration and H2H (Host-to-Host) protocols. Corporates can connect their ERP systems and manually or automatically upload invoices for payments and collections management. The portal provides multi-bank visibility and supports secure payment initiation across multiple currencies and payment types.
+  version: 1.0.0
+  contact:
+    name: Montran Corporation
+    url: https://www.montran.com/contact-us/
+  license:
+    name: Proprietary
+    url: https://www.montran.com/terms-conditions/
+  x-logo:
+    url: https://www.montran.com/logo.png
+servers:
+- url: https://api.montran.com/corporate/v1
+  description: Montran Corporate Payments Portal API Server
+security:
+- bearerAuth: []
+- apiKey: []
+tags:
+- name: Virtual IBANs
+  description: Virtual IBAN issuance and management
+paths:
+  /virtual-ibans:
+    get:
+      operationId: listVirtualIbans
+      summary: Montran List virtual IBANs
+      description: Retrieves a list of issued virtual IBANs. Supports filtering by status and associated virtual account. Virtual IBANs enable incoming payments to be automatically routed and allocated to the correct virtual account.
+      tags:
+      - Virtual IBANs
+      parameters:
+      - name: status
+        in: query
+        schema:
+          type: string
+          enum:
+          - active
+          - inactive
+      - name: virtualAccountId
+        in: query
+        description: Filter by associated virtual account
+        schema:
+          type: string
+      - name: page
+        in: query
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 20
+      responses:
+        '200':
+          description: Successfully retrieved virtual IBANs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VirtualIbanList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      operationId: issueVirtualIban
+      summary: Montran Issue a virtual IBAN
+      description: Issues a new virtual IBAN and associates it with a virtual account. The VIBAN can be used for receiving incoming payments that are automatically allocated to the linked virtual account. Supports 2-way VIBANs for both receiving and sending.
+      tags:
+      - Virtual IBANs
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VirtualIbanCreate'
+      responses:
+        '201':
+          description: Virtual IBAN successfully issued
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VirtualIban'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /virtual-ibans/{vibanId}:
+    get:
+      operationId: getVirtualIban
+      summary: Montran Get virtual IBAN details
+      description: Retrieves the details of a specific virtual IBAN including its associated virtual account, status, and usage statistics.
+      tags:
+      - Virtual IBANs
+      parameters:
+      - name: vibanId
+        in: path
+        required: true
+        description: Unique identifier of the virtual IBAN
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successfully retrieved virtual IBAN details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VirtualIban'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /virtual-ibans/{vibanId}/deactivate:
+    post:
+      operationId: deactivateVirtualIban
+      summary: Montran Deactivate a virtual IBAN
+      description: Deactivates a virtual IBAN so it can no longer receive incoming payments. The IBAN remains in the system for historical reference but new payments referencing it will be rejected.
+      tags:
+      - Virtual IBANs
+      parameters:
+      - name: vibanId
+        in: path
+        required: true
+        description: Unique identifier of the virtual IBAN
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Virtual IBAN successfully deactivated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VirtualIban'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  schemas:
+    VirtualIban:
+      type: object
+      description: Virtual IBAN details
+      properties:
+        vibanId:
+          type: string
+          description: Unique VIBAN identifier
+        iban:
+          type: string
+          description: The virtual IBAN
+        virtualAccountId:
+          type: string
+          description: Associated virtual account
+        status:
+          type: string
+          enum:
+          - active
+          - inactive
+        twoWay:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+    Error:
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
+    VirtualIbanList:
+      type: object
+      properties:
+        virtualIbans:
+          type: array
+          items:
+            $ref: '#/components/schemas/VirtualIban'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+    VirtualIbanCreate:
+      type: object
+      description: Virtual IBAN issuance request
+      required:
+      - virtualAccountId
+      properties:
+        virtualAccountId:
+          type: string
+          description: Virtual account to associate the VIBAN with
+        twoWay:
+          type: boolean
+          description: Whether the VIBAN supports both incoming and outgoing
+          default: false
+        countryCode:
+          type: string
+          description: Country code for IBAN generation
+          pattern: ^[A-Z]{2}$
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+        pageSize:
+          type: integer
+        totalItems:
+          type: integer
+        totalPages:
+          type: integer
+  responses:
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    UnprocessableEntity:
+      description: Validation failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    apiKey:
+      type: apiKey
+      in: header
+      name: X-API-Key
+externalDocs:
+  description: Montran Corporate Payments Portal Documentation
+  url: https://www.montran.com/solutions/corporate-payments-portal/

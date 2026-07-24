@@ -1,0 +1,395 @@
+openapi: 3.1.0
+info:
+  title: Montran Corporate Payments Portal Account Information Virtual Accounts API
+  description: The Montran Corporate Payments Portal enables corporates to exercise complete control over accounts at their various bank relationships, with the ability to make secure payments over the Internet. It supports SWIFT payments and local clearing delivery through API integration and H2H (Host-to-Host) protocols. Corporates can connect their ERP systems and manually or automatically upload invoices for payments and collections management. The portal provides multi-bank visibility and supports secure payment initiation across multiple currencies and payment types.
+  version: 1.0.0
+  contact:
+    name: Montran Corporation
+    url: https://www.montran.com/contact-us/
+  license:
+    name: Proprietary
+    url: https://www.montran.com/terms-conditions/
+  x-logo:
+    url: https://www.montran.com/logo.png
+servers:
+- url: https://api.montran.com/corporate/v1
+  description: Montran Corporate Payments Portal API Server
+security:
+- bearerAuth: []
+- apiKey: []
+tags:
+- name: Virtual Accounts
+  description: Virtual account creation, management, and lifecycle operations
+paths:
+  /virtual-accounts:
+    get:
+      operationId: listVirtualAccounts
+      summary: Montran List virtual accounts
+      description: Retrieves a list of virtual accounts managed on the platform. Supports filtering by status, currency, parent account, and account holder. Returns account details including virtual IBAN, balance, and hierarchy information.
+      tags:
+      - Virtual Accounts
+      parameters:
+      - name: status
+        in: query
+        description: Filter by account status
+        schema:
+          type: string
+          enum:
+          - active
+          - suspended
+          - closed
+      - name: currency
+        in: query
+        description: Filter by ISO 4217 currency code
+        schema:
+          type: string
+          pattern: ^[A-Z]{3}$
+      - name: parentAccountId
+        in: query
+        description: Filter by parent physical account
+        schema:
+          type: string
+      - name: accountHolder
+        in: query
+        description: Filter by account holder name
+        schema:
+          type: string
+      - name: page
+        in: query
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 20
+      responses:
+        '200':
+          description: Successfully retrieved virtual accounts
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VirtualAccountList'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      operationId: createVirtualAccount
+      summary: Montran Create a virtual account
+      description: Creates a new virtual account mapped to an existing physical bank account. The virtual account can optionally be assigned a Virtual IBAN for receiving incoming payments. Supports multi-currency virtual accounts and can be configured for POBO/COBO, escrow, or general segregation purposes.
+      tags:
+      - Virtual Accounts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VirtualAccountCreate'
+      responses:
+        '201':
+          description: Virtual account successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VirtualAccount'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /virtual-accounts/{accountId}:
+    get:
+      operationId: getVirtualAccount
+      summary: Montran Get virtual account details
+      description: Retrieves the full details of a specific virtual account including its virtual IBAN, mapped physical account, balance, transaction history summary, and position within the account hierarchy.
+      tags:
+      - Virtual Accounts
+      parameters:
+      - $ref: '#/components/parameters/AccountIdParam'
+      responses:
+        '200':
+          description: Successfully retrieved virtual account details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VirtualAccount'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    put:
+      operationId: updateVirtualAccount
+      summary: Montran Update a virtual account
+      description: Updates the configuration of a virtual account including its name, metadata, and allocation rules. Cannot change the mapped physical account or virtual IBAN.
+      tags:
+      - Virtual Accounts
+      parameters:
+      - $ref: '#/components/parameters/AccountIdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VirtualAccountUpdate'
+      responses:
+        '200':
+          description: Virtual account successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VirtualAccount'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /virtual-accounts/{accountId}/close:
+    post:
+      operationId: closeVirtualAccount
+      summary: Montran Close a virtual account
+      description: Closes a virtual account. The account must have a zero balance before it can be closed. Any associated virtual IBANs are deactivated upon closure.
+      tags:
+      - Virtual Accounts
+      parameters:
+      - $ref: '#/components/parameters/AccountIdParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reason:
+                  type: string
+                  description: Reason for closing the account
+      responses:
+        '200':
+          description: Virtual account successfully closed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VirtualAccount'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          description: Account cannot be closed (non-zero balance)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  parameters:
+    AccountIdParam:
+      name: accountId
+      in: path
+      required: true
+      description: Unique identifier of the virtual account
+      schema:
+        type: string
+  responses:
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    UnprocessableEntity:
+      description: Validation failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Error:
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
+    VirtualAccount:
+      type: object
+      description: Virtual account details
+      properties:
+        accountId:
+          type: string
+          description: Unique virtual account identifier
+        name:
+          type: string
+        physicalAccountId:
+          type: string
+        currency:
+          type: string
+        accountHolder:
+          type: string
+        purpose:
+          type: string
+        status:
+          type: string
+          enum:
+          - active
+          - suspended
+          - closed
+        virtualIban:
+          type: string
+          description: Associated virtual IBAN if issued
+        balance:
+          type: number
+          format: double
+          description: Current balance
+        parentVirtualAccountId:
+          type: string
+        autoAllocate:
+          type: boolean
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    VirtualAccountList:
+      type: object
+      properties:
+        accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/VirtualAccount'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+    VirtualAccountCreate:
+      type: object
+      description: Virtual account creation request
+      required:
+      - name
+      - physicalAccountId
+      - currency
+      properties:
+        name:
+          type: string
+          description: Account name or label
+        physicalAccountId:
+          type: string
+          description: ID of the underlying physical bank account
+        currency:
+          type: string
+          description: ISO 4217 currency code
+          pattern: ^[A-Z]{3}$
+        accountHolder:
+          type: string
+          description: Name of the virtual account holder
+        purpose:
+          type: string
+          description: Purpose of the virtual account
+          enum:
+          - GENERAL
+          - POBO
+          - COBO
+          - ESCROW
+          - IN_HOUSE_BANK
+          - TREASURY
+        parentVirtualAccountId:
+          type: string
+          description: Parent virtual account for hierarchical structures
+        autoAllocate:
+          type: boolean
+          description: Whether incoming payments should be auto-allocated
+          default: true
+        issueViban:
+          type: boolean
+          description: Whether to automatically issue a virtual IBAN
+          default: false
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+        pageSize:
+          type: integer
+        totalItems:
+          type: integer
+        totalPages:
+          type: integer
+    VirtualAccountUpdate:
+      type: object
+      description: Virtual account update request
+      properties:
+        name:
+          type: string
+        accountHolder:
+          type: string
+        autoAllocate:
+          type: boolean
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    apiKey:
+      type: apiKey
+      in: header
+      name: X-API-Key
+externalDocs:
+  description: Montran Corporate Payments Portal Documentation
+  url: https://www.montran.com/solutions/corporate-payments-portal/

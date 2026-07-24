@@ -1,0 +1,163 @@
+openapi: 3.1.0
+info:
+  title: Montran Corporate Payments Portal Account Information Lists API
+  description: The Montran Corporate Payments Portal enables corporates to exercise complete control over accounts at their various bank relationships, with the ability to make secure payments over the Internet. It supports SWIFT payments and local clearing delivery through API integration and H2H (Host-to-Host) protocols. Corporates can connect their ERP systems and manually or automatically upload invoices for payments and collections management. The portal provides multi-bank visibility and supports secure payment initiation across multiple currencies and payment types.
+  version: 1.0.0
+  contact:
+    name: Montran Corporation
+    url: https://www.montran.com/contact-us/
+  license:
+    name: Proprietary
+    url: https://www.montran.com/terms-conditions/
+  x-logo:
+    url: https://www.montran.com/logo.png
+servers:
+- url: https://api.montran.com/corporate/v1
+  description: Montran Corporate Payments Portal API Server
+security:
+- bearerAuth: []
+- apiKey: []
+tags:
+- name: Lists
+  description: Sanctions and compliance list management
+paths:
+  /lists:
+    get:
+      operationId: listComplianceLists
+      summary: Montran List compliance lists
+      description: Retrieves the configured sanctions and compliance lists including OFAC SDN, EU Consolidated List, OFSI, Lloyds MIU, UN Sanctions, and any local or custom lists. Shows list status, last update date, and entry count.
+      tags:
+      - Lists
+      responses:
+        '200':
+          description: Successfully retrieved compliance lists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComplianceListSummary'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /lists/{listId}:
+    get:
+      operationId: getComplianceList
+      summary: Montran Get compliance list details
+      description: Retrieves the details of a specific compliance list including its source, last update date, entry count, and configuration for which channels use this list.
+      tags:
+      - Lists
+      parameters:
+      - name: listId
+        in: path
+        required: true
+        description: Unique identifier of the compliance list
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successfully retrieved list details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComplianceListDetail'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  schemas:
+    ComplianceListSummary:
+      type: object
+      properties:
+        lists:
+          type: array
+          items:
+            $ref: '#/components/schemas/ComplianceListDetail'
+    Error:
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
+    ComplianceListDetail:
+      type: object
+      description: Compliance list details
+      properties:
+        listId:
+          type: string
+        name:
+          type: string
+          description: List name
+        source:
+          type: string
+          description: List source organization
+          enum:
+          - OFAC
+          - EU
+          - OFSI
+          - UN
+          - LLOYDS_MIU
+          - CUSTOM
+        status:
+          type: string
+          enum:
+          - active
+          - inactive
+        entryCount:
+          type: integer
+          description: Number of entries in the list
+        lastUpdated:
+          type: string
+          format: date-time
+          description: When the list was last updated
+        channels:
+          type: array
+          description: Channels configured to use this list
+          items:
+            type: string
+  responses:
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    apiKey:
+      type: apiKey
+      in: header
+      name: X-API-Key
+externalDocs:
+  description: Montran Corporate Payments Portal Documentation
+  url: https://www.montran.com/solutions/corporate-payments-portal/

@@ -1,0 +1,212 @@
+openapi: 3.1.0
+info:
+  title: Montran Corporate Payments Portal Account Information Files API
+  description: The Montran Corporate Payments Portal enables corporates to exercise complete control over accounts at their various bank relationships, with the ability to make secure payments over the Internet. It supports SWIFT payments and local clearing delivery through API integration and H2H (Host-to-Host) protocols. Corporates can connect their ERP systems and manually or automatically upload invoices for payments and collections management. The portal provides multi-bank visibility and supports secure payment initiation across multiple currencies and payment types.
+  version: 1.0.0
+  contact:
+    name: Montran Corporation
+    url: https://www.montran.com/contact-us/
+  license:
+    name: Proprietary
+    url: https://www.montran.com/terms-conditions/
+  x-logo:
+    url: https://www.montran.com/logo.png
+servers:
+- url: https://api.montran.com/corporate/v1
+  description: Montran Corporate Payments Portal API Server
+security:
+- bearerAuth: []
+- apiKey: []
+tags:
+- name: Files
+  description: File upload and processing for batch payments
+paths:
+  /files:
+    post:
+      operationId: uploadPaymentFile
+      summary: Montran Upload a payment file
+      description: Uploads a payment file for batch processing. Supports various file formats for bulk payment initiation including CSV, XML (pain.001), and proprietary ERP export formats. Files are validated and individual payments are extracted and entered into the approval workflow.
+      tags:
+      - Files
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+              - file
+              - format
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: Payment file to upload
+                format:
+                  type: string
+                  description: File format
+                  enum:
+                  - CSV
+                  - XML_PAIN001
+                  - PROPRIETARY
+                bankId:
+                  type: string
+                  description: Target bank relationship
+      responses:
+        '202':
+          description: File accepted for processing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileUploadResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /files/{fileId}:
+    get:
+      operationId: getFileStatus
+      summary: Montran Get file processing status
+      description: Retrieves the processing status of an uploaded payment file including the number of payments extracted, validated, and any errors encountered during processing.
+      tags:
+      - Files
+      parameters:
+      - name: fileId
+        in: path
+        required: true
+        description: Unique identifier of the uploaded file
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successfully retrieved file status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileStatus'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  schemas:
+    Error:
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
+    FileStatus:
+      type: object
+      properties:
+        fileId:
+          type: string
+        fileName:
+          type: string
+        format:
+          type: string
+        status:
+          type: string
+          enum:
+          - PROCESSING
+          - COMPLETED
+          - COMPLETED_WITH_ERRORS
+          - FAILED
+        totalRecords:
+          type: integer
+        successfulRecords:
+          type: integer
+        failedRecords:
+          type: integer
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              recordNumber:
+                type: integer
+              errorMessage:
+                type: string
+        uploadedAt:
+          type: string
+          format: date-time
+        processedAt:
+          type: string
+          format: date-time
+    FileUploadResponse:
+      type: object
+      properties:
+        fileId:
+          type: string
+        fileName:
+          type: string
+        status:
+          type: string
+          enum:
+          - UPLOADED
+          - PROCESSING
+        uploadedAt:
+          type: string
+          format: date-time
+  responses:
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    UnprocessableEntity:
+      description: Validation failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    apiKey:
+      type: apiKey
+      in: header
+      name: X-API-Key
+externalDocs:
+  description: Montran Corporate Payments Portal Documentation
+  url: https://www.montran.com/solutions/corporate-payments-portal/
