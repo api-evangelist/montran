@@ -12,7 +12,7 @@ accessModel:
   - authentication
   generated: '2026-07-22'
   method: derived
-specificationVersion: '0.19'
+specificationVersion: '0.23'
 name: Montran
 description: >-
   Montran Corporation provides technologically advanced critical payments, cash management, and securities solutions to
