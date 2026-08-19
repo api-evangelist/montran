@@ -1,0 +1,54 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Montran Corporate Payments Portal Account Information Lists API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Lists",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Montran List compliance lists",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/corporate/v1/lists"
+          },
+          "docs": "Retrieves the configured sanctions and compliance lists including OFAC SDN, EU Consolidated List, OFSI, Lloyds MIU, UN Sanctions, and any local or custom lists. Shows list status, last update date, and entry count."
+        },
+        {
+          "info": {
+            "name": "Montran Get compliance list details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/corporate/v1/lists/:listId",
+            "params": [
+              {
+                "name": "listId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the compliance list"
+              }
+            ]
+          },
+          "docs": "Retrieves the details of a specific compliance list including its source, last update date, entry count, and configuration for which channels use this list."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

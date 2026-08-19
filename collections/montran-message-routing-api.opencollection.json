@@ -1,0 +1,129 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Montran Corporate Payments Portal Account Information Message Routing API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Message Routing",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Montran List processed messages",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/corporate/v1/messages",
+            "params": [
+              {
+                "name": "sourceSystem",
+                "value": "",
+                "type": "query",
+                "description": "Filter by source system identifier"
+              },
+              {
+                "name": "destinationSystem",
+                "value": "",
+                "type": "query",
+                "description": "Filter by destination system identifier"
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Filter by message format"
+              },
+              {
+                "name": "messageType",
+                "value": "",
+                "type": "query",
+                "description": "Filter by specific message type (e.g., MT103, pacs.008, pain.001, camt.053)"
+              },
+              {
+                "name": "direction",
+                "value": "",
+                "type": "query",
+                "description": "Filter by message direction"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by processing status"
+              },
+              {
+                "name": "fromDate",
+                "value": "",
+                "type": "query",
+                "description": "Start date filter (ISO 8601)"
+              },
+              {
+                "name": "toDate",
+                "value": "",
+                "type": "query",
+                "description": "End date filter (ISO 8601)"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Retrieves a list of messages processed through the connectivity platform. Supports filtering by source system, destination system, message format (SWIFT FIN, ISO 20022, proprietary), direction, and processing status."
+        },
+        {
+          "info": {
+            "name": "Montran Submit a message for routing",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.montran.com/corporate/v1/messages",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Submits a payment or financial message for routing through the connectivity platform. The message is validated, transformed to the required format, and routed to the appropriate destination system. Supports SWIFT FIN (MT series), ISO 20022 (pain, pacs, camt), and proprietary formats. The system automatically determines the appropriate channel and format transformation."
+        },
+        {
+          "info": {
+            "name": "Montran Get message details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/corporate/v1/messages/:messageId",
+            "params": [
+              {
+                "name": "messageId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the message"
+              }
+            ]
+          },
+          "docs": "Retrieves the full details of a specific message including its routing path, format transformations applied, delivery status, and any acknowledgements received from destination systems."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,62 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Montran Corporate Payments Portal Account Information Beneficiaries API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Beneficiaries",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Montran List beneficiaries",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/corporate/v1/beneficiaries",
+            "params": [
+              {
+                "name": "page",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Retrieves the list of registered payment beneficiaries. Beneficiaries store pre-validated account details for recurring payment recipients."
+        },
+        {
+          "info": {
+            "name": "Montran Create a beneficiary",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.montran.com/corporate/v1/beneficiaries",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Registers a new payment beneficiary with pre-validated account details for use in future payments."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

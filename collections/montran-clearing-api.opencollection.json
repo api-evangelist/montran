@@ -1,0 +1,92 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Montran Corporate Payments Portal Account Information Clearing API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Clearing",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Montran List clearing batches",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/corporate/v1/clearing/batches",
+            "params": [
+              {
+                "name": "clearingSystem",
+                "value": "",
+                "type": "query",
+                "description": "Filter by clearing and settlement mechanism"
+              },
+              {
+                "name": "direction",
+                "value": "",
+                "type": "query",
+                "description": "Filter by clearing direction"
+              },
+              {
+                "name": "fromDate",
+                "value": "",
+                "type": "query",
+                "description": "Start date for filtering (ISO 8601 format)"
+              },
+              {
+                "name": "toDate",
+                "value": "",
+                "type": "query",
+                "description": "End date for filtering (ISO 8601 format)"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number for pagination"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Number of items per page"
+              }
+            ]
+          },
+          "docs": "Retrieves a list of clearing batches submitted to or received from clearing and settlement mechanisms. Supports filtering by clearing system (SEPA, Target2, Fedwire, CHIPS, local ACH/RTGS), direction (inbound/outbound), and date range."
+        },
+        {
+          "info": {
+            "name": "Montran Get clearing batch details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/corporate/v1/clearing/batches/:batchId",
+            "params": [
+              {
+                "name": "batchId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the clearing batch"
+              }
+            ]
+          },
+          "docs": "Retrieves the details of a specific clearing batch including the list of payments contained within it, settlement status, and clearing system acknowledgement information."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

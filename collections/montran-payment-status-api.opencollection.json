@@ -1,0 +1,62 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Montran Corporate Payments Portal Account Information Payment Status API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Payment Status",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Montran Get payment status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/corporate/v1/payments/:paymentId/status",
+            "params": [
+              {
+                "name": "paymentId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the payment"
+              }
+            ]
+          },
+          "docs": "Retrieves the current processing status of a payment. Returns status information aligned with ISO 20022 pacs.002 Payment Status Report format, including reason codes for rejected or returned payments."
+        },
+        {
+          "info": {
+            "name": "Montran Get instant payment details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/corporate/v1/payments/instant/:paymentId",
+            "params": [
+              {
+                "name": "paymentId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the payment"
+              }
+            ]
+          },
+          "docs": "Retrieves the full details and current status of a specific instant payment. Returns ISO 20022 pacs.002 status information including acceptance or rejection reason codes."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

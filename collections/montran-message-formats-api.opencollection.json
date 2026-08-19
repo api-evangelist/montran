@@ -1,0 +1,54 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Montran Corporate Payments Portal Account Information Message Formats API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Message Formats",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Montran Transform a message between formats",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.montran.com/corporate/v1/messages/transform",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Transforms a financial message between supported formats without routing it. Supports conversion between SWIFT FIN MT and ISO 20022 MX formats, as well as local proprietary formats. Useful for validating format transformations before submission."
+        },
+        {
+          "info": {
+            "name": "Montran Validate a message",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.montran.com/corporate/v1/messages/validate",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Validates a financial message against the rules for its message type and format. Checks structural validity, field content, and business rules without submitting the message for routing. Supports SWIFT FIN, ISO 20022, and proprietary format validation."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

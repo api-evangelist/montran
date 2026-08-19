@@ -1,0 +1,607 @@
+{
+  "item": [
+    {
+      "id": "d73d4fc6-4091-4184-a53d-df56d0a7c786",
+      "name": "Request to Pay",
+      "description": {
+        "content": "Request-to-pay initiation and management operations",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "488b50ca-4d05-44ed-b2ac-628b2bbf50aa",
+          "name": "Montran Initiate a request to pay",
+          "request": {
+            "name": "Montran Initiate a request to pay",
+            "description": {
+              "content": "Initiates a request-to-pay (R2P) message to request payment from a debtor. The debtor receives the request and can accept or reject it. Supports person-to-person, person-to-merchant, and business-to-business use cases. Uses ISO 20022 pain.013 CreditorPaymentActivationRequest.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "payments",
+                "request-to-pay"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"creditorAccount\": {\n    \"iban\": \"<string>\",\n    \"accountNumber\": \"<string>\",\n    \"currency\": \"<string>\"\n  },\n  \"debtorAccount\": {\n    \"iban\": \"<string>\",\n    \"accountNumber\": \"<string>\",\n    \"currency\": \"<string>\"\n  },\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"messageId\": \"<string>\",\n  \"creditorName\": \"<string>\",\n  \"debtorName\": \"<string>\",\n  \"expiryDate\": \"<dateTime>\",\n  \"remittanceInformation\": \"<string>\",\n  \"purpose\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "3aa1a898-1c53-43e6-aac0-dd05b43b0205",
+              "name": "Request to pay successfully created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    "request-to-pay"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"creditorAccount\": {\n    \"iban\": \"FW21ULJAZX\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"UOT\"\n  },\n  \"debtorAccount\": {\n    \"iban\": \"MI94WUIND8E4L922BL\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"UCI\"\n  },\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"messageId\": \"<string>\",\n  \"creditorName\": \"<string>\",\n  \"debtorName\": \"<string>\",\n  \"expiryDate\": \"<dateTime>\",\n  \"remittanceInformation\": \"<string>\",\n  \"purpose\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"requestId\": \"string\",\n  \"status\": \"SENT\",\n  \"createdAt\": \"2024-12-10T05:00:39.870Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f8b88187-a018-48a9-a2ab-ddac87dae96f",
+              "name": "Bad request - invalid parameters or malformed request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    "request-to-pay"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"creditorAccount\": {\n    \"iban\": \"FW21ULJAZX\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"UOT\"\n  },\n  \"debtorAccount\": {\n    \"iban\": \"MI94WUIND8E4L922BL\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"UCI\"\n  },\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"messageId\": \"<string>\",\n  \"creditorName\": \"<string>\",\n  \"debtorName\": \"<string>\",\n  \"expiryDate\": \"<dateTime>\",\n  \"remittanceInformation\": \"<string>\",\n  \"purpose\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9f0fa9b1-e5a0-4f6f-a558-648a947d80e4",
+              "name": "Authentication required or credentials invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    "request-to-pay"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"creditorAccount\": {\n    \"iban\": \"FW21ULJAZX\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"UOT\"\n  },\n  \"debtorAccount\": {\n    \"iban\": \"MI94WUIND8E4L922BL\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"UCI\"\n  },\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"messageId\": \"<string>\",\n  \"creditorName\": \"<string>\",\n  \"debtorName\": \"<string>\",\n  \"expiryDate\": \"<dateTime>\",\n  \"remittanceInformation\": \"<string>\",\n  \"purpose\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f7c456b5-7dd8-4c45-bace-e2076cd9c266",
+              "name": "Request validation failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    "request-to-pay"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"creditorAccount\": {\n    \"iban\": \"FW21ULJAZX\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"UOT\"\n  },\n  \"debtorAccount\": {\n    \"iban\": \"MI94WUIND8E4L922BL\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"UCI\"\n  },\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"messageId\": \"<string>\",\n  \"creditorName\": \"<string>\",\n  \"debtorName\": \"<string>\",\n  \"expiryDate\": \"<dateTime>\",\n  \"remittanceInformation\": \"<string>\",\n  \"purpose\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c7ccde86-9c24-4543-8806-3f34b1f9b398",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    "request-to-pay"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"creditorAccount\": {\n    \"iban\": \"FW21ULJAZX\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"UOT\"\n  },\n  \"debtorAccount\": {\n    \"iban\": \"MI94WUIND8E4L922BL\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"UCI\"\n  },\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"messageId\": \"<string>\",\n  \"creditorName\": \"<string>\",\n  \"debtorName\": \"<string>\",\n  \"expiryDate\": \"<dateTime>\",\n  \"remittanceInformation\": \"<string>\",\n  \"purpose\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e9084b3f-5996-4131-b836-ee1b812df9f9",
+          "name": "Montran Get request-to-pay details",
+          "request": {
+            "name": "Montran Get request-to-pay details",
+            "description": {
+              "content": "Retrieves the details and current status of a request-to-pay. Shows whether the request has been accepted, rejected, or is still pending.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "payments",
+                "request-to-pay",
+                ":requestId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "requestId",
+                  "description": "(Required) Unique identifier of the request to pay"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "04caa8de-254a-4ccd-8ce7-d87e3d596f0f",
+              "name": "Successfully retrieved request-to-pay details",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    "request-to-pay",
+                    ":requestId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "requestId",
+                      "description": "(Required) Unique identifier of the request to pay"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"requestId\": \"string\",\n  \"messageId\": \"string\",\n  \"status\": \"CREATED\",\n  \"creditorName\": \"string\",\n  \"creditorAccount\": {\n    \"iban\": \"YS04JJJ69TUH6PVO28EEYNZ\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"NCH\"\n  },\n  \"debtorName\": \"string\",\n  \"debtorAccount\": {\n    \"iban\": \"HR44U9CWA9S49FNHP6Q1X\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"IAH\"\n  },\n  \"amount\": 3578.5753984392686,\n  \"currency\": \"string\",\n  \"expiryDate\": \"1955-09-05T03:23:03.662Z\",\n  \"resultingPaymentId\": \"string\",\n  \"createdAt\": \"2013-03-02T18:59:28.290Z\",\n  \"updatedAt\": \"1984-07-30T15:00:26.760Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "06fe16f4-e475-4b66-a12e-527b26dc9c90",
+              "name": "Authentication required or credentials invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    "request-to-pay",
+                    ":requestId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "requestId",
+                      "description": "(Required) Unique identifier of the request to pay"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2562fa72-9010-414b-9993-f9e9b9d21228",
+              "name": "Requested resource not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    "request-to-pay",
+                    ":requestId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "requestId",
+                      "description": "(Required) Unique identifier of the request to pay"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5cf6a19d-0f68-4fca-a801-44cc40f0a340",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    "request-to-pay",
+                    ":requestId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "requestId",
+                      "description": "(Required) Unique identifier of the request to pay"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.montran.com/corporate/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "6df11fc5-b0e5-4947-953b-de514be84b82",
+    "name": "Montran Corporate Payments Portal Account Information Request to Pay API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Montran Corporate Payments Portal enables corporates to exercise complete control over accounts at their various bank relationships, with the ability to make secure payments over the Internet. It supports SWIFT payments and local clearing delivery through API integration and H2H (Host-to-Host) protocols. Corporates can connect their ERP systems and manually or automatically upload invoices for payments and collections management. The portal provides multi-bank visibility and supports secure payment initiation across multiple currencies and payment types.\n\nContact Support:\n Name: Montran Corporation",
+      "type": "text/plain"
+    }
+  }
+}

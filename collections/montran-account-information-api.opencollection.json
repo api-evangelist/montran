@@ -1,0 +1,171 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Montran Corporate Payments Portal Account Information API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Account Information",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Montran List accessible accounts (AISP)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/corporate/v1/accounts",
+            "params": [
+              {
+                "name": "consentId",
+                "value": "",
+                "type": "query",
+                "description": "PSD2 consent identifier authorizing access"
+              }
+            ]
+          },
+          "docs": "Retrieves a list of payment accounts accessible to the Account Information Service Provider (AISP) under an authorized PSD2 consent. Provides account identification, type, currency, and basic balance information."
+        },
+        {
+          "info": {
+            "name": "Montran Get account details (AISP)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/corporate/v1/accounts/:accountId",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the payment account"
+              },
+              {
+                "name": "consentId",
+                "value": "",
+                "type": "query",
+                "description": "PSD2 consent identifier"
+              }
+            ]
+          },
+          "docs": "Retrieves detailed information about a specific payment account including account holder name, IBAN, currency, and product type. Requires valid PSD2 AISP consent."
+        },
+        {
+          "info": {
+            "name": "Montran Get account balances (AISP)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/corporate/v1/accounts/:accountId/balances",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the payment account"
+              },
+              {
+                "name": "consentId",
+                "value": "",
+                "type": "query",
+                "description": "PSD2 consent identifier"
+              }
+            ]
+          },
+          "docs": "Retrieves the current balances for a specific payment account. Returns available balance, booked balance, and expected balance. Requires valid PSD2 AISP consent."
+        },
+        {
+          "info": {
+            "name": "Montran Get account transactions (AISP)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/corporate/v1/accounts/:accountId/transactions",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the payment account"
+              },
+              {
+                "name": "consentId",
+                "value": "",
+                "type": "query",
+                "description": "PSD2 consent identifier"
+              },
+              {
+                "name": "dateFrom",
+                "value": "",
+                "type": "query",
+                "description": "Start date for transaction filter (ISO 8601)"
+              },
+              {
+                "name": "dateTo",
+                "value": "",
+                "type": "query",
+                "description": "End date for transaction filter (ISO 8601)"
+              },
+              {
+                "name": "bookingStatus",
+                "value": "",
+                "type": "query",
+                "description": "Filter by booking status"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number for pagination"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Number of items per page"
+              }
+            ]
+          },
+          "docs": "Retrieves a list of transactions for a specific payment account. Supports filtering by date range, booking status, and amount. Requires valid PSD2 AISP consent."
+        },
+        {
+          "info": {
+            "name": "Montran Verify account balance sufficiency",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.montran.com/corporate/v1/accounts/:accountId/verification",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the payment account"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Performs a balance sufficiency check on a payment account. Returns whether the account has sufficient funds for the specified amount without disclosing the actual balance. Used for pre-payment validation."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

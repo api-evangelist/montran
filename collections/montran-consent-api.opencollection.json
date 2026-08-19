@@ -1,0 +1,77 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Montran Corporate Payments Portal Account Information Consent API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Consent",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Montran Create a PSD2 consent",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.montran.com/corporate/v1/consents",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new PSD2 consent for account access (AISP) or payment initiation (PISP). The consent must be authorized by the payment service user (PSU) before it can be used. Supports Strong Customer Authentication (SCA) flows as required by PSD2."
+        },
+        {
+          "info": {
+            "name": "Montran Get consent status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/corporate/v1/consents/:consentId",
+            "params": [
+              {
+                "name": "consentId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the PSD2 consent"
+              }
+            ]
+          },
+          "docs": "Retrieves the current status and details of a PSD2 consent. Used to check whether the consent has been authorized by the PSU and remains valid for use."
+        },
+        {
+          "info": {
+            "name": "Montran Revoke a consent",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.montran.com/corporate/v1/consents/:consentId",
+            "params": [
+              {
+                "name": "consentId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the PSD2 consent"
+              }
+            ]
+          },
+          "docs": "Revokes an existing PSD2 consent. Once revoked, the consent can no longer be used for account access or payment initiation."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,858 @@
+{
+  "item": [
+    {
+      "id": "4615b4ea-f80c-4d65-a2f2-673051aa9328",
+      "name": "Screening",
+      "description": {
+        "content": "Transaction and entity screening operations",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "2eaab99d-a5cb-4077-a7bf-a63b5d5243a9",
+          "name": "Montran Screen a transaction",
+          "request": {
+            "name": "Montran Screen a transaction",
+            "description": {
+              "content": "Submits a payment transaction for real-time sanctions screening. The transaction is screened against all configured compliance lists (OFAC, EU, OFSI, etc.) for the specified channel. Supports ISO 20022 pacs and pain messages, SWIFT FIN MT messages, ISO 8583, NACHA, and local CSM formats. Returns screening results synchronously for instant payment use cases with sub-second response times.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "screen"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"channelId\": \"<string>\",\n  \"transaction\": {\n    \"transactionId\": \"<string>\",\n    \"debtorName\": \"<string>\",\n    \"debtorAddress\": \"<string>\",\n    \"debtorCountry\": \"<string>\",\n    \"debtorAccountIban\": \"<string>\",\n    \"debtorAgentBic\": \"<string>\",\n    \"creditorName\": \"<string>\",\n    \"creditorAddress\": \"<string>\",\n    \"creditorCountry\": \"<string>\",\n    \"creditorAccountIban\": \"<string>\",\n    \"creditorAgentBic\": \"<string>\",\n    \"amount\": \"<double>\",\n    \"currency\": \"<string>\",\n    \"remittanceInformation\": \"<string>\"\n  },\n  \"messageFormat\": \"<string>\",\n  \"messageType\": \"<string>\",\n  \"rawMessage\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "c472092f-d9fc-4c20-8362-7587dcf8bdcf",
+              "name": "Screening completed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "screen"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"channelId\": \"<string>\",\n  \"transaction\": {\n    \"transactionId\": \"string\",\n    \"debtorName\": \"string\",\n    \"debtorAddress\": \"string\",\n    \"debtorCountry\": \"string\",\n    \"debtorAccountIban\": \"string\",\n    \"debtorAgentBic\": \"string\",\n    \"creditorName\": \"string\",\n    \"creditorAddress\": \"string\",\n    \"creditorCountry\": \"string\",\n    \"creditorAccountIban\": \"string\",\n    \"creditorAgentBic\": \"string\",\n    \"amount\": 221.9311565245674,\n    \"currency\": \"string\",\n    \"remittanceInformation\": \"string\"\n  },\n  \"messageFormat\": \"<string>\",\n  \"messageType\": \"<string>\",\n  \"rawMessage\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"screeningId\": \"string\",\n  \"result\": \"HIT\",\n  \"matchCount\": 8958,\n  \"matches\": [\n    {\n      \"matchId\": \"string\",\n      \"matchedField\": \"creditorName\",\n      \"matchedValue\": \"string\",\n      \"listName\": \"string\",\n      \"listEntryId\": \"string\",\n      \"listedName\": \"string\",\n      \"matchScore\": 75.22320837608125,\n      \"matchType\": \"EXACT\",\n      \"severity\": \"high\"\n    },\n    {\n      \"matchId\": \"string\",\n      \"matchedField\": \"creditorName\",\n      \"matchedValue\": \"string\",\n      \"listName\": \"string\",\n      \"listEntryId\": \"string\",\n      \"listedName\": \"string\",\n      \"matchScore\": 46.79371692297314,\n      \"matchType\": \"EXACT\",\n      \"severity\": \"medium\"\n    }\n  ],\n  \"screenedAt\": \"1956-06-11T04:00:42.919Z\",\n  \"latencyMs\": 8131\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "27b66f48-1cee-4b64-a8cd-599a19fc590f",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "screen"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"channelId\": \"<string>\",\n  \"transaction\": {\n    \"transactionId\": \"string\",\n    \"debtorName\": \"string\",\n    \"debtorAddress\": \"string\",\n    \"debtorCountry\": \"string\",\n    \"debtorAccountIban\": \"string\",\n    \"debtorAgentBic\": \"string\",\n    \"creditorName\": \"string\",\n    \"creditorAddress\": \"string\",\n    \"creditorCountry\": \"string\",\n    \"creditorAccountIban\": \"string\",\n    \"creditorAgentBic\": \"string\",\n    \"amount\": 221.9311565245674,\n    \"currency\": \"string\",\n    \"remittanceInformation\": \"string\"\n  },\n  \"messageFormat\": \"<string>\",\n  \"messageType\": \"<string>\",\n  \"rawMessage\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d7b7f4b1-7860-4f7d-9675-71f4d7e33f34",
+              "name": "Authentication required",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "screen"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"channelId\": \"<string>\",\n  \"transaction\": {\n    \"transactionId\": \"string\",\n    \"debtorName\": \"string\",\n    \"debtorAddress\": \"string\",\n    \"debtorCountry\": \"string\",\n    \"debtorAccountIban\": \"string\",\n    \"debtorAgentBic\": \"string\",\n    \"creditorName\": \"string\",\n    \"creditorAddress\": \"string\",\n    \"creditorCountry\": \"string\",\n    \"creditorAccountIban\": \"string\",\n    \"creditorAgentBic\": \"string\",\n    \"amount\": 221.9311565245674,\n    \"currency\": \"string\",\n    \"remittanceInformation\": \"string\"\n  },\n  \"messageFormat\": \"<string>\",\n  \"messageType\": \"<string>\",\n  \"rawMessage\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "90c101e8-7953-405a-8bbe-fb4b1f24e397",
+              "name": "Validation failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "screen"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"channelId\": \"<string>\",\n  \"transaction\": {\n    \"transactionId\": \"string\",\n    \"debtorName\": \"string\",\n    \"debtorAddress\": \"string\",\n    \"debtorCountry\": \"string\",\n    \"debtorAccountIban\": \"string\",\n    \"debtorAgentBic\": \"string\",\n    \"creditorName\": \"string\",\n    \"creditorAddress\": \"string\",\n    \"creditorCountry\": \"string\",\n    \"creditorAccountIban\": \"string\",\n    \"creditorAgentBic\": \"string\",\n    \"amount\": 221.9311565245674,\n    \"currency\": \"string\",\n    \"remittanceInformation\": \"string\"\n  },\n  \"messageFormat\": \"<string>\",\n  \"messageType\": \"<string>\",\n  \"rawMessage\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "79a3f7bf-f1b5-4df2-aa88-d952a58ae8f5",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "screen"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"channelId\": \"<string>\",\n  \"transaction\": {\n    \"transactionId\": \"string\",\n    \"debtorName\": \"string\",\n    \"debtorAddress\": \"string\",\n    \"debtorCountry\": \"string\",\n    \"debtorAccountIban\": \"string\",\n    \"debtorAgentBic\": \"string\",\n    \"creditorName\": \"string\",\n    \"creditorAddress\": \"string\",\n    \"creditorCountry\": \"string\",\n    \"creditorAccountIban\": \"string\",\n    \"creditorAgentBic\": \"string\",\n    \"amount\": 221.9311565245674,\n    \"currency\": \"string\",\n    \"remittanceInformation\": \"string\"\n  },\n  \"messageFormat\": \"<string>\",\n  \"messageType\": \"<string>\",\n  \"rawMessage\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1cec8105-5f63-40b7-8ade-cb542c969417",
+          "name": "Montran Screen a batch of transactions",
+          "request": {
+            "name": "Montran Screen a batch of transactions",
+            "description": {
+              "content": "Submits a batch of payment transactions for sanctions screening. Each transaction is individually screened against the configured compliance lists. Returns results for all transactions in the batch.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "screen",
+                "batch"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"channelId\": \"<string>\",\n  \"transactions\": [\n    {\n      \"transactionId\": \"<string>\",\n      \"debtorName\": \"<string>\",\n      \"debtorAddress\": \"<string>\",\n      \"debtorCountry\": \"<string>\",\n      \"debtorAccountIban\": \"<string>\",\n      \"debtorAgentBic\": \"<string>\",\n      \"creditorName\": \"<string>\",\n      \"creditorAddress\": \"<string>\",\n      \"creditorCountry\": \"<string>\",\n      \"creditorAccountIban\": \"<string>\",\n      \"creditorAgentBic\": \"<string>\",\n      \"amount\": \"<double>\",\n      \"currency\": \"<string>\",\n      \"remittanceInformation\": \"<string>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "16f748e4-5032-4321-a3dd-f92c727941dd",
+              "name": "Batch screening completed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "screen",
+                    "batch"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"channelId\": \"<string>\",\n  \"transactions\": [\n    {\n      \"transactionId\": \"string\",\n      \"debtorName\": \"string\",\n      \"debtorAddress\": \"string\",\n      \"debtorCountry\": \"string\",\n      \"debtorAccountIban\": \"string\",\n      \"debtorAgentBic\": \"string\",\n      \"creditorName\": \"string\",\n      \"creditorAddress\": \"string\",\n      \"creditorCountry\": \"string\",\n      \"creditorAccountIban\": \"string\",\n      \"creditorAgentBic\": \"string\",\n      \"amount\": 7346.276158539591,\n      \"currency\": \"string\",\n      \"remittanceInformation\": \"string\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"batchId\": \"string\",\n  \"totalScreened\": 5382,\n  \"passCount\": 4507,\n  \"hitCount\": 3282,\n  \"results\": [\n    {\n      \"screeningId\": \"string\",\n      \"result\": \"POSSIBLE_HIT\",\n      \"matchCount\": 3923,\n      \"matches\": [\n        {\n          \"matchId\": \"string\",\n          \"matchedField\": \"creditorAddress\",\n          \"matchedValue\": \"string\",\n          \"listName\": \"string\",\n          \"listEntryId\": \"string\",\n          \"listedName\": \"string\",\n          \"matchScore\": 68.03189382996577,\n          \"matchType\": \"EXACT\",\n          \"severity\": \"high\"\n        },\n        {\n          \"matchId\": \"string\",\n          \"matchedField\": \"debtorName\",\n          \"matchedValue\": \"string\",\n          \"listName\": \"string\",\n          \"listEntryId\": \"string\",\n          \"listedName\": \"string\",\n          \"matchScore\": 43.74820980684782,\n          \"matchType\": \"FUZZY\",\n          \"severity\": \"medium\"\n        }\n      ],\n      \"screenedAt\": \"2004-05-21T13:24:10.810Z\",\n      \"latencyMs\": 9640\n    },\n    {\n      \"screeningId\": \"string\",\n      \"result\": \"PASS\",\n      \"matchCount\": 977,\n      \"matches\": [\n        {\n          \"matchId\": \"string\",\n          \"matchedField\": \"creditorCountry\",\n          \"matchedValue\": \"string\",\n          \"listName\": \"string\",\n          \"listEntryId\": \"string\",\n          \"listedName\": \"string\",\n          \"matchScore\": 79.58739203714586,\n          \"matchType\": \"EXACT\",\n          \"severity\": \"medium\"\n        },\n        {\n          \"matchId\": \"string\",\n          \"matchedField\": \"creditorCountry\",\n          \"matchedValue\": \"string\",\n          \"listName\": \"string\",\n          \"listEntryId\": \"string\",\n          \"listedName\": \"string\",\n          \"matchScore\": 17.806359362110914,\n          \"matchType\": \"PHONETIC\",\n          \"severity\": \"low\"\n        }\n      ],\n      \"screenedAt\": \"1952-07-18T19:03:23.019Z\",\n      \"latencyMs\": 9280\n    }\n  ],\n  \"screenedAt\": \"2025-12-07T23:52:16.033Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0ffe9a96-dbe9-4c1d-bac6-c696f53cdc2e",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "screen",
+                    "batch"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"channelId\": \"<string>\",\n  \"transactions\": [\n    {\n      \"transactionId\": \"string\",\n      \"debtorName\": \"string\",\n      \"debtorAddress\": \"string\",\n      \"debtorCountry\": \"string\",\n      \"debtorAccountIban\": \"string\",\n      \"debtorAgentBic\": \"string\",\n      \"creditorName\": \"string\",\n      \"creditorAddress\": \"string\",\n      \"creditorCountry\": \"string\",\n      \"creditorAccountIban\": \"string\",\n      \"creditorAgentBic\": \"string\",\n      \"amount\": 7346.276158539591,\n      \"currency\": \"string\",\n      \"remittanceInformation\": \"string\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2a41336c-b9e9-458e-84cc-836d509a5d9e",
+              "name": "Authentication required",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "screen",
+                    "batch"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"channelId\": \"<string>\",\n  \"transactions\": [\n    {\n      \"transactionId\": \"string\",\n      \"debtorName\": \"string\",\n      \"debtorAddress\": \"string\",\n      \"debtorCountry\": \"string\",\n      \"debtorAccountIban\": \"string\",\n      \"debtorAgentBic\": \"string\",\n      \"creditorName\": \"string\",\n      \"creditorAddress\": \"string\",\n      \"creditorCountry\": \"string\",\n      \"creditorAccountIban\": \"string\",\n      \"creditorAgentBic\": \"string\",\n      \"amount\": 7346.276158539591,\n      \"currency\": \"string\",\n      \"remittanceInformation\": \"string\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6a464d06-dff7-4428-b647-0f326b944b81",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "screen",
+                    "batch"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"channelId\": \"<string>\",\n  \"transactions\": [\n    {\n      \"transactionId\": \"string\",\n      \"debtorName\": \"string\",\n      \"debtorAddress\": \"string\",\n      \"debtorCountry\": \"string\",\n      \"debtorAccountIban\": \"string\",\n      \"debtorAgentBic\": \"string\",\n      \"creditorName\": \"string\",\n      \"creditorAddress\": \"string\",\n      \"creditorCountry\": \"string\",\n      \"creditorAccountIban\": \"string\",\n      \"creditorAgentBic\": \"string\",\n      \"amount\": 7346.276158539591,\n      \"currency\": \"string\",\n      \"remittanceInformation\": \"string\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "00a5d573-14e1-4281-b290-d55f515545c0",
+          "name": "Montran Screen an entity",
+          "request": {
+            "name": "Montran Screen an entity",
+            "description": {
+              "content": "Screens an individual or organization entity against configured sanctions and compliance lists. Used for customer onboarding, periodic review, and ad-hoc screening independent of a specific payment transaction.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "screen",
+                "entity"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"entityType\": \"<string>\",\n  \"name\": \"<string>\",\n  \"aliases\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"dateOfBirth\": \"<date>\",\n  \"nationality\": \"<string>\",\n  \"country\": \"<string>\",\n  \"address\": \"<string>\",\n  \"identificationNumber\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "ed9eae5a-6270-4fd8-883c-e531fdc346be",
+              "name": "Entity screening completed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "screen",
+                    "entity"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"entityType\": \"<string>\",\n  \"name\": \"<string>\",\n  \"aliases\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"dateOfBirth\": \"<date>\",\n  \"nationality\": \"<string>\",\n  \"country\": \"<string>\",\n  \"address\": \"<string>\",\n  \"identificationNumber\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"screeningId\": \"string\",\n  \"result\": \"POSSIBLE_HIT\",\n  \"matchCount\": 4489,\n  \"matches\": [\n    {\n      \"matchId\": \"string\",\n      \"matchedField\": \"creditorCountry\",\n      \"matchedValue\": \"string\",\n      \"listName\": \"string\",\n      \"listEntryId\": \"string\",\n      \"listedName\": \"string\",\n      \"matchScore\": 85.2687266615538,\n      \"matchType\": \"EXACT\",\n      \"severity\": \"high\"\n    },\n    {\n      \"matchId\": \"string\",\n      \"matchedField\": \"creditorName\",\n      \"matchedValue\": \"string\",\n      \"listName\": \"string\",\n      \"listEntryId\": \"string\",\n      \"listedName\": \"string\",\n      \"matchScore\": 11.201082166421273,\n      \"matchType\": \"PHONETIC\",\n      \"severity\": \"low\"\n    }\n  ],\n  \"screenedAt\": \"1995-10-28T03:44:53.663Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "880d0b37-b522-4cf8-b242-a483b351e049",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "screen",
+                    "entity"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"entityType\": \"<string>\",\n  \"name\": \"<string>\",\n  \"aliases\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"dateOfBirth\": \"<date>\",\n  \"nationality\": \"<string>\",\n  \"country\": \"<string>\",\n  \"address\": \"<string>\",\n  \"identificationNumber\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3a6ef21f-9408-4d8d-9048-96f8069ed8b5",
+              "name": "Authentication required",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "screen",
+                    "entity"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"entityType\": \"<string>\",\n  \"name\": \"<string>\",\n  \"aliases\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"dateOfBirth\": \"<date>\",\n  \"nationality\": \"<string>\",\n  \"country\": \"<string>\",\n  \"address\": \"<string>\",\n  \"identificationNumber\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0eac467a-5dd4-44ce-a73f-44fda705b2e8",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "screen",
+                    "entity"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"entityType\": \"<string>\",\n  \"name\": \"<string>\",\n  \"aliases\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"dateOfBirth\": \"<date>\",\n  \"nationality\": \"<string>\",\n  \"country\": \"<string>\",\n  \"address\": \"<string>\",\n  \"identificationNumber\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.montran.com/corporate/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "4fe57190-2a00-4515-b980-d10ef239887b",
+    "name": "Montran Corporate Payments Portal Account Information Screening API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Montran Corporate Payments Portal enables corporates to exercise complete control over accounts at their various bank relationships, with the ability to make secure payments over the Internet. It supports SWIFT payments and local clearing delivery through API integration and H2H (Host-to-Host) protocols. Corporates can connect their ERP systems and manually or automatically upload invoices for payments and collections management. The portal provides multi-bank visibility and supports secure payment initiation across multiple currencies and payment types.\n\nContact Support:\n Name: Montran Corporation",
+      "type": "text/plain"
+    }
+  }
+}

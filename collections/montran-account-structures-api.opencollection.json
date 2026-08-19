@@ -1,0 +1,50 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Montran Corporate Payments Portal Account Information Account Structures API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Account Structures",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Montran List account structures",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/corporate/v1/account-structures"
+          },
+          "docs": "Retrieves virtual account hierarchy structures. Account structures define the organizational grouping of virtual accounts for corporate clients, enabling POBO/COBO, in-house banking, and treasury centralization use cases."
+        },
+        {
+          "info": {
+            "name": "Montran Create an account structure",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.montran.com/corporate/v1/account-structures",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new virtual account hierarchy structure mapping virtual accounts to physical bank accounts. Supports multi-bank, multi- currency structures for POBO/COBO, in-house banking, and escrow use cases."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

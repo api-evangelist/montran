@@ -1,0 +1,124 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Montran Corporate Payments Portal Account Information Accounts API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Accounts",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Montran List bank accounts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/corporate/v1/accounts",
+            "params": [
+              {
+                "name": "bankId",
+                "value": "",
+                "type": "query",
+                "description": "Filter by bank relationship"
+              },
+              {
+                "name": "currency",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Retrieves a consolidated view of accounts across all connected bank relationships. Provides multi-bank visibility including account balances, currencies, and bank details."
+        },
+        {
+          "info": {
+            "name": "Montran Get bank account details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/corporate/v1/accounts/:accountId",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "Unique account identifier"
+              }
+            ]
+          },
+          "docs": "Retrieves detailed information about a specific bank account including current balance, available balance, and recent transaction summary."
+        },
+        {
+          "info": {
+            "name": "Montran List account transactions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/corporate/v1/accounts/:accountId/transactions",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "fromDate",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "toDate",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Retrieves the transaction history for a bank account. Supports date range filtering and pagination."
+        },
+        {
+          "info": {
+            "name": "Montran Get account balance",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/corporate/v1/accounts/:accountId/balance",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the account"
+              }
+            ]
+          },
+          "docs": "Retrieves the current balance of an account including available balance, booked balance, and pending transactions. Aligned with ISO 20022 camt.052 BankToCustomerAccountReport format."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

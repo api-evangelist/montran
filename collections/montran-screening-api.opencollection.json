@@ -1,0 +1,69 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Montran Corporate Payments Portal Account Information Screening API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Screening",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Montran Screen a transaction",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.montran.com/corporate/v1/screen",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Submits a payment transaction for real-time sanctions screening. The transaction is screened against all configured compliance lists (OFAC, EU, OFSI, etc.) for the specified channel. Supports ISO 20022 pacs and pain messages, SWIFT FIN MT messages, ISO 8583, NACHA, and local CSM formats. Returns screening results synchronously for instant payment use cases with sub-second response times."
+        },
+        {
+          "info": {
+            "name": "Montran Screen a batch of transactions",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.montran.com/corporate/v1/screen/batch",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Submits a batch of payment transactions for sanctions screening. Each transaction is individually screened against the configured compliance lists. Returns results for all transactions in the batch."
+        },
+        {
+          "info": {
+            "name": "Montran Screen an entity",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.montran.com/corporate/v1/screen/entity",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Screens an individual or organization entity against configured sanctions and compliance lists. Used for customer onboarding, periodic review, and ad-hoc screening independent of a specific payment transaction."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

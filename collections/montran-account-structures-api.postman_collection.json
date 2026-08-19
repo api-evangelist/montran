@@ -1,0 +1,508 @@
+{
+  "item": [
+    {
+      "id": "cb04b30f-e567-4b9d-a196-a2011e6fb2cc",
+      "name": "Account Structures",
+      "description": {
+        "content": "Virtual account hierarchy and structure management",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "6081af46-768b-4bc6-8961-5da07907f3c5",
+          "name": "Montran List account structures",
+          "request": {
+            "name": "Montran List account structures",
+            "description": {
+              "content": "Retrieves virtual account hierarchy structures. Account structures define the organizational grouping of virtual accounts for corporate clients, enabling POBO/COBO, in-house banking, and treasury centralization use cases.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "account-structures"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "6b6ed58b-af6c-426b-ac1b-1db0882ad4f8",
+              "name": "Successfully retrieved account structures",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "account-structures"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"structures\": [\n    {\n      \"structureId\": \"string\",\n      \"name\": \"string\",\n      \"physicalAccountId\": \"string\",\n      \"type\": \"string\",\n      \"virtualAccounts\": [\n        {\n          \"accountId\": \"string\",\n          \"name\": \"string\",\n          \"physicalAccountId\": \"string\",\n          \"currency\": \"string\",\n          \"accountHolder\": \"string\",\n          \"purpose\": \"string\",\n          \"status\": \"suspended\",\n          \"virtualIban\": \"string\",\n          \"balance\": 7477.3760560144865,\n          \"parentVirtualAccountId\": \"string\",\n          \"autoAllocate\": true,\n          \"metadata\": {\n            \"key_0\": \"string\"\n          },\n          \"createdAt\": \"1947-10-19T01:51:50.080Z\",\n          \"updatedAt\": \"1955-03-22T04:39:34.303Z\"\n        },\n        {\n          \"accountId\": \"string\",\n          \"name\": \"string\",\n          \"physicalAccountId\": \"string\",\n          \"currency\": \"string\",\n          \"accountHolder\": \"string\",\n          \"purpose\": \"string\",\n          \"status\": \"active\",\n          \"virtualIban\": \"string\",\n          \"balance\": 3073.7328556081557,\n          \"parentVirtualAccountId\": \"string\",\n          \"autoAllocate\": true,\n          \"metadata\": {\n            \"key_0\": \"string\"\n          },\n          \"createdAt\": \"1983-03-20T11:25:47.242Z\",\n          \"updatedAt\": \"1978-03-04T13:25:38.904Z\"\n        }\n      ],\n      \"createdAt\": \"1956-01-24T12:31:31.777Z\"\n    },\n    {\n      \"structureId\": \"string\",\n      \"name\": \"string\",\n      \"physicalAccountId\": \"string\",\n      \"type\": \"string\",\n      \"virtualAccounts\": [\n        {\n          \"accountId\": \"string\",\n          \"name\": \"string\",\n          \"physicalAccountId\": \"string\",\n          \"currency\": \"string\",\n          \"accountHolder\": \"string\",\n          \"purpose\": \"string\",\n          \"status\": \"active\",\n          \"virtualIban\": \"string\",\n          \"balance\": 1441.7714933467207,\n          \"parentVirtualAccountId\": \"string\",\n          \"autoAllocate\": false,\n          \"metadata\": {\n            \"key_0\": \"string\"\n          },\n          \"createdAt\": \"2020-06-10T13:30:29.974Z\",\n          \"updatedAt\": \"2010-09-29T20:18:09.884Z\"\n        },\n        {\n          \"accountId\": \"string\",\n          \"name\": \"string\",\n          \"physicalAccountId\": \"string\",\n          \"currency\": \"string\",\n          \"accountHolder\": \"string\",\n          \"purpose\": \"string\",\n          \"status\": \"active\",\n          \"virtualIban\": \"string\",\n          \"balance\": 550.5577078606605,\n          \"parentVirtualAccountId\": \"string\",\n          \"autoAllocate\": false,\n          \"metadata\": {\n            \"key_0\": \"string\",\n            \"key_1\": \"string\"\n          },\n          \"createdAt\": \"2012-09-16T04:24:10.873Z\",\n          \"updatedAt\": \"2014-10-30T10:02:35.630Z\"\n        }\n      ],\n      \"createdAt\": \"1951-04-22T13:27:14.020Z\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "88106007-b403-4405-ac3c-c6c81b0064bc",
+              "name": "Authentication required",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "account-structures"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5904e3af-4bed-4134-910f-a49fb81aaf2f",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "account-structures"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9babf84f-22cf-4fba-925d-8f4668a7a138",
+          "name": "Montran Create an account structure",
+          "request": {
+            "name": "Montran Create an account structure",
+            "description": {
+              "content": "Creates a new virtual account hierarchy structure mapping virtual accounts to physical bank accounts. Supports multi-bank, multi- currency structures for POBO/COBO, in-house banking, and escrow use cases.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "account-structures"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"physicalAccountId\": \"<string>\",\n  \"type\": \"<string>\",\n  \"description\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "21af506b-b097-4c93-8032-f212347bdbee",
+              "name": "Account structure successfully created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "account-structures"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"physicalAccountId\": \"<string>\",\n  \"type\": \"<string>\",\n  \"description\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"structureId\": \"string\",\n  \"name\": \"string\",\n  \"physicalAccountId\": \"string\",\n  \"type\": \"string\",\n  \"virtualAccounts\": [\n    {\n      \"accountId\": \"string\",\n      \"name\": \"string\",\n      \"physicalAccountId\": \"string\",\n      \"currency\": \"string\",\n      \"accountHolder\": \"string\",\n      \"purpose\": \"string\",\n      \"status\": \"suspended\",\n      \"virtualIban\": \"string\",\n      \"balance\": 1987.0139683598165,\n      \"parentVirtualAccountId\": \"string\",\n      \"autoAllocate\": true,\n      \"metadata\": {\n        \"key_0\": \"string\"\n      },\n      \"createdAt\": \"2012-10-10T22:38:48.451Z\",\n      \"updatedAt\": \"2011-10-25T08:25:36.638Z\"\n    },\n    {\n      \"accountId\": \"string\",\n      \"name\": \"string\",\n      \"physicalAccountId\": \"string\",\n      \"currency\": \"string\",\n      \"accountHolder\": \"string\",\n      \"purpose\": \"string\",\n      \"status\": \"suspended\",\n      \"virtualIban\": \"string\",\n      \"balance\": 4812.255318509789,\n      \"parentVirtualAccountId\": \"string\",\n      \"autoAllocate\": false,\n      \"metadata\": {\n        \"key_0\": \"string\"\n      },\n      \"createdAt\": \"1957-05-16T15:32:10.250Z\",\n      \"updatedAt\": \"1960-11-13T10:51:43.031Z\"\n    }\n  ],\n  \"createdAt\": \"1962-03-02T22:28:43.432Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f48b79de-a4e8-4143-9528-35e5cae4c4f9",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "account-structures"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"physicalAccountId\": \"<string>\",\n  \"type\": \"<string>\",\n  \"description\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "369e7de9-b17c-4cf1-96da-8c482df911d3",
+              "name": "Authentication required",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "account-structures"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"physicalAccountId\": \"<string>\",\n  \"type\": \"<string>\",\n  \"description\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4667f80b-8bca-4506-9c7b-1c0293a4fab9",
+              "name": "Validation failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "account-structures"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"physicalAccountId\": \"<string>\",\n  \"type\": \"<string>\",\n  \"description\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bbe1de63-65f9-43e0-a0bf-3dd7d348b7d6",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "account-structures"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"physicalAccountId\": \"<string>\",\n  \"type\": \"<string>\",\n  \"description\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.montran.com/corporate/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "60fea7a8-9f8f-4482-a88d-ff57131a77d6",
+    "name": "Montran Corporate Payments Portal Account Information Account Structures API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Montran Corporate Payments Portal enables corporates to exercise complete control over accounts at their various bank relationships, with the ability to make secure payments over the Internet. It supports SWIFT payments and local clearing delivery through API integration and H2H (Host-to-Host) protocols. Corporates can connect their ERP systems and manually or automatically upload invoices for payments and collections management. The portal provides multi-bank visibility and supports secure payment initiation across multiple currencies and payment types.\n\nContact Support:\n Name: Montran Corporation",
+      "type": "text/plain"
+    }
+  }
+}

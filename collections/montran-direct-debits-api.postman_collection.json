@@ -1,0 +1,344 @@
+{
+  "item": [
+    {
+      "id": "4710cfa0-9422-4e6e-b01b-489413b8e929",
+      "name": "Direct Debits",
+      "description": {
+        "content": "Direct debit payment operations",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "07b1f9d2-3a28-49ad-8937-53f24aef31b0",
+          "name": "Montran Initiate a direct debit",
+          "request": {
+            "name": "Montran Initiate a direct debit",
+            "description": {
+              "content": "Initiates a direct debit collection using ISO 20022 pain.008 CustomerDirectDebitInitiation format. Supports SEPA Direct Debit (Core and B2B schemes) and local ACH direct debit schemes.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "direct-debits"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"creditorAccount\": {\n    \"iban\": \"<string>\",\n    \"accountNumber\": \"<string>\",\n    \"currency\": \"<string>\"\n  },\n  \"debtorAccount\": {\n    \"iban\": \"<string>\",\n    \"accountNumber\": \"<string>\",\n    \"currency\": \"<string>\"\n  },\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"mandateId\": \"<string>\",\n  \"messageId\": \"<string>\",\n  \"creditorName\": \"<string>\",\n  \"creditorAgent\": {\n    \"bic\": \"<string>\",\n    \"name\": \"<string>\",\n    \"clearingSystemMemberId\": \"<string>\"\n  },\n  \"debtorName\": \"<string>\",\n  \"debtorAgent\": {\n    \"bic\": \"<string>\",\n    \"name\": \"<string>\",\n    \"clearingSystemMemberId\": \"<string>\"\n  },\n  \"requestedCollectionDate\": \"<date>\",\n  \"mandateDateOfSignature\": \"<date>\",\n  \"sequenceType\": \"<string>\",\n  \"schemeType\": \"<string>\",\n  \"endToEndId\": \"<string>\",\n  \"remittanceInformation\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "bf3b4f68-7588-42e3-809e-5441020dfbed",
+              "name": "Direct debit successfully initiated",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "direct-debits"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"creditorAccount\": {\n    \"iban\": \"QT81FSZWFEEF1F86YLHFKOCP\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"HQG\"\n  },\n  \"debtorAccount\": {\n    \"iban\": \"DH22I77V04WE3MY52GYYVS\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"FTI\"\n  },\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"mandateId\": \"<string>\",\n  \"messageId\": \"<string>\",\n  \"creditorName\": \"<string>\",\n  \"creditorAgent\": {\n    \"bic\": \"USITUYTJ\",\n    \"name\": \"string\",\n    \"clearingSystemMemberId\": \"string\"\n  },\n  \"debtorName\": \"<string>\",\n  \"debtorAgent\": {\n    \"bic\": \"TXZNJCGC\",\n    \"name\": \"string\",\n    \"clearingSystemMemberId\": \"string\"\n  },\n  \"requestedCollectionDate\": \"<date>\",\n  \"mandateDateOfSignature\": \"<date>\",\n  \"sequenceType\": \"<string>\",\n  \"schemeType\": \"<string>\",\n  \"endToEndId\": \"<string>\",\n  \"remittanceInformation\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"paymentId\": \"string\",\n  \"messageId\": \"string\",\n  \"endToEndId\": \"string\",\n  \"status\": \"PENDING\",\n  \"clearingSystem\": \"string\",\n  \"createdAt\": \"2005-05-12T23:38:30.252Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "47db2d97-6419-4ef6-b5f8-d3513d224a71",
+              "name": "Bad request - invalid parameters or malformed request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "direct-debits"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"creditorAccount\": {\n    \"iban\": \"QT81FSZWFEEF1F86YLHFKOCP\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"HQG\"\n  },\n  \"debtorAccount\": {\n    \"iban\": \"DH22I77V04WE3MY52GYYVS\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"FTI\"\n  },\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"mandateId\": \"<string>\",\n  \"messageId\": \"<string>\",\n  \"creditorName\": \"<string>\",\n  \"creditorAgent\": {\n    \"bic\": \"USITUYTJ\",\n    \"name\": \"string\",\n    \"clearingSystemMemberId\": \"string\"\n  },\n  \"debtorName\": \"<string>\",\n  \"debtorAgent\": {\n    \"bic\": \"TXZNJCGC\",\n    \"name\": \"string\",\n    \"clearingSystemMemberId\": \"string\"\n  },\n  \"requestedCollectionDate\": \"<date>\",\n  \"mandateDateOfSignature\": \"<date>\",\n  \"sequenceType\": \"<string>\",\n  \"schemeType\": \"<string>\",\n  \"endToEndId\": \"<string>\",\n  \"remittanceInformation\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6f32a733-ff6f-4b97-8c92-7e0b85cbf26a",
+              "name": "Authentication required or credentials invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "direct-debits"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"creditorAccount\": {\n    \"iban\": \"QT81FSZWFEEF1F86YLHFKOCP\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"HQG\"\n  },\n  \"debtorAccount\": {\n    \"iban\": \"DH22I77V04WE3MY52GYYVS\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"FTI\"\n  },\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"mandateId\": \"<string>\",\n  \"messageId\": \"<string>\",\n  \"creditorName\": \"<string>\",\n  \"creditorAgent\": {\n    \"bic\": \"USITUYTJ\",\n    \"name\": \"string\",\n    \"clearingSystemMemberId\": \"string\"\n  },\n  \"debtorName\": \"<string>\",\n  \"debtorAgent\": {\n    \"bic\": \"TXZNJCGC\",\n    \"name\": \"string\",\n    \"clearingSystemMemberId\": \"string\"\n  },\n  \"requestedCollectionDate\": \"<date>\",\n  \"mandateDateOfSignature\": \"<date>\",\n  \"sequenceType\": \"<string>\",\n  \"schemeType\": \"<string>\",\n  \"endToEndId\": \"<string>\",\n  \"remittanceInformation\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3bdfaf69-3b74-484e-983e-433b666a7c97",
+              "name": "Request validation failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "direct-debits"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"creditorAccount\": {\n    \"iban\": \"QT81FSZWFEEF1F86YLHFKOCP\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"HQG\"\n  },\n  \"debtorAccount\": {\n    \"iban\": \"DH22I77V04WE3MY52GYYVS\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"FTI\"\n  },\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"mandateId\": \"<string>\",\n  \"messageId\": \"<string>\",\n  \"creditorName\": \"<string>\",\n  \"creditorAgent\": {\n    \"bic\": \"USITUYTJ\",\n    \"name\": \"string\",\n    \"clearingSystemMemberId\": \"string\"\n  },\n  \"debtorName\": \"<string>\",\n  \"debtorAgent\": {\n    \"bic\": \"TXZNJCGC\",\n    \"name\": \"string\",\n    \"clearingSystemMemberId\": \"string\"\n  },\n  \"requestedCollectionDate\": \"<date>\",\n  \"mandateDateOfSignature\": \"<date>\",\n  \"sequenceType\": \"<string>\",\n  \"schemeType\": \"<string>\",\n  \"endToEndId\": \"<string>\",\n  \"remittanceInformation\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c983b77c-5636-4f2d-be05-e423bc705471",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "direct-debits"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"creditorAccount\": {\n    \"iban\": \"QT81FSZWFEEF1F86YLHFKOCP\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"HQG\"\n  },\n  \"debtorAccount\": {\n    \"iban\": \"DH22I77V04WE3MY52GYYVS\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"FTI\"\n  },\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"mandateId\": \"<string>\",\n  \"messageId\": \"<string>\",\n  \"creditorName\": \"<string>\",\n  \"creditorAgent\": {\n    \"bic\": \"USITUYTJ\",\n    \"name\": \"string\",\n    \"clearingSystemMemberId\": \"string\"\n  },\n  \"debtorName\": \"<string>\",\n  \"debtorAgent\": {\n    \"bic\": \"TXZNJCGC\",\n    \"name\": \"string\",\n    \"clearingSystemMemberId\": \"string\"\n  },\n  \"requestedCollectionDate\": \"<date>\",\n  \"mandateDateOfSignature\": \"<date>\",\n  \"sequenceType\": \"<string>\",\n  \"schemeType\": \"<string>\",\n  \"endToEndId\": \"<string>\",\n  \"remittanceInformation\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.montran.com/corporate/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "7a2b3065-d597-4d48-94fa-d413f628e107",
+    "name": "Montran Corporate Payments Portal Account Information Direct Debits API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Montran Corporate Payments Portal enables corporates to exercise complete control over accounts at their various bank relationships, with the ability to make secure payments over the Internet. It supports SWIFT payments and local clearing delivery through API integration and H2H (Host-to-Host) protocols. Corporates can connect their ERP systems and manually or automatically upload invoices for payments and collections management. The portal provides multi-bank visibility and supports secure payment initiation across multiple currencies and payment types.\n\nContact Support:\n Name: Montran Corporation",
+      "type": "text/plain"
+    }
+  }
+}

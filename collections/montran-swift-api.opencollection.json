@@ -1,0 +1,68 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Montran Corporate Payments Portal Account Information SWIFT API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "SWIFT",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Montran List SWIFT messages",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/corporate/v1/swift/messages",
+            "params": [
+              {
+                "name": "messageType",
+                "value": "",
+                "type": "query",
+                "description": "SWIFT MT message type filter"
+              },
+              {
+                "name": "direction",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "fromDate",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "toDate",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Retrieves SWIFT FIN messages processed through the connectivity platform. Supports filtering by message type (MT103, MT202, etc.), direction, and date range. Includes SWIFT gpi tracking information where available."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

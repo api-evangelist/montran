@@ -1,0 +1,54 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Montran Corporate Payments Portal Account Information Payment Initiation API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Payment Initiation",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Montran Initiate an instant payment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.montran.com/corporate/v1/payments/instant",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Initiates a real-time instant payment with guaranteed end-to-end processing latency of a few seconds. The payment is processed using ISO 20022 pacs.008 FIToFICustomerCreditTransfer messaging. Supports credit transfers across instant payment schemes. Returns the payment status synchronously, including confirmation or rejection."
+        },
+        {
+          "info": {
+            "name": "Montran Initiate a PISP credit transfer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.montran.com/corporate/v1/payments/credit-transfer",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Initiates a credit transfer payment on behalf of a Payment Service User (PSU) as a Payment Initiation Service Provider (PISP) under PSD2. Requires valid PSU consent. Uses ISO 20022 pain.001 CustomerCreditTransferInitiation format."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

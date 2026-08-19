@@ -1,0 +1,74 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Montran Corporate Payments Portal Account Information Files API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Files",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Montran Upload a payment file",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.montran.com/corporate/v1/files",
+            "body": {
+              "type": "multipart-form",
+              "data": [
+                {
+                  "name": "file",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "format",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "bankId",
+                  "type": "text",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "Uploads a payment file for batch processing. Supports various file formats for bulk payment initiation including CSV, XML (pain.001), and proprietary ERP export formats. Files are validated and individual payments are extracted and entered into the approval workflow."
+        },
+        {
+          "info": {
+            "name": "Montran Get file processing status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/corporate/v1/files/:fileId",
+            "params": [
+              {
+                "name": "fileId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the uploaded file"
+              }
+            ]
+          },
+          "docs": "Retrieves the processing status of an uploaded payment file including the number of payments extracted, validated, and any errors encountered during processing."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

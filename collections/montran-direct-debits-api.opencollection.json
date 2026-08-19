@@ -1,0 +1,39 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Montran Corporate Payments Portal Account Information Direct Debits API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Direct Debits",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Montran Initiate a direct debit",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.montran.com/corporate/v1/direct-debits",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Initiates a direct debit collection using ISO 20022 pain.008 CustomerDirectDebitInitiation format. Supports SEPA Direct Debit (Core and B2B schemes) and local ACH direct debit schemes."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

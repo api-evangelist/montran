@@ -1,0 +1,815 @@
+{
+  "item": [
+    {
+      "id": "e4bd634c-cadd-4da4-ae2f-025bb60a8001",
+      "name": "Payment Initiation",
+      "description": {
+        "content": "PSD2-compliant payment initiation operations for PISP integration. Supports instant credit transfers and request-to-pay flows.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "e0399064-8fb6-467c-9e30-1d222891ddd6",
+          "name": "Montran Initiate an instant payment",
+          "request": {
+            "name": "Montran Initiate an instant payment",
+            "description": {
+              "content": "Initiates a real-time instant payment with guaranteed end-to-end processing latency of a few seconds. The payment is processed using ISO 20022 pacs.008 FIToFICustomerCreditTransfer messaging. Supports credit transfers across instant payment schemes. Returns the payment status synchronously, including confirmation or rejection.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "payments",
+                "instant"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"debtorAccount\": {\n    \"iban\": \"<string>\",\n    \"accountNumber\": \"<string>\",\n    \"currency\": \"<string>\"\n  },\n  \"creditorAccount\": {\n    \"iban\": \"<string>\",\n    \"accountNumber\": \"<string>\",\n    \"currency\": \"<string>\"\n  },\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"messageId\": \"<string>\",\n  \"endToEndId\": \"<string>\",\n  \"transactionId\": \"<string>\",\n  \"debtorName\": \"<string>\",\n  \"debtorAgent\": {\n    \"bic\": \"<string>\",\n    \"name\": \"<string>\"\n  },\n  \"creditorName\": \"<string>\",\n  \"creditorAgent\": {\n    \"bic\": \"<string>\",\n    \"name\": \"<string>\"\n  },\n  \"remittanceInformation\": \"<string>\",\n  \"purpose\": \"<string>\",\n  \"chargeBearer\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "5e66edfb-9af7-421d-91ef-cb0f00847b54",
+              "name": "Instant payment successfully processed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    "instant"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"debtorAccount\": {\n    \"iban\": \"GM48CK6S4U5GOU9IGV1Y4TO\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"TGW\"\n  },\n  \"creditorAccount\": {\n    \"iban\": \"NV38WY78ASNG0MRVPBRWU6E1K7\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"NXG\"\n  },\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"messageId\": \"<string>\",\n  \"endToEndId\": \"<string>\",\n  \"transactionId\": \"<string>\",\n  \"debtorName\": \"<string>\",\n  \"debtorAgent\": {\n    \"bic\": \"YGABZAGX\",\n    \"name\": \"string\"\n  },\n  \"creditorName\": \"<string>\",\n  \"creditorAgent\": {\n    \"bic\": \"EBGVHOJ8\",\n    \"name\": \"string\"\n  },\n  \"remittanceInformation\": \"<string>\",\n  \"purpose\": \"<string>\",\n  \"chargeBearer\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"paymentId\": \"string\",\n  \"messageId\": \"string\",\n  \"endToEndId\": \"string\",\n  \"transactionId\": \"string\",\n  \"status\": \"ACSC\",\n  \"reasonCode\": \"string\",\n  \"settlementDate\": \"2000-04-19\",\n  \"acceptanceDateTime\": \"2006-05-11T06:26:22.517Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d3b1cd03-7c0e-489c-8a2a-014f09365eb6",
+              "name": "Bad request - invalid parameters or malformed request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    "instant"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"debtorAccount\": {\n    \"iban\": \"GM48CK6S4U5GOU9IGV1Y4TO\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"TGW\"\n  },\n  \"creditorAccount\": {\n    \"iban\": \"NV38WY78ASNG0MRVPBRWU6E1K7\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"NXG\"\n  },\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"messageId\": \"<string>\",\n  \"endToEndId\": \"<string>\",\n  \"transactionId\": \"<string>\",\n  \"debtorName\": \"<string>\",\n  \"debtorAgent\": {\n    \"bic\": \"YGABZAGX\",\n    \"name\": \"string\"\n  },\n  \"creditorName\": \"<string>\",\n  \"creditorAgent\": {\n    \"bic\": \"EBGVHOJ8\",\n    \"name\": \"string\"\n  },\n  \"remittanceInformation\": \"<string>\",\n  \"purpose\": \"<string>\",\n  \"chargeBearer\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ae6767ae-a18c-4e10-8d3d-df503ec66012",
+              "name": "Authentication required or credentials invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    "instant"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"debtorAccount\": {\n    \"iban\": \"GM48CK6S4U5GOU9IGV1Y4TO\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"TGW\"\n  },\n  \"creditorAccount\": {\n    \"iban\": \"NV38WY78ASNG0MRVPBRWU6E1K7\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"NXG\"\n  },\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"messageId\": \"<string>\",\n  \"endToEndId\": \"<string>\",\n  \"transactionId\": \"<string>\",\n  \"debtorName\": \"<string>\",\n  \"debtorAgent\": {\n    \"bic\": \"YGABZAGX\",\n    \"name\": \"string\"\n  },\n  \"creditorName\": \"<string>\",\n  \"creditorAgent\": {\n    \"bic\": \"EBGVHOJ8\",\n    \"name\": \"string\"\n  },\n  \"remittanceInformation\": \"<string>\",\n  \"purpose\": \"<string>\",\n  \"chargeBearer\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6de3249e-ec23-4227-a8fe-904eb98f0d4a",
+              "name": "Insufficient permissions or invalid consent",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    "instant"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"debtorAccount\": {\n    \"iban\": \"GM48CK6S4U5GOU9IGV1Y4TO\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"TGW\"\n  },\n  \"creditorAccount\": {\n    \"iban\": \"NV38WY78ASNG0MRVPBRWU6E1K7\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"NXG\"\n  },\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"messageId\": \"<string>\",\n  \"endToEndId\": \"<string>\",\n  \"transactionId\": \"<string>\",\n  \"debtorName\": \"<string>\",\n  \"debtorAgent\": {\n    \"bic\": \"YGABZAGX\",\n    \"name\": \"string\"\n  },\n  \"creditorName\": \"<string>\",\n  \"creditorAgent\": {\n    \"bic\": \"EBGVHOJ8\",\n    \"name\": \"string\"\n  },\n  \"remittanceInformation\": \"<string>\",\n  \"purpose\": \"<string>\",\n  \"chargeBearer\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "dc0aa899-171c-4a0f-adc2-e4fc44bc6b9f",
+              "name": "Request validation failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    "instant"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"debtorAccount\": {\n    \"iban\": \"GM48CK6S4U5GOU9IGV1Y4TO\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"TGW\"\n  },\n  \"creditorAccount\": {\n    \"iban\": \"NV38WY78ASNG0MRVPBRWU6E1K7\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"NXG\"\n  },\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"messageId\": \"<string>\",\n  \"endToEndId\": \"<string>\",\n  \"transactionId\": \"<string>\",\n  \"debtorName\": \"<string>\",\n  \"debtorAgent\": {\n    \"bic\": \"YGABZAGX\",\n    \"name\": \"string\"\n  },\n  \"creditorName\": \"<string>\",\n  \"creditorAgent\": {\n    \"bic\": \"EBGVHOJ8\",\n    \"name\": \"string\"\n  },\n  \"remittanceInformation\": \"<string>\",\n  \"purpose\": \"<string>\",\n  \"chargeBearer\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "93040b29-5a50-4426-af75-3922b577d557",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    "instant"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"debtorAccount\": {\n    \"iban\": \"GM48CK6S4U5GOU9IGV1Y4TO\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"TGW\"\n  },\n  \"creditorAccount\": {\n    \"iban\": \"NV38WY78ASNG0MRVPBRWU6E1K7\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"NXG\"\n  },\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"messageId\": \"<string>\",\n  \"endToEndId\": \"<string>\",\n  \"transactionId\": \"<string>\",\n  \"debtorName\": \"<string>\",\n  \"debtorAgent\": {\n    \"bic\": \"YGABZAGX\",\n    \"name\": \"string\"\n  },\n  \"creditorName\": \"<string>\",\n  \"creditorAgent\": {\n    \"bic\": \"EBGVHOJ8\",\n    \"name\": \"string\"\n  },\n  \"remittanceInformation\": \"<string>\",\n  \"purpose\": \"<string>\",\n  \"chargeBearer\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9546d164-0ac2-41dc-a7a1-1ae6ce01db24",
+              "name": "Service temporarily unavailable",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    "instant"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"debtorAccount\": {\n    \"iban\": \"GM48CK6S4U5GOU9IGV1Y4TO\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"TGW\"\n  },\n  \"creditorAccount\": {\n    \"iban\": \"NV38WY78ASNG0MRVPBRWU6E1K7\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"NXG\"\n  },\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"messageId\": \"<string>\",\n  \"endToEndId\": \"<string>\",\n  \"transactionId\": \"<string>\",\n  \"debtorName\": \"<string>\",\n  \"debtorAgent\": {\n    \"bic\": \"YGABZAGX\",\n    \"name\": \"string\"\n  },\n  \"creditorName\": \"<string>\",\n  \"creditorAgent\": {\n    \"bic\": \"EBGVHOJ8\",\n    \"name\": \"string\"\n  },\n  \"remittanceInformation\": \"<string>\",\n  \"purpose\": \"<string>\",\n  \"chargeBearer\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "20b697cc-2ecb-4cdc-82a8-2465c6c2bdd8",
+          "name": "Montran Initiate a PISP credit transfer",
+          "request": {
+            "name": "Montran Initiate a PISP credit transfer",
+            "description": {
+              "content": "Initiates a credit transfer payment on behalf of a Payment Service User (PSU) as a Payment Initiation Service Provider (PISP) under PSD2. Requires valid PSU consent. Uses ISO 20022 pain.001 CustomerCreditTransferInitiation format.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "payments",
+                "credit-transfer"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"consentId\": \"<string>\",\n  \"debtorAccount\": {\n    \"iban\": \"<string>\",\n    \"accountNumber\": \"<string>\",\n    \"currency\": \"<string>\"\n  },\n  \"creditorAccount\": {\n    \"iban\": \"<string>\",\n    \"accountNumber\": \"<string>\",\n    \"currency\": \"<string>\"\n  },\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"creditorName\": \"<string>\",\n  \"creditorAgent\": {\n    \"bic\": \"<string>\",\n    \"name\": \"<string>\"\n  },\n  \"endToEndId\": \"<string>\",\n  \"remittanceInformation\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "352b56cf-22c8-47d4-872e-47df78c2573c",
+              "name": "Credit transfer successfully initiated",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    "credit-transfer"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"consentId\": \"<string>\",\n  \"debtorAccount\": {\n    \"iban\": \"ZT4264NWAD70QWS14NI83A\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"XZF\"\n  },\n  \"creditorAccount\": {\n    \"iban\": \"HL54ZBY16KM8OMYJI\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"NBW\"\n  },\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"creditorName\": \"<string>\",\n  \"creditorAgent\": {\n    \"bic\": \"PQAAAKCVWII\",\n    \"name\": \"string\"\n  },\n  \"endToEndId\": \"<string>\",\n  \"remittanceInformation\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"paymentId\": \"string\",\n  \"status\": \"RCVD\",\n  \"scaRedirectUrl\": \"http://CVVVFD.uvozxGTeiZjKP1.YjpeTsP.K,iQUR4h0i5hPO1mo29lRRMJu27jHBm5PBGD3pDR1\",\n  \"createdAt\": \"1966-02-27T09:02:35.087Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d289792c-848c-42f1-a984-91be4d628ea0",
+              "name": "Bad request - invalid parameters or malformed request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    "credit-transfer"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"consentId\": \"<string>\",\n  \"debtorAccount\": {\n    \"iban\": \"ZT4264NWAD70QWS14NI83A\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"XZF\"\n  },\n  \"creditorAccount\": {\n    \"iban\": \"HL54ZBY16KM8OMYJI\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"NBW\"\n  },\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"creditorName\": \"<string>\",\n  \"creditorAgent\": {\n    \"bic\": \"PQAAAKCVWII\",\n    \"name\": \"string\"\n  },\n  \"endToEndId\": \"<string>\",\n  \"remittanceInformation\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c09bc627-fe2d-45e5-944b-7874dcee67ba",
+              "name": "Authentication required or credentials invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    "credit-transfer"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"consentId\": \"<string>\",\n  \"debtorAccount\": {\n    \"iban\": \"ZT4264NWAD70QWS14NI83A\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"XZF\"\n  },\n  \"creditorAccount\": {\n    \"iban\": \"HL54ZBY16KM8OMYJI\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"NBW\"\n  },\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"creditorName\": \"<string>\",\n  \"creditorAgent\": {\n    \"bic\": \"PQAAAKCVWII\",\n    \"name\": \"string\"\n  },\n  \"endToEndId\": \"<string>\",\n  \"remittanceInformation\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b8ea2941-4b06-4b84-8c49-5e1b2c53601d",
+              "name": "Insufficient permissions or invalid consent",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    "credit-transfer"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"consentId\": \"<string>\",\n  \"debtorAccount\": {\n    \"iban\": \"ZT4264NWAD70QWS14NI83A\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"XZF\"\n  },\n  \"creditorAccount\": {\n    \"iban\": \"HL54ZBY16KM8OMYJI\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"NBW\"\n  },\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"creditorName\": \"<string>\",\n  \"creditorAgent\": {\n    \"bic\": \"PQAAAKCVWII\",\n    \"name\": \"string\"\n  },\n  \"endToEndId\": \"<string>\",\n  \"remittanceInformation\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "10d6c98a-e8e4-419a-89ea-fa6e75fc4f32",
+              "name": "Request validation failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    "credit-transfer"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"consentId\": \"<string>\",\n  \"debtorAccount\": {\n    \"iban\": \"ZT4264NWAD70QWS14NI83A\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"XZF\"\n  },\n  \"creditorAccount\": {\n    \"iban\": \"HL54ZBY16KM8OMYJI\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"NBW\"\n  },\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"creditorName\": \"<string>\",\n  \"creditorAgent\": {\n    \"bic\": \"PQAAAKCVWII\",\n    \"name\": \"string\"\n  },\n  \"endToEndId\": \"<string>\",\n  \"remittanceInformation\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e124a9ea-99be-44db-b297-f8c731ffc8a2",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    "credit-transfer"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"consentId\": \"<string>\",\n  \"debtorAccount\": {\n    \"iban\": \"ZT4264NWAD70QWS14NI83A\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"XZF\"\n  },\n  \"creditorAccount\": {\n    \"iban\": \"HL54ZBY16KM8OMYJI\",\n    \"accountNumber\": \"string\",\n    \"currency\": \"NBW\"\n  },\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"creditorName\": \"<string>\",\n  \"creditorAgent\": {\n    \"bic\": \"PQAAAKCVWII\",\n    \"name\": \"string\"\n  },\n  \"endToEndId\": \"<string>\",\n  \"remittanceInformation\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.montran.com/corporate/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "071b3155-126f-449a-98eb-77bd95470961",
+    "name": "Montran Corporate Payments Portal Account Information Payment Initiation API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Montran Corporate Payments Portal enables corporates to exercise complete control over accounts at their various bank relationships, with the ability to make secure payments over the Internet. It supports SWIFT payments and local clearing delivery through API integration and H2H (Host-to-Host) protocols. Corporates can connect their ERP systems and manually or automatically upload invoices for payments and collections management. The portal provides multi-bank visibility and supports secure payment initiation across multiple currencies and payment types.\n\nContact Support:\n Name: Montran Corporation",
+      "type": "text/plain"
+    }
+  }
+}

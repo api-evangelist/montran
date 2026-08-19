@@ -1,0 +1,647 @@
+{
+  "item": [
+    {
+      "id": "a1d97eda-efb6-4364-9132-0f8d20194a57",
+      "name": "Clearing",
+      "description": {
+        "content": "Clearing and settlement operations across multiple CSMs",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "d2239206-98ca-4144-9de4-e8290fb29f94",
+          "name": "Montran List clearing batches",
+          "request": {
+            "name": "Montran List clearing batches",
+            "description": {
+              "content": "Retrieves a list of clearing batches submitted to or received from clearing and settlement mechanisms. Supports filtering by clearing system (SEPA, Target2, Fedwire, CHIPS, local ACH/RTGS), direction (inbound/outbound), and date range.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "clearing",
+                "batches"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "clearingSystem",
+                  "value": "<string>",
+                  "description": "Filter by clearing and settlement mechanism"
+                },
+                {
+                  "disabled": false,
+                  "key": "direction",
+                  "value": "<string>",
+                  "description": "Filter by clearing direction"
+                },
+                {
+                  "disabled": false,
+                  "key": "fromDate",
+                  "value": "<date>",
+                  "description": "Start date for filtering (ISO 8601 format)"
+                },
+                {
+                  "disabled": false,
+                  "key": "toDate",
+                  "value": "<date>",
+                  "description": "End date for filtering (ISO 8601 format)"
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number for pagination"
+                },
+                {
+                  "disabled": false,
+                  "key": "pageSize",
+                  "value": "20",
+                  "description": "Number of items per page"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "f8f4cff5-4370-4b67-ad4f-316587f446aa",
+              "name": "Successfully retrieved clearing batches",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clearing",
+                    "batches"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "clearingSystem",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "direction",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "fromDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "toDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "20"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"batches\": [\n    {\n      \"batchId\": \"string\",\n      \"clearingSystem\": \"string\",\n      \"direction\": \"inbound\",\n      \"status\": \"submitted\",\n      \"numberOfTransactions\": 9755,\n      \"totalAmount\": 5863.229303152616,\n      \"currency\": \"string\",\n      \"settlementDate\": \"1995-05-16\",\n      \"createdAt\": \"2003-10-09T00:32:18.474Z\",\n      \"payments\": [\n        {\n          \"paymentId\": \"string\",\n          \"messageId\": \"string\",\n          \"paymentType\": \"string\",\n          \"status\": \"string\",\n          \"debtorName\": \"string\",\n          \"debtorAccount\": {\n            \"iban\": \"MX912H3MVYCZ4R5SSR226K\",\n            \"accountNumber\": \"string\",\n            \"currency\": \"EEJ\"\n          },\n          \"debtorAgent\": {\n            \"bic\": \"ERRTQGCY\",\n            \"name\": \"string\",\n            \"clearingSystemMemberId\": \"string\"\n          },\n          \"creditorName\": \"string\",\n          \"creditorAccount\": {\n            \"iban\": \"NV00U59N2XXN11B\",\n            \"accountNumber\": \"string\",\n            \"currency\": \"JOR\"\n          },\n          \"creditorAgent\": {\n            \"bic\": \"FVMWKZ5ASLD\",\n            \"name\": \"string\",\n            \"clearingSystemMemberId\": \"string\"\n          },\n          \"amount\": 9470.07903613699,\n          \"currency\": \"string\",\n          \"endToEndId\": \"string\",\n          \"clearingSystem\": \"string\",\n          \"settlementDate\": \"1996-08-25\",\n          \"createdAt\": \"2025-10-24T13:52:15.583Z\",\n          \"updatedAt\": \"1988-11-08T08:53:31.106Z\",\n          \"statusHistory\": [\n            {\n              \"status\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"timestamp\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"reasonCode\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"description\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"status\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"timestamp\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"reasonCode\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"description\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ]\n        },\n        {\n          \"paymentId\": \"string\",\n          \"messageId\": \"string\",\n          \"paymentType\": \"string\",\n          \"status\": \"string\",\n          \"debtorName\": \"string\",\n          \"debtorAccount\": {\n            \"iban\": \"TH16TR2KH9NOXROE98FD2BUDB4TGFND22V\",\n            \"accountNumber\": \"string\",\n            \"currency\": \"HSY\"\n          },\n          \"debtorAgent\": {\n            \"bic\": \"BWAGWYS2LBA\",\n            \"name\": \"string\",\n            \"clearingSystemMemberId\": \"string\"\n          },\n          \"creditorName\": \"string\",\n          \"creditorAccount\": {\n            \"iban\": \"MZ90Y4GGY\",\n            \"accountNumber\": \"string\",\n            \"currency\": \"MYL\"\n          },\n          \"creditorAgent\": {\n            \"bic\": \"ZQNSPG9M\",\n            \"name\": \"string\",\n            \"clearingSystemMemberId\": \"string\"\n          },\n          \"amount\": 3212.6349645266896,\n          \"currency\": \"string\",\n          \"endToEndId\": \"string\",\n          \"clearingSystem\": \"string\",\n          \"settlementDate\": \"1956-10-03\",\n          \"createdAt\": \"1948-10-15T00:09:42.274Z\",\n          \"updatedAt\": \"1965-02-20T02:09:22.234Z\",\n          \"statusHistory\": [\n            {\n              \"status\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"timestamp\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"reasonCode\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"description\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"status\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"timestamp\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"reasonCode\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"description\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ]\n        }\n      ]\n    },\n    {\n      \"batchId\": \"string\",\n      \"clearingSystem\": \"string\",\n      \"direction\": \"inbound\",\n      \"status\": \"rejected\",\n      \"numberOfTransactions\": 3773,\n      \"totalAmount\": 2802.3343420033143,\n      \"currency\": \"string\",\n      \"settlementDate\": \"2004-08-29\",\n      \"createdAt\": \"1961-10-27T05:05:40.642Z\",\n      \"payments\": [\n        {\n          \"paymentId\": \"string\",\n          \"messageId\": \"string\",\n          \"paymentType\": \"string\",\n          \"status\": \"string\",\n          \"debtorName\": \"string\",\n          \"debtorAccount\": {\n            \"iban\": \"KY09OUNJAU28\",\n            \"accountNumber\": \"string\",\n            \"currency\": \"JYQ\"\n          },\n          \"debtorAgent\": {\n            \"bic\": \"JWVJMUFLE23\",\n            \"name\": \"string\",\n            \"clearingSystemMemberId\": \"string\"\n          },\n          \"creditorName\": \"string\",\n          \"creditorAccount\": {\n            \"iban\": \"DL34RX4BHCC\",\n            \"accountNumber\": \"string\",\n            \"currency\": \"RGP\"\n          },\n          \"creditorAgent\": {\n            \"bic\": \"HQDIQQN3\",\n            \"name\": \"string\",\n            \"clearingSystemMemberId\": \"string\"\n          },\n          \"amount\": 3449.261793181504,\n          \"currency\": \"string\",\n          \"endToEndId\": \"string\",\n          \"clearingSystem\": \"string\",\n          \"settlementDate\": \"1952-05-16\",\n          \"createdAt\": \"1951-04-21T19:24:21.970Z\",\n          \"updatedAt\": \"1955-09-02T16:48:47.068Z\",\n          \"statusHistory\": [\n            {\n              \"status\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"timestamp\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"reasonCode\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"description\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"status\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"timestamp\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"reasonCode\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"description\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ]\n        },\n        {\n          \"paymentId\": \"string\",\n          \"messageId\": \"string\",\n          \"paymentType\": \"string\",\n          \"status\": \"string\",\n          \"debtorName\": \"string\",\n          \"debtorAccount\": {\n            \"iban\": \"YG06E5CTDOBRCU09SLDI7\",\n            \"accountNumber\": \"string\",\n            \"currency\": \"NZO\"\n          },\n          \"debtorAgent\": {\n            \"bic\": \"ZOABRHTI\",\n            \"name\": \"string\",\n            \"clearingSystemMemberId\": \"string\"\n          },\n          \"creditorName\": \"string\",\n          \"creditorAccount\": {\n            \"iban\": \"XJ58SBL93W\",\n            \"accountNumber\": \"string\",\n            \"currency\": \"NZH\"\n          },\n          \"creditorAgent\": {\n            \"bic\": \"ZXSGCVMGGR2\",\n            \"name\": \"string\",\n            \"clearingSystemMemberId\": \"string\"\n          },\n          \"amount\": 5756.593824760127,\n          \"currency\": \"string\",\n          \"endToEndId\": \"string\",\n          \"clearingSystem\": \"string\",\n          \"settlementDate\": \"1991-05-14\",\n          \"createdAt\": \"1952-06-18T04:12:56.850Z\",\n          \"updatedAt\": \"1962-04-12T23:39:17.008Z\",\n          \"statusHistory\": [\n            {\n              \"status\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"timestamp\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"reasonCode\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"description\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"status\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"timestamp\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"reasonCode\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"description\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ]\n        }\n      ]\n    }\n  ],\n  \"pagination\": {\n    \"page\": 2987,\n    \"pageSize\": 2747,\n    \"totalItems\": 2064,\n    \"totalPages\": 7960\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "460efec4-8796-45e8-922a-5221240ffbf6",
+              "name": "Bad request - invalid parameters or malformed request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clearing",
+                    "batches"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "clearingSystem",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "direction",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "fromDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "toDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "20"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a1df93e1-4c19-431d-bd02-3875b8fc832f",
+              "name": "Authentication required or credentials invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clearing",
+                    "batches"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "clearingSystem",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "direction",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "fromDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "toDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "20"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "df6245b1-2ae1-4986-a67f-51d717ef8f48",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clearing",
+                    "batches"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "clearingSystem",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "direction",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "fromDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "toDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "20"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "50c9572b-20ca-44a4-8768-10cb6dd244bf",
+          "name": "Montran Get clearing batch details",
+          "request": {
+            "name": "Montran Get clearing batch details",
+            "description": {
+              "content": "Retrieves the details of a specific clearing batch including the list of payments contained within it, settlement status, and clearing system acknowledgement information.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "clearing",
+                "batches",
+                ":batchId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "batchId",
+                  "description": "(Required) Unique identifier of the clearing batch"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "7b3498bc-9a2b-4061-a65a-a378fdd250d0",
+              "name": "Successfully retrieved clearing batch details",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clearing",
+                    "batches",
+                    ":batchId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "batchId",
+                      "description": "(Required) Unique identifier of the clearing batch"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"batchId\": \"string\",\n  \"clearingSystem\": \"string\",\n  \"direction\": \"outbound\",\n  \"status\": \"accepted\",\n  \"numberOfTransactions\": 9054,\n  \"totalAmount\": 5068.983193204214,\n  \"currency\": \"string\",\n  \"settlementDate\": \"1977-03-27\",\n  \"createdAt\": \"1948-02-06T21:04:03.298Z\",\n  \"payments\": [\n    {\n      \"paymentId\": \"string\",\n      \"messageId\": \"string\",\n      \"paymentType\": \"string\",\n      \"status\": \"string\",\n      \"debtorName\": \"string\",\n      \"debtorAccount\": {\n        \"iban\": \"JG704Q70H967\",\n        \"accountNumber\": \"string\",\n        \"currency\": \"UFE\"\n      },\n      \"debtorAgent\": {\n        \"bic\": \"RKVTJDXQ48W\",\n        \"name\": \"string\",\n        \"clearingSystemMemberId\": \"string\"\n      },\n      \"creditorName\": \"string\",\n      \"creditorAccount\": {\n        \"iban\": \"ZL70IJV3MJX0K55DFQ64J28GBVF3ZZ02\",\n        \"accountNumber\": \"string\",\n        \"currency\": \"FPW\"\n      },\n      \"creditorAgent\": {\n        \"bic\": \"GPKBWJWMH5L\",\n        \"name\": \"string\",\n        \"clearingSystemMemberId\": \"string\"\n      },\n      \"amount\": 5817.256095360638,\n      \"currency\": \"string\",\n      \"endToEndId\": \"string\",\n      \"clearingSystem\": \"string\",\n      \"settlementDate\": \"2009-05-13\",\n      \"createdAt\": \"2013-03-24T17:46:06.366Z\",\n      \"updatedAt\": \"2025-12-15T19:27:04.054Z\",\n      \"statusHistory\": [\n        {\n          \"status\": \"string\",\n          \"timestamp\": \"2010-10-25T22:22:50.925Z\",\n          \"reasonCode\": \"string\",\n          \"description\": \"string\"\n        },\n        {\n          \"status\": \"string\",\n          \"timestamp\": \"1957-09-27T14:27:38.688Z\",\n          \"reasonCode\": \"string\",\n          \"description\": \"string\"\n        }\n      ]\n    },\n    {\n      \"paymentId\": \"string\",\n      \"messageId\": \"string\",\n      \"paymentType\": \"string\",\n      \"status\": \"string\",\n      \"debtorName\": \"string\",\n      \"debtorAccount\": {\n        \"iban\": \"HA34EL3X0IMI69IW48ZGGD\",\n        \"accountNumber\": \"string\",\n        \"currency\": \"MYA\"\n      },\n      \"debtorAgent\": {\n        \"bic\": \"QJZWKLJC\",\n        \"name\": \"string\",\n        \"clearingSystemMemberId\": \"string\"\n      },\n      \"creditorName\": \"string\",\n      \"creditorAccount\": {\n        \"iban\": \"BO80SQIKBLD\",\n        \"accountNumber\": \"string\",\n        \"currency\": \"FDA\"\n      },\n      \"creditorAgent\": {\n        \"bic\": \"SFRTEBNVUQ3\",\n        \"name\": \"string\",\n        \"clearingSystemMemberId\": \"string\"\n      },\n      \"amount\": 5981.983760629923,\n      \"currency\": \"string\",\n      \"endToEndId\": \"string\",\n      \"clearingSystem\": \"string\",\n      \"settlementDate\": \"1980-09-04\",\n      \"createdAt\": \"2012-12-04T20:52:49.917Z\",\n      \"updatedAt\": \"1957-12-12T11:32:30.103Z\",\n      \"statusHistory\": [\n        {\n          \"status\": \"string\",\n          \"timestamp\": \"2008-09-27T02:25:14.850Z\",\n          \"reasonCode\": \"string\",\n          \"description\": \"string\"\n        },\n        {\n          \"status\": \"string\",\n          \"timestamp\": \"1968-01-21T22:51:08.297Z\",\n          \"reasonCode\": \"string\",\n          \"description\": \"string\"\n        }\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "64744e1c-35cf-4549-a7d2-57230b725959",
+              "name": "Authentication required or credentials invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clearing",
+                    "batches",
+                    ":batchId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "batchId",
+                      "description": "(Required) Unique identifier of the clearing batch"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e4389bad-4422-4f19-a188-a44917265369",
+              "name": "Requested resource not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clearing",
+                    "batches",
+                    ":batchId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "batchId",
+                      "description": "(Required) Unique identifier of the clearing batch"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "86fff341-ce52-44f7-aaee-c05353ff18ee",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clearing",
+                    "batches",
+                    ":batchId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "batchId",
+                      "description": "(Required) Unique identifier of the clearing batch"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.montran.com/corporate/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "854e8176-1343-4899-9020-f30e308c25a4",
+    "name": "Montran Corporate Payments Portal Account Information Clearing API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Montran Corporate Payments Portal enables corporates to exercise complete control over accounts at their various bank relationships, with the ability to make secure payments over the Internet. It supports SWIFT payments and local clearing delivery through API integration and H2H (Host-to-Host) protocols. Corporates can connect their ERP systems and manually or automatically upload invoices for payments and collections management. The portal provides multi-bank visibility and supports secure payment initiation across multiple currencies and payment types.\n\nContact Support:\n Name: Montran Corporation",
+      "type": "text/plain"
+    }
+  }
+}

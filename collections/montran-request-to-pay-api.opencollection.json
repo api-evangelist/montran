@@ -1,0 +1,58 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Montran Corporate Payments Portal Account Information Request to Pay API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Request to Pay",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Montran Initiate a request to pay",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.montran.com/corporate/v1/payments/request-to-pay",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Initiates a request-to-pay (R2P) message to request payment from a debtor. The debtor receives the request and can accept or reject it. Supports person-to-person, person-to-merchant, and business-to-business use cases. Uses ISO 20022 pain.013 CreditorPaymentActivationRequest."
+        },
+        {
+          "info": {
+            "name": "Montran Get request-to-pay details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/corporate/v1/payments/request-to-pay/:requestId",
+            "params": [
+              {
+                "name": "requestId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the request to pay"
+              }
+            ]
+          },
+          "docs": "Retrieves the details and current status of a request-to-pay. Shows whether the request has been accepted, rejected, or is still pending."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

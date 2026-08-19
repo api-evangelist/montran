@@ -1,0 +1,96 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Montran Corporate Payments Portal Account Information Instant Payments API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Instant Payments",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Montran Initiate an instant payment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.montran.com/corporate/v1/payments/instant",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Initiates a real-time instant payment with guaranteed end-to-end processing latency of a few seconds. The payment is processed using ISO 20022 pacs.008 FIToFICustomerCreditTransfer messaging. Supports credit transfers across instant payment schemes. Returns the payment status synchronously, including confirmation or rejection."
+        },
+        {
+          "info": {
+            "name": "Montran Get instant payment details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/corporate/v1/payments/instant/:paymentId",
+            "params": [
+              {
+                "name": "paymentId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the payment"
+              }
+            ]
+          },
+          "docs": "Retrieves the full details and current status of a specific instant payment. Returns ISO 20022 pacs.002 status information including acceptance or rejection reason codes."
+        },
+        {
+          "info": {
+            "name": "Montran Return an instant payment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.montran.com/corporate/v1/payments/instant/:paymentId/return",
+            "params": [
+              {
+                "name": "paymentId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the payment"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Initiates the return of a previously received instant payment. Uses ISO 20022 pacs.004 PaymentReturn messaging. The return must specify a valid reason code."
+        },
+        {
+          "info": {
+            "name": "Montran Submit a bulk payment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.montran.com/corporate/v1/payments/bulk",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Submits a batch of instant payments for processing. Each payment in the batch is processed individually in real-time. Supports high-volume use cases such as salary payments and batch collections."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

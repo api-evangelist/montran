@@ -1,0 +1,111 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Montran Corporate Payments Portal Account Information Virtual IBANs API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Virtual IBANs",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Montran List virtual IBANs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/corporate/v1/virtual-ibans",
+            "params": [
+              {
+                "name": "status",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "virtualAccountId",
+                "value": "",
+                "type": "query",
+                "description": "Filter by associated virtual account"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Retrieves a list of issued virtual IBANs. Supports filtering by status and associated virtual account. Virtual IBANs enable incoming payments to be automatically routed and allocated to the correct virtual account."
+        },
+        {
+          "info": {
+            "name": "Montran Issue a virtual IBAN",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.montran.com/corporate/v1/virtual-ibans",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Issues a new virtual IBAN and associates it with a virtual account. The VIBAN can be used for receiving incoming payments that are automatically allocated to the linked virtual account. Supports 2-way VIBANs for both receiving and sending."
+        },
+        {
+          "info": {
+            "name": "Montran Get virtual IBAN details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/corporate/v1/virtual-ibans/:vibanId",
+            "params": [
+              {
+                "name": "vibanId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the virtual IBAN"
+              }
+            ]
+          },
+          "docs": "Retrieves the details of a specific virtual IBAN including its associated virtual account, status, and usage statistics."
+        },
+        {
+          "info": {
+            "name": "Montran Deactivate a virtual IBAN",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.montran.com/corporate/v1/virtual-ibans/:vibanId/deactivate",
+            "params": [
+              {
+                "name": "vibanId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the virtual IBAN"
+              }
+            ]
+          },
+          "docs": "Deactivates a virtual IBAN so it can no longer receive incoming payments. The IBAN remains in the system for historical reference but new payments referencing it will be rejected."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

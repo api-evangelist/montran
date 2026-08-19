@@ -1,0 +1,137 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Montran Corporate Portal Account Information Payments API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Payments",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Montran List corporate payments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/corporate/v1/payments",
+            "params": [
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by payment status"
+              },
+              {
+                "name": "paymentType",
+                "value": "",
+                "type": "query",
+                "description": "Filter by payment type"
+              },
+              {
+                "name": "bankId",
+                "value": "",
+                "type": "query",
+                "description": "Filter by bank relationship"
+              },
+              {
+                "name": "currency",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "fromDate",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "toDate",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Retrieves a list of payments initiated through the corporate portal. Supports filtering by payment type, status, bank relationship, currency, and date range. Provides multi-bank payment visibility across all connected bank relationships."
+        },
+        {
+          "info": {
+            "name": "Montran Create a corporate payment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.montran.com/corporate/v1/payments",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new payment through the corporate portal. The payment is routed through the appropriate bank relationship and clearing system based on the payment type, destination, and currency. Supports domestic payments, cross-border SWIFT payments, SEPA transfers, and local ACH payments. The payment enters the approval workflow if configured."
+        },
+        {
+          "info": {
+            "name": "Montran Get payment details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/corporate/v1/payments/:paymentId",
+            "params": [
+              {
+                "name": "paymentId",
+                "value": "",
+                "type": "path",
+                "description": "Unique payment identifier"
+              }
+            ]
+          },
+          "docs": "Retrieves the full details of a corporate payment including its approval status, bank submission status, and settlement information."
+        },
+        {
+          "info": {
+            "name": "Montran Cancel a payment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.montran.com/corporate/v1/payments/:paymentId/cancel",
+            "params": [
+              {
+                "name": "paymentId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the payment"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requests cancellation of a payment that has not yet been settled. Generates an ISO 20022 camt.056 FIToFIPaymentCancellationRequest message. Cancellation availability depends on the payment status and the clearing system rules."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

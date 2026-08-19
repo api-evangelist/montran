@@ -1,0 +1,54 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Montran Corporate Payments Portal Account Information Clearing Systems API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Clearing Systems",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Montran List connected clearing systems",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/corporate/v1/clearing-systems"
+          },
+          "docs": "Retrieves a list of clearing and settlement systems connected through the platform including SEPA (Step1, Step2), Target2, TIPS, RT1, Fedwire, CHIPS, CHAPS, Faster Payments, and local RTGS and ACH systems. Shows connection status and supported message formats."
+        },
+        {
+          "info": {
+            "name": "Montran Get clearing system details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/corporate/v1/clearing-systems/:systemId",
+            "params": [
+              {
+                "name": "systemId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the clearing system"
+              }
+            ]
+          },
+          "docs": "Retrieves the details of a specific clearing and settlement system connection including supported message types, operating hours, settlement windows, and current connectivity status."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

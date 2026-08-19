@@ -1,0 +1,35 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Montran Corporate Payments Portal Account Information Configuration API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Configuration",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Montran List screening channels",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.montran.com/corporate/v1/channels"
+          },
+          "docs": "Retrieves the configured screening channels. Each channel can be independently configured to use specific compliance lists, matching thresholds, and screening rules. Channels correspond to different payment types or clearing systems."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
