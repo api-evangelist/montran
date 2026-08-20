@@ -27,6 +27,16 @@ modified: '2026-05-19'
 tags:
   - Banking
   - Central Banking
+  - Financial-Services
+  - ISO 20022
+  - Market Infrastructure
+  - Messaging
+  - Payments
+  - Real-Time Payments
+  - Swift
+tags_raw:
+  - Banking
+  - Central Banking
   - Financial Services
   - ISO 20022
   - Market Infrastructure
@@ -158,6 +168,12 @@ apis:
     collection and payment-on-behalf-of operations regionally or globally. Available as SaaS or on-premise.
   humanURL: https://www.montran.com/solutions/payments-and-collections-factory/
   tags:
+  - COBO
+  - Collection
+  - Corporate Payments
+  - Multi-Bank
+  - POBO
+  tags_raw:
   - COBO
   - Collections
   - Corporate Payments
@@ -311,6 +327,8 @@ apis:
   description: Multi-bank account visibility and management
   humanURL: https://www.montran.com/solutions/global-payments-hub/
   tags:
+  - Account
+  tags_raw:
   - Accounts
   properties:
   - type: OpenAPI
@@ -707,6 +725,8 @@ apis:
   description: File upload and processing for batch payments
   humanURL: https://www.montran.com/solutions/global-payments-hub/
   tags:
+  - File
+  tags_raw:
   - Files
   properties:
   - type: OpenAPI
@@ -773,6 +793,8 @@ apis:
   description: Sanctions and compliance list management
   humanURL: https://www.montran.com/solutions/global-payments-hub/
   tags:
+  - List
+  tags_raw:
   - Lists
   properties:
   - type: OpenAPI
@@ -1072,6 +1094,8 @@ apis:
   description: SWIFT network connectivity and message management
   humanURL: https://www.montran.com/solutions/global-payments-hub/
   tags:
+  - Swift
+  tags_raw:
   - SWIFT
   properties:
   - type: OpenAPI
@@ -1105,6 +1129,8 @@ apis:
   description: Transaction processing and allocation
   humanURL: https://www.montran.com/solutions/global-payments-hub/
   tags:
+  - Transaction
+  tags_raw:
   - Transactions
   properties:
   - type: OpenAPI
