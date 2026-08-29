@@ -1,0 +1,36 @@
+slug: montran
+provider: Montran
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Telecommunications
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 2
+edges:
+- tag: Account Information
+  spec_file: montran-account-information-api-openapi.yml
+  capability_id: BC-210.10
+  capability_id_l1: BC-210
+  capability_name: Cash Management
+  confidence: 0.7
+  evidence: GET /accounts/{accountId}/balances "Montran Get account balances (AISP)", GET /accounts/{accountId}/transactions
+    "Get account transactions (AISP)", POST /accounts/{accountId}/verification "Verify account balance
+    sufficiency"
+  reason: Read-only multi-bank account, balance and transaction visibility for corporates — the cash-positioning/visibility
+    side of treasury. Could alternatively be framed as bank relationship management, hence 0.7.
+- tag: Accounts
+  spec_file: montran-accounts-api-openapi.yml
+  capability_id: BC-210.10
+  capability_id_l1: BC-210
+  capability_name: Cash Management
+  confidence: 0.7
+  evidence: GET /accounts "Montran List bank accounts", GET /accounts/{accountId}/balance "Get account
+    balance", GET /accounts/{accountId}/transactions "List account transactions"
+  reason: Bank account, balance and statement retrieval for a corporate treasury user — cash position
+    visibility. Not a banking-product capability since the buyer here is the corporate consuming the portal.

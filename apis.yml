@@ -1238,6 +1238,9 @@ apis:
   - type: JSONSchema
     url: json-schema/montran-screening-result-schema.json
 common:
+  - type: CapabilityMap
+    url: capabilities/montran-capability-edges.yml
+    name: Montran Business Capability Map
   - type: AgenticAccess
     url: agentic-access/montran-agentic-access.yml
   - type: DomainSecurity
