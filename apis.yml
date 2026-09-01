@@ -45,7 +45,7 @@ tags:
   - Messaging
   - Payments
   - Real-Time Payments
-  - SWIFT
+  - Swift
 tags_raw:
   - Banking
   - Central Banking
@@ -1106,7 +1106,7 @@ apis:
   description: SWIFT network connectivity and message management
   humanURL: https://www.montran.com/solutions/global-payments-hub/
   tags:
-  - SWIFT
+  - Swift
   tags_raw:
   - SWIFT
   properties:
