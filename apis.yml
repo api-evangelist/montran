@@ -233,6 +233,12 @@ apis:
   - Case Management
   - Compensation
   - Disputes
+  - Investigations
+  - Payments
+  tags_raw:
+  - Case Management
+  - Compensation
+  - Disputes
   - Investigation
   - Payments
   properties:
