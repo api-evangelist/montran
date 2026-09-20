@@ -11,8 +11,143 @@ capability_model:
   attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
     CC BY 4.0
   notice: NOTICE
-edge_count: 2
+edge_count: 19
 edges:
+- tag: Instant Payments
+  spec_file: montran-instant-payments-api-openapi.yml
+  capability_id: BC-1340.50
+  capability_id_l1: BC-1340
+  capability_name: Real-Time Payment Management
+  confidence: 0.93
+  evidence: POST /payments/instant initiateInstantPayment 'Initiate an instant payment'; POST /payments/instant/{paymentId}/return
+  reason: Initiation, retrieval and return of instant payments is real-time payment rail processing.
+  recovered_from: vertical-banking-capital-markets-edges.json
+- tag: Payment Initiation
+  spec_file: montran-payment-initiation-api-openapi.yml
+  capability_id: BC-1340.10
+  capability_id_l1: BC-1340
+  capability_name: Payment Initiation Management
+  confidence: 0.93
+  evidence: POST /payments/instant "Initiate an instant payment"; POST /payments/credit-transfer "Initiate
+    a PISP credit transfer"
+  reason: Explicit capture and authorisation of payment instructions (instant payment, PISP credit transfer)
+    — plainly payment initiation.
+  recovered_from: vertical-banking-capital-markets-edges.json
+- tag: Credit Transfers
+  spec_file: montran-credit-transfers-api-openapi.yml
+  capability_id: BC-1340.10
+  capability_id_l1: BC-1340
+  capability_name: Payment Initiation Management
+  confidence: 0.92
+  evidence: POST /credit-transfers initiateCreditTransfer 'Initiate a credit transfer'; schema CreditTransferInitiation
+  reason: Directly captures and authorises payment instructions — payment initiation management.
+  recovered_from: vertical-banking-capital-markets-edges.json
+- tag: Clearing
+  spec_file: montran-clearing-api-openapi.yml
+  capability_id: BC-1340.30
+  capability_id_l1: BC-1340
+  capability_name: Clearing & Settlement Management
+  confidence: 0.9
+  evidence: GET /clearing/batches listClearingBatches 'List clearing batches'; schema ClearingBatch
+  reason: Operations expose clearing batch inventory and detail, which is squarely domestic clearing and
+    settlement processing.
+  recovered_from: vertical-banking-capital-markets-edges.json
+- tag: Direct Debits
+  spec_file: montran-direct-debits-api-openapi.yml
+  capability_id: BC-1340.10
+  capability_id_l1: BC-1340
+  capability_name: Payment Initiation Management
+  confidence: 0.85
+  evidence: POST /direct-debits initiateDirectDebit 'Initiate a direct debit'; schema DirectDebitInitiation
+  reason: Initiation of collection instructions is payment instruction capture; some ambiguity with clearing/settlement
+    as direct debits run over ACH/SEPA rails.
+  recovered_from: vertical-banking-capital-markets-edges.json
+- tag: Payment Status
+  spec_file: montran-payment-status-api-openapi.yml
+  capability_id: BC-1340
+  capability_id_l1: BC-1340
+  capability_name: Payments & Card Management
+  confidence: 0.85
+  evidence: GET /payments/{paymentId}/status "Get payment status"; schema PaymentStatus
+  reason: Status enquiry over submitted payments sits squarely in Payments & Card Management; evidence
+    does not clearly name a single sub-capability (initiation vs processing), so only the L1 is asserted.
+  recovered_from: vertical-banking-capital-markets-edges.json
+- tag: Alerts
+  spec_file: montran-alerts-api-openapi.yml
+  capability_id: BC-1400.20
+  capability_id_l1: BC-1400
+  capability_name: Sanctions Screening Management
+  confidence: 0.8
+  evidence: GET /alerts listAlerts Montran List screening alerts; POST /alerts/{alertId}/resolve Montran
+    Resolve a screening alert; schema ScreeningMatch
+  reason: 'Not observability alerts: the operations manage payment screening alerts with ScreeningMatch
+    data and hit resolution, which is sanctions/AML screening hit handling in a payments portal.'
+  recovered_from: vertical-banking-capital-markets-edges.json
+- tag: Approvals
+  spec_file: montran-approvals-api-openapi.yml
+  capability_id: BC-1340.10
+  capability_id_l1: BC-1340
+  capability_name: Payment Initiation Management
+  confidence: 0.8
+  evidence: POST /payments/{paymentId}/approve approvePayment; POST /payments/{paymentId}/reject rejectPayment;
+    schema CorporatePayment
+  reason: Payment approval/rejection workflow is the authorisation step of payment instruction capture
+    and authorisation.
+  recovered_from: vertical-banking-capital-markets-edges.json
+- tag: Clearing Systems
+  spec_file: montran-clearing-systems-api-openapi.yml
+  capability_id: BC-1340.30
+  capability_id_l1: BC-1340
+  capability_name: Clearing & Settlement Management
+  confidence: 0.8
+  evidence: GET /clearing-systems listClearingSystems 'List connected clearing systems'; schema ClearingSystemDetail
+  reason: Describes the clearing systems (ACH/RTGS rails) the portal connects to; supports clearing &
+    settlement management, though these are read-only reference lookups.
+  recovered_from: vertical-banking-capital-markets-edges.json
+- tag: Payments
+  spec_file: montran-payments-api-openapi.yml
+  capability_id: BC-1340.10
+  capability_id_l1: BC-1340
+  capability_name: Payment Initiation Management
+  confidence: 0.8
+  evidence: POST /payments "Create a corporate payment"; POST /payments/{paymentId}/cancel "Cancel a payment";
+    schema CorporatePaymentCreate
+  reason: CRUD plus cancellation over corporate payment instructions is payment instruction capture, validation
+    and authorisation lifecycle.
+  recovered_from: vertical-banking-capital-markets-edges.json
+- tag: Screening
+  spec_file: montran-screening-api-openapi.yml
+  capability_id: BC-1400.20
+  capability_id_l1: BC-1400
+  capability_name: Sanctions Screening Management
+  confidence: 0.8
+  evidence: POST /screen/entity "Screen an entity"; schemas ScreeningMatch, BatchScreeningResult, TransactionData
+  reason: Name and transaction screening with match results on a payments platform is sanctions/watchlist
+    screening — financial crime, not generic filtering.
+  recovered_from: vertical-banking-capital-markets-edges.json
+- tag: Message Routing
+  spec_file: montran-message-routing-api-openapi.yml
+  capability_id: BC-1340.20
+  capability_id_l1: BC-1340
+  capability_name: Payment Processing Management
+  confidence: 0.75
+  evidence: POST /messages submitMessage "Submit a message for routing"; GET /messages "List processed
+    messages"
+  reason: Operations submit and track payment messages for routing within a corporate payments portal
+    — this is payment message processing/routing, matching Payment Processing Management rather than any
+    generic messaging capability.
+  recovered_from: vertical-banking-capital-markets-edges.json
+- tag: Lists
+  spec_file: montran-lists-api-openapi.yml
+  capability_id: BC-1400.20
+  capability_id_l1: BC-1400
+  capability_name: Sanctions Screening Management
+  confidence: 0.72
+  evidence: GET /lists listComplianceLists 'List compliance lists'; schema ComplianceListDetail
+  reason: Compliance lists in a payments platform are sanctions/watchlists used for screening; mapped
+    to sanctions screening list management, though the tag name is generic and list content is not fully
+    specified.
+  recovered_from: vertical-banking-capital-markets-edges.json
 - tag: Account Information
   spec_file: montran-account-information-api-openapi.yml
   capability_id: BC-210.10
@@ -34,3 +169,46 @@ edges:
     balance", GET /accounts/{accountId}/transactions "List account transactions"
   reason: Bank account, balance and statement retrieval for a corporate treasury user — cash position
     visibility. Not a banking-product capability since the buyer here is the corporate consuming the portal.
+- tag: Message Formats
+  spec_file: montran-message-formats-api-openapi.yml
+  capability_id: BC-1340.20
+  capability_id_l1: BC-1340
+  capability_name: Payment Processing Management
+  confidence: 0.7
+  evidence: POST /messages/transform 'Transform a message between formats'; POST /messages/validate 'Validate
+    a message'
+  reason: Payment message transformation and validation corresponds to payment processing, routing and
+    formatting (ISO 20022/SWIFT); could also be seen as generic integration tooling, hence moderate confidence.
+  recovered_from: vertical-banking-capital-markets-edges.json
+- tag: Request to Pay
+  spec_file: montran-request-to-pay-api-openapi.yml
+  capability_id: BC-1340.10
+  capability_id_l1: BC-1340
+  capability_name: Payment Initiation Management
+  confidence: 0.7
+  evidence: POST /payments/request-to-pay "Initiate a request to pay"; schema RequestToPayRequest
+  reason: Request-to-pay is a payment request/instruction flow on payment rails; maps to Payments & Card
+    Management, most plausibly initiation, though RTP could also be seen as a real-time rail feature.
+  recovered_from: vertical-banking-capital-markets-edges.json
+- tag: SWIFT
+  spec_file: montran-swift-api-openapi.yml
+  capability_id: BC-1340
+  capability_id_l1: BC-1340
+  capability_name: Payments & Card Management
+  confidence: 0.7
+  evidence: GET /swift/messages "List SWIFT messages"; "It supports SWIFT payments and local clearing
+    delivery"
+  reason: 'Single read operation over SWIFT payment messages: clearly within bank payments, but too thin
+    to pin cross-border vs processing sub-capability.'
+  recovered_from: vertical-banking-capital-markets-edges.json
+- tag: Virtual Accounts
+  spec_file: montran-virtual-accounts-api-openapi.yml
+  capability_id: BC-1330.40
+  capability_id_l1: BC-1330
+  capability_name: Account Lifecycle Operations Management
+  confidence: 0.7
+  evidence: POST /virtual-accounts "Create a virtual account"; POST /virtual-accounts/{accountId}/close
+    "Close a virtual account"
+  reason: Create, update and close operations over bank virtual accounts constitute account lifecycle
+    operations within deposits/account management.
+  recovered_from: vertical-banking-capital-markets-edges.json
