@@ -1,7 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Montran Corporate Payments Portal Account Information Message Routing API
-  description: The Montran Corporate Payments Portal enables corporates to exercise complete control over accounts at their various bank relationships, with the ability to make secure payments over the Internet. It supports SWIFT payments and local clearing delivery through API integration and H2H (Host-to-Host) protocols. Corporates can connect their ERP systems and manually or automatically upload invoices for payments and collections management. The portal provides multi-bank visibility and supports secure payment initiation across multiple currencies and payment types.
+  title: Montran Payments Connectivity Message Routing API
+  description: The Montran Payments Connectivity solution allows commercial banks to connect to multiple clearing and settlement systems and messaging systems such as SWIFT.
   version: 1.0.0
   contact:
     name: Montran Corporation
@@ -12,8 +12,8 @@ info:
   x-logo:
     url: https://www.montran.com/logo.png
 servers:
-- url: https://api.montran.com/corporate/v1
-  description: Montran Corporate Payments Portal API Server
+- url: https://api.montran.com/connectivity/v1
+  description: Montran Payments Connectivity API Server
 security:
 - bearerAuth: []
 - apiKey: []
@@ -166,96 +166,16 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
-  responses:
-    UnprocessableEntity:
-      description: Validation failed
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Authentication required
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    InternalServerError:
-      description: Internal server error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
-    Error:
+    MessageList:
       type: object
-      required:
-      - code
-      - message
       properties:
-        code:
-          type: string
-        message:
-          type: string
-        details:
+        messages:
           type: array
           items:
-            type: object
-            properties:
-              field:
-                type: string
-              message:
-                type: string
-    MessageSubmission:
-      type: object
-      description: Message submission for routing through the connectivity platform
-      required:
-      - format
-      - messageType
-      - content
-      properties:
-        format:
-          type: string
-          description: Message format
-          enum:
-          - SWIFT_FIN
-          - ISO20022
-          - PROPRIETARY
-        messageType:
-          type: string
-          description: Specific message type (e.g., MT103, MT202, pacs.008, pain.001, camt.053)
-        destinationSystem:
-          type: string
-          description: Target clearing or settlement system
-        destinationChannel:
-          type: string
-          description: Target communication channel identifier
-        priority:
-          type: string
-          description: Message priority
-          enum:
-          - NORMAL
-          - URGENT
-          - SYSTEM
-        content:
-          type: string
-          description: Message content in the specified format
-        metadata:
-          type: object
-          description: Additional routing metadata
-          additionalProperties:
-            type: string
+            $ref: '#/components/schemas/MessageDetail'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
     MessageResponse:
       type: object
       description: Response after message submission
@@ -278,26 +198,25 @@ components:
         createdAt:
           type: string
           format: date-time
-    Pagination:
+    Error:
       type: object
+      required:
+      - code
+      - message
       properties:
-        page:
-          type: integer
-        pageSize:
-          type: integer
-        totalItems:
-          type: integer
-        totalPages:
-          type: integer
-    MessageList:
-      type: object
-      properties:
-        messages:
+        code:
+          type: string
+        message:
+          type: string
+        details:
           type: array
           items:
-            $ref: '#/components/schemas/MessageDetail'
-        pagination:
-          $ref: '#/components/schemas/Pagination'
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
     MessageDetail:
       type: object
       description: Full message details including routing information
@@ -362,6 +281,87 @@ components:
         updatedAt:
           type: string
           format: date-time
+    MessageSubmission:
+      type: object
+      description: Message submission for routing through the connectivity platform
+      required:
+      - format
+      - messageType
+      - content
+      properties:
+        format:
+          type: string
+          description: Message format
+          enum:
+          - SWIFT_FIN
+          - ISO20022
+          - PROPRIETARY
+        messageType:
+          type: string
+          description: Specific message type (e.g., MT103, MT202, pacs.008, pain.001, camt.053)
+        destinationSystem:
+          type: string
+          description: Target clearing or settlement system
+        destinationChannel:
+          type: string
+          description: Target communication channel identifier
+        priority:
+          type: string
+          description: Message priority
+          enum:
+          - NORMAL
+          - URGENT
+          - SYSTEM
+        content:
+          type: string
+          description: Message content in the specified format
+        metadata:
+          type: object
+          description: Additional routing metadata
+          additionalProperties:
+            type: string
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+        pageSize:
+          type: integer
+        totalItems:
+          type: integer
+        totalPages:
+          type: integer
+  responses:
+    UnprocessableEntity:
+      description: Validation failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     bearerAuth:
       type: http
@@ -372,5 +372,5 @@ components:
       in: header
       name: X-API-Key
 externalDocs:
-  description: Montran Corporate Payments Portal Documentation
-  url: https://www.montran.com/solutions/corporate-payments-portal/
+  description: Montran Payments Connectivity Documentation
+  url: https://www.montran.com/solutions/payments-connectivity/

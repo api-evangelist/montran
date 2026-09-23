@@ -1,7 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Montran Corporate Payments Portal Account Information Request to Pay API
-  description: The Montran Corporate Payments Portal enables corporates to exercise complete control over accounts at their various bank relationships, with the ability to make secure payments over the Internet. It supports SWIFT payments and local clearing delivery through API integration and H2H (Host-to-Host) protocols. Corporates can connect their ERP systems and manually or automatically upload invoices for payments and collections management. The portal provides multi-bank visibility and supports secure payment initiation across multiple currencies and payment types.
+  title: Montran Instant Payments Gateway Request to Pay API
+  description: The Montran Instant Payments Gateway (IPG) enables participants in an instant payments ecosystem to support high volumes of instant payments in a high availability 24x7 environment.
   version: 1.0.0
   contact:
     name: Montran Corporation
@@ -12,13 +12,15 @@ info:
   x-logo:
     url: https://www.montran.com/logo.png
 servers:
-- url: https://api.montran.com/corporate/v1
-  description: Montran Corporate Payments Portal API Server
+- url: https://api.montran.com/ipg/v1
+  description: Montran Instant Payments Gateway API Server
 security:
+- oauth2:
+  - aisp
+  - pisp
 - bearerAuth: []
-- apiKey: []
 tags:
-- name: Request to Pay
+- name: Request To Pay
   description: Request-to-pay initiation and management operations
 paths:
   /payments/request-to-pay:
@@ -27,7 +29,7 @@ paths:
       summary: Montran Initiate a request to pay
       description: Initiates a request-to-pay (R2P) message to request payment from a debtor. The debtor receives the request and can accept or reject it. Supports person-to-person, person-to-merchant, and business-to-business use cases. Uses ISO 20022 pain.013 CreditorPaymentActivationRequest.
       tags:
-      - Request to Pay
+      - Request To Pay
       requestBody:
         required: true
         content:
@@ -55,7 +57,7 @@ paths:
       summary: Montran Get request-to-pay details
       description: Retrieves the details and current status of a request-to-pay. Shows whether the request has been accepted, rejected, or is still pending.
       tags:
-      - Request to Pay
+      - Request To Pay
       parameters:
       - name: requestId
         in: path
@@ -77,7 +79,79 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
+  responses:
+    UnprocessableEntity:
+      description: Request validation failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Requested resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Bad request - invalid parameters or malformed request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication required or credentials invalid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
+    RequestToPayRequest:
+      type: object
+      description: Request-to-pay initiation using ISO 20022 pain.013 CreditorPaymentActivationRequest
+      required:
+      - creditorAccount
+      - debtorAccount
+      - amount
+      - currency
+      properties:
+        messageId:
+          type: string
+          description: Unique message identification
+        creditorName:
+          type: string
+          description: Name of the creditor (requester)
+        creditorAccount:
+          $ref: '#/components/schemas/AccountIdentification'
+        debtorName:
+          type: string
+          description: Name of the debtor (payer)
+        debtorAccount:
+          $ref: '#/components/schemas/AccountIdentification'
+        amount:
+          type: number
+          format: double
+          description: Requested payment amount
+          minimum: 0.01
+        currency:
+          type: string
+          description: ISO 4217 currency code
+          pattern: ^[A-Z]{3}$
+        expiryDate:
+          type: string
+          format: date-time
+          description: Expiry date/time for the request
+        remittanceInformation:
+          type: string
+          description: Remittance information
+        purpose:
+          type: string
+          description: Purpose of the request
     Error:
       type: object
       description: Standard error response
@@ -116,6 +190,21 @@ components:
         createdAt:
           type: string
           format: date-time
+    AccountIdentification:
+      type: object
+      description: Account identification using IBAN or proprietary identifier
+      properties:
+        iban:
+          type: string
+          description: International Bank Account Number
+          pattern: ^[A-Z]{2}[0-9]{2}[A-Z0-9]{4,30}$
+        accountNumber:
+          type: string
+          description: Proprietary account number
+        currency:
+          type: string
+          description: Account currency (ISO 4217)
+          pattern: ^[A-Z]{3}$
     RequestToPayDetail:
       type: object
       description: Full request-to-pay details with status
@@ -158,102 +247,22 @@ components:
         updatedAt:
           type: string
           format: date-time
-    RequestToPayRequest:
-      type: object
-      description: Request-to-pay initiation using ISO 20022 pain.013 CreditorPaymentActivationRequest
-      required:
-      - creditorAccount
-      - debtorAccount
-      - amount
-      - currency
-      properties:
-        messageId:
-          type: string
-          description: Unique message identification
-        creditorName:
-          type: string
-          description: Name of the creditor (requester)
-        creditorAccount:
-          $ref: '#/components/schemas/AccountIdentification'
-        debtorName:
-          type: string
-          description: Name of the debtor (payer)
-        debtorAccount:
-          $ref: '#/components/schemas/AccountIdentification'
-        amount:
-          type: number
-          format: double
-          description: Requested payment amount
-          minimum: 0.01
-        currency:
-          type: string
-          description: ISO 4217 currency code
-          pattern: ^[A-Z]{3}$
-        expiryDate:
-          type: string
-          format: date-time
-          description: Expiry date/time for the request
-        remittanceInformation:
-          type: string
-          description: Remittance information
-        purpose:
-          type: string
-          description: Purpose of the request
-    AccountIdentification:
-      type: object
-      description: Account identification using IBAN or proprietary identifier
-      properties:
-        iban:
-          type: string
-          description: International Bank Account Number
-          pattern: ^[A-Z]{2}[0-9]{2}[A-Z0-9]{4,30}$
-        accountNumber:
-          type: string
-          description: Proprietary account number
-        currency:
-          type: string
-          description: Account currency (ISO 4217)
-          pattern: ^[A-Z]{3}$
-  responses:
-    Unauthorized:
-      description: Authentication required or credentials invalid
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: Bad request - invalid parameters or malformed request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Requested resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    UnprocessableEntity:
-      description: Request validation failed
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    InternalServerError:
-      description: Internal server error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   securitySchemes:
+    oauth2:
+      type: oauth2
+      description: OAuth 2.0 authorization for PSD2 AISP/PISP access
+      flows:
+        authorizationCode:
+          authorizationUrl: https://auth.montran.com/oauth2/authorize
+          tokenUrl: https://auth.montran.com/oauth2/token
+          scopes:
+            aisp: Account Information Service Provider access
+            pisp: Payment Initiation Service Provider access
     bearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT
-    apiKey:
-      type: apiKey
-      in: header
-      name: X-API-Key
+      description: JWT bearer token authentication
 externalDocs:
-  description: Montran Corporate Payments Portal Documentation
-  url: https://www.montran.com/solutions/corporate-payments-portal/
+  description: Montran Instant Payments Gateway Documentation
+  url: https://www.montran.com/solutions/instant-payments-gateway/

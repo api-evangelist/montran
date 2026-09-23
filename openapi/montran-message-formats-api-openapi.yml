@@ -1,7 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Montran Corporate Payments Portal Account Information Message Formats API
-  description: The Montran Corporate Payments Portal enables corporates to exercise complete control over accounts at their various bank relationships, with the ability to make secure payments over the Internet. It supports SWIFT payments and local clearing delivery through API integration and H2H (Host-to-Host) protocols. Corporates can connect their ERP systems and manually or automatically upload invoices for payments and collections management. The portal provides multi-bank visibility and supports secure payment initiation across multiple currencies and payment types.
+  title: Montran Payments Connectivity Message Formats API
+  description: The Montran Payments Connectivity solution allows commercial banks to connect to multiple clearing and settlement systems and messaging systems such as SWIFT.
   version: 1.0.0
   contact:
     name: Montran Corporation
@@ -12,8 +12,8 @@ info:
   x-logo:
     url: https://www.montran.com/logo.png
 servers:
-- url: https://api.montran.com/corporate/v1
-  description: Montran Corporate Payments Portal API Server
+- url: https://api.montran.com/connectivity/v1
+  description: Montran Payments Connectivity API Server
 security:
 - bearerAuth: []
 - apiKey: []
@@ -77,6 +77,43 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
+    ValidateRequest:
+      type: object
+      description: Request to validate a message
+      required:
+      - format
+      - messageType
+      - content
+      properties:
+        format:
+          type: string
+          enum:
+          - SWIFT_FIN
+          - ISO20022
+          - PROPRIETARY
+        messageType:
+          type: string
+        content:
+          type: string
+    Error:
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
     TransformRequest:
       type: object
       description: Request to transform a message between formats
@@ -108,25 +145,6 @@ components:
         content:
           type: string
           description: Source message content
-    Error:
-      type: object
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: string
-        message:
-          type: string
-        details:
-          type: array
-          items:
-            type: object
-            properties:
-              field:
-                type: string
-              message:
-                type: string
     ValidationResult:
       type: object
       description: Message validation result
@@ -175,27 +193,15 @@ components:
                 type: string
               message:
                 type: string
-    ValidateRequest:
-      type: object
-      description: Request to validate a message
-      required:
-      - format
-      - messageType
-      - content
-      properties:
-        format:
-          type: string
-          enum:
-          - SWIFT_FIN
-          - ISO20022
-          - PROPRIETARY
-        messageType:
-          type: string
-        content:
-          type: string
   responses:
-    Unauthorized:
-      description: Authentication required
+    UnprocessableEntity:
+      description: Validation failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal server error
       content:
         application/json:
           schema:
@@ -206,14 +212,8 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    UnprocessableEntity:
-      description: Validation failed
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    InternalServerError:
-      description: Internal server error
+    Unauthorized:
+      description: Authentication required
       content:
         application/json:
           schema:
@@ -228,5 +228,5 @@ components:
       in: header
       name: X-API-Key
 externalDocs:
-  description: Montran Corporate Payments Portal Documentation
-  url: https://www.montran.com/solutions/corporate-payments-portal/
+  description: Montran Payments Connectivity Documentation
+  url: https://www.montran.com/solutions/payments-connectivity/
