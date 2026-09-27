@@ -156,6 +156,83 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+        pageSize:
+          type: integer
+        totalItems:
+          type: integer
+        totalPages:
+          type: integer
+    Error:
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
+    TransactionData:
+      type: object
+      description: Structured transaction data for screening
+      properties:
+        transactionId:
+          type: string
+          description: Transaction reference
+        debtorName:
+          type: string
+          description: Name of the debtor/originator
+        debtorAddress:
+          type: string
+          description: Address of the debtor
+        debtorCountry:
+          type: string
+          description: Country of the debtor (ISO 3166-1 alpha-2)
+        debtorAccountIban:
+          type: string
+          description: Debtor IBAN
+        debtorAgentBic:
+          type: string
+          description: Debtor agent BIC
+        creditorName:
+          type: string
+          description: Name of the creditor/beneficiary
+        creditorAddress:
+          type: string
+          description: Address of the creditor
+        creditorCountry:
+          type: string
+          description: Country of the creditor (ISO 3166-1 alpha-2)
+        creditorAccountIban:
+          type: string
+          description: Creditor IBAN
+        creditorAgentBic:
+          type: string
+          description: Creditor agent BIC
+        amount:
+          type: number
+          format: double
+          description: Transaction amount
+        currency:
+          type: string
+          description: Currency code (ISO 4217)
+        remittanceInformation:
+          type: string
+          description: Remittance information / purpose
     AlertResolution:
       type: object
       description: Alert resolution submission
@@ -180,74 +257,15 @@ components:
           - RELEASE_TRANSACTION
           - ESCALATE
           - FILE_SAR
-    ScreeningMatch:
+    AlertList:
       type: object
-      description: Individual screening match details
       properties:
-        matchId:
-          type: string
-        matchedField:
-          type: string
-          description: Transaction field that triggered the match
-          enum:
-          - debtorName
-          - creditorName
-          - debtorAddress
-          - creditorAddress
-          - debtorCountry
-          - creditorCountry
-          - remittanceInformation
-        matchedValue:
-          type: string
-          description: Value from the transaction that matched
-        listName:
-          type: string
-          description: Name of the compliance list
-        listEntryId:
-          type: string
-          description: Entry identifier in the compliance list
-        listedName:
-          type: string
-          description: Name on the sanctions list
-        matchScore:
-          type: number
-          format: double
-          description: Match confidence score (0-100)
-          minimum: 0
-          maximum: 100
-        matchType:
-          type: string
-          description: Type of match
-          enum:
-          - EXACT
-          - FUZZY
-          - PHONETIC
-          - PARTIAL
-        severity:
-          type: string
-          enum:
-          - high
-          - medium
-          - low
-    Error:
-      type: object
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: string
-        message:
-          type: string
-        details:
+        alerts:
           type: array
           items:
-            type: object
-            properties:
-              field:
-                type: string
-              message:
-                type: string
+            $ref: '#/components/schemas/AlertDetail'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
     AlertDetail:
       type: object
       description: Screening alert full details
@@ -300,86 +318,56 @@ components:
         updatedAt:
           type: string
           format: date-time
-    Pagination:
+    ScreeningMatch:
       type: object
+      description: Individual screening match details
       properties:
-        page:
-          type: integer
-        pageSize:
-          type: integer
-        totalItems:
-          type: integer
-        totalPages:
-          type: integer
-    AlertList:
-      type: object
-      properties:
-        alerts:
-          type: array
-          items:
-            $ref: '#/components/schemas/AlertDetail'
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-    TransactionData:
-      type: object
-      description: Structured transaction data for screening
-      properties:
-        transactionId:
+        matchId:
           type: string
-          description: Transaction reference
-        debtorName:
+        matchedField:
           type: string
-          description: Name of the debtor/originator
-        debtorAddress:
+          description: Transaction field that triggered the match
+          enum:
+          - debtorName
+          - creditorName
+          - debtorAddress
+          - creditorAddress
+          - debtorCountry
+          - creditorCountry
+          - remittanceInformation
+        matchedValue:
           type: string
-          description: Address of the debtor
-        debtorCountry:
+          description: Value from the transaction that matched
+        listName:
           type: string
-          description: Country of the debtor (ISO 3166-1 alpha-2)
-        debtorAccountIban:
+          description: Name of the compliance list
+        listEntryId:
           type: string
-          description: Debtor IBAN
-        debtorAgentBic:
+          description: Entry identifier in the compliance list
+        listedName:
           type: string
-          description: Debtor agent BIC
-        creditorName:
-          type: string
-          description: Name of the creditor/beneficiary
-        creditorAddress:
-          type: string
-          description: Address of the creditor
-        creditorCountry:
-          type: string
-          description: Country of the creditor (ISO 3166-1 alpha-2)
-        creditorAccountIban:
-          type: string
-          description: Creditor IBAN
-        creditorAgentBic:
-          type: string
-          description: Creditor agent BIC
-        amount:
+          description: Name on the sanctions list
+        matchScore:
           type: number
           format: double
-          description: Transaction amount
-        currency:
+          description: Match confidence score (0-100)
+          minimum: 0
+          maximum: 100
+        matchType:
           type: string
-          description: Currency code (ISO 4217)
-        remittanceInformation:
+          description: Type of match
+          enum:
+          - EXACT
+          - FUZZY
+          - PHONETIC
+          - PARTIAL
+        severity:
           type: string
-          description: Remittance information / purpose
+          enum:
+          - high
+          - medium
+          - low
   responses:
-    NotFound:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    InternalServerError:
-      description: Internal server error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     BadRequest:
       description: Bad request
       content:
@@ -388,6 +376,18 @@ components:
             $ref: '#/components/schemas/Error'
     Unauthorized:
       description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal server error
       content:
         application/json:
           schema:

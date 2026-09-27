@@ -68,25 +68,25 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
-    AccountStructure:
+    Error:
       type: object
-      description: Account hierarchy structure
+      required:
+      - code
+      - message
       properties:
-        structureId:
+        code:
           type: string
-        name:
+        message:
           type: string
-        physicalAccountId:
-          type: string
-        type:
-          type: string
-        virtualAccounts:
+        details:
           type: array
           items:
-            $ref: '#/components/schemas/VirtualAccount'
-        createdAt:
-          type: string
-          format: date-time
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
     AccountStructureCreate:
       type: object
       description: Account structure creation request
@@ -110,32 +110,6 @@ components:
           - GENERAL
         description:
           type: string
-    AccountStructureList:
-      type: object
-      properties:
-        structures:
-          type: array
-          items:
-            $ref: '#/components/schemas/AccountStructure'
-    Error:
-      type: object
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: string
-        message:
-          type: string
-        details:
-          type: array
-          items:
-            type: object
-            properties:
-              field:
-                type: string
-              message:
-                type: string
     VirtualAccount:
       type: object
       description: Virtual account details
@@ -180,15 +154,35 @@ components:
         updatedAt:
           type: string
           format: date-time
+    AccountStructureList:
+      type: object
+      properties:
+        structures:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountStructure'
+    AccountStructure:
+      type: object
+      description: Account hierarchy structure
+      properties:
+        structureId:
+          type: string
+        name:
+          type: string
+        physicalAccountId:
+          type: string
+        type:
+          type: string
+        virtualAccounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/VirtualAccount'
+        createdAt:
+          type: string
+          format: date-time
   responses:
     UnprocessableEntity:
       description: Validation failed
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    InternalServerError:
-      description: Internal server error
       content:
         application/json:
           schema:
@@ -201,6 +195,12 @@ components:
             $ref: '#/components/schemas/Error'
     Unauthorized:
       description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal server error
       content:
         application/json:
           schema:

@@ -77,24 +77,6 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
-    ValidateRequest:
-      type: object
-      description: Request to validate a message
-      required:
-      - format
-      - messageType
-      - content
-      properties:
-        format:
-          type: string
-          enum:
-          - SWIFT_FIN
-          - ISO20022
-          - PROPRIETARY
-        messageType:
-          type: string
-        content:
-          type: string
     Error:
       type: object
       required:
@@ -114,6 +96,24 @@ components:
                 type: string
               message:
                 type: string
+    ValidateRequest:
+      type: object
+      description: Request to validate a message
+      required:
+      - format
+      - messageType
+      - content
+      properties:
+        format:
+          type: string
+          enum:
+          - SWIFT_FIN
+          - ISO20022
+          - PROPRIETARY
+        messageType:
+          type: string
+        content:
+          type: string
     TransformRequest:
       type: object
       description: Request to transform a message between formats
@@ -145,29 +145,6 @@ components:
         content:
           type: string
           description: Source message content
-    ValidationResult:
-      type: object
-      description: Message validation result
-      properties:
-        valid:
-          type: boolean
-          description: Whether the message is valid
-        errors:
-          type: array
-          items:
-            type: object
-            properties:
-              severity:
-                type: string
-                enum:
-                - ERROR
-                - WARNING
-              field:
-                type: string
-              rule:
-                type: string
-              message:
-                type: string
     TransformResponse:
       type: object
       description: Result of message format transformation
@@ -193,15 +170,32 @@ components:
                 type: string
               message:
                 type: string
+    ValidationResult:
+      type: object
+      description: Message validation result
+      properties:
+        valid:
+          type: boolean
+          description: Whether the message is valid
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              severity:
+                type: string
+                enum:
+                - ERROR
+                - WARNING
+              field:
+                type: string
+              rule:
+                type: string
+              message:
+                type: string
   responses:
     UnprocessableEntity:
       description: Validation failed
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    InternalServerError:
-      description: Internal server error
       content:
         application/json:
           schema:
@@ -214,6 +208,12 @@ components:
             $ref: '#/components/schemas/Error'
     Unauthorized:
       description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal server error
       content:
         application/json:
           schema:

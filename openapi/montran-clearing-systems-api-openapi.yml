@@ -68,13 +68,25 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
-    ClearingSystemList:
+    Error:
       type: object
+      required:
+      - code
+      - message
       properties:
-        clearingSystems:
+        code:
+          type: string
+        message:
+          type: string
+        details:
           type: array
           items:
-            $ref: '#/components/schemas/ClearingSystemDetail'
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
     ClearingSystemDetail:
       type: object
       description: Clearing and settlement system details
@@ -120,26 +132,20 @@ components:
               type: string
             timezone:
               type: string
-    Error:
+    ClearingSystemList:
       type: object
-      required:
-      - code
-      - message
       properties:
-        code:
-          type: string
-        message:
-          type: string
-        details:
+        clearingSystems:
           type: array
           items:
-            type: object
-            properties:
-              field:
-                type: string
-              message:
-                type: string
+            $ref: '#/components/schemas/ClearingSystemDetail'
   responses:
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
     NotFound:
       description: Resource not found
       content:
@@ -148,12 +154,6 @@ components:
             $ref: '#/components/schemas/Error'
     InternalServerError:
       description: Internal server error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Authentication required
       content:
         application/json:
           schema:

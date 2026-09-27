@@ -198,47 +198,18 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
-  responses:
-    UnprocessableEntity:
-      description: Validation failed
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    InternalServerError:
-      description: Internal server error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Authentication required
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
-    VirtualAccountList:
+    Pagination:
       type: object
       properties:
-        accounts:
-          type: array
-          items:
-            $ref: '#/components/schemas/VirtualAccount'
-        pagination:
-          $ref: '#/components/schemas/Pagination'
+        page:
+          type: integer
+        pageSize:
+          type: integer
+        totalItems:
+          type: integer
+        totalPages:
+          type: integer
     Error:
       type: object
       required:
@@ -258,6 +229,50 @@ components:
                 type: string
               message:
                 type: string
+    VirtualAccount:
+      type: object
+      description: Virtual account details
+      properties:
+        accountId:
+          type: string
+          description: Unique virtual account identifier
+        name:
+          type: string
+        physicalAccountId:
+          type: string
+        currency:
+          type: string
+        accountHolder:
+          type: string
+        purpose:
+          type: string
+        status:
+          type: string
+          enum:
+          - active
+          - suspended
+          - closed
+        virtualIban:
+          type: string
+          description: Associated virtual IBAN if issued
+        balance:
+          type: number
+          format: double
+          description: Current balance
+        parentVirtualAccountId:
+          type: string
+        autoAllocate:
+          type: boolean
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
     VirtualAccountCreate:
       type: object
       description: Virtual account creation request
@@ -304,6 +319,15 @@ components:
           type: object
           additionalProperties:
             type: string
+    VirtualAccountList:
+      type: object
+      properties:
+        accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/VirtualAccount'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
     VirtualAccountUpdate:
       type: object
       description: Virtual account update request
@@ -318,61 +342,37 @@ components:
           type: object
           additionalProperties:
             type: string
-    Pagination:
-      type: object
-      properties:
-        page:
-          type: integer
-        pageSize:
-          type: integer
-        totalItems:
-          type: integer
-        totalPages:
-          type: integer
-    VirtualAccount:
-      type: object
-      description: Virtual account details
-      properties:
-        accountId:
-          type: string
-          description: Unique virtual account identifier
-        name:
-          type: string
-        physicalAccountId:
-          type: string
-        currency:
-          type: string
-        accountHolder:
-          type: string
-        purpose:
-          type: string
-        status:
-          type: string
-          enum:
-          - active
-          - suspended
-          - closed
-        virtualIban:
-          type: string
-          description: Associated virtual IBAN if issued
-        balance:
-          type: number
-          format: double
-          description: Current balance
-        parentVirtualAccountId:
-          type: string
-        autoAllocate:
-          type: boolean
-        metadata:
-          type: object
-          additionalProperties:
-            type: string
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
+  responses:
+    UnprocessableEntity:
+      description: Validation failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   parameters:
     AccountIdParam:
       name: accountId

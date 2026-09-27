@@ -87,6 +87,13 @@ components:
                 type: string
               message:
                 type: string
+    ComplianceListSummary:
+      type: object
+      properties:
+        lists:
+          type: array
+          items:
+            $ref: '#/components/schemas/ComplianceListDetail'
     ComplianceListDetail:
       type: object
       description: Compliance list details
@@ -123,14 +130,13 @@ components:
           description: Channels configured to use this list
           items:
             type: string
-    ComplianceListSummary:
-      type: object
-      properties:
-        lists:
-          type: array
-          items:
-            $ref: '#/components/schemas/ComplianceListDetail'
   responses:
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
     NotFound:
       description: Resource not found
       content:
@@ -139,12 +145,6 @@ components:
             $ref: '#/components/schemas/Error'
     InternalServerError:
       description: Internal server error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Authentication required
       content:
         application/json:
           schema:

@@ -119,6 +119,25 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
+    Error:
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
     ChannelHealth:
       type: object
       description: Real-time channel health metrics
@@ -147,32 +166,6 @@ components:
         checkedAt:
           type: string
           format: date-time
-    ChannelList:
-      type: object
-      properties:
-        channels:
-          type: array
-          items:
-            $ref: '#/components/schemas/ChannelDetail'
-    Error:
-      type: object
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: string
-        message:
-          type: string
-        details:
-          type: array
-          items:
-            type: object
-            properties:
-              field:
-                type: string
-              message:
-                type: string
     ChannelDetail:
       type: object
       description: Communication channel configuration and status
@@ -211,7 +204,20 @@ components:
           description: Channel-specific configuration
           additionalProperties:
             type: string
+    ChannelList:
+      type: object
+      properties:
+        channels:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChannelDetail'
   responses:
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
     NotFound:
       description: Resource not found
       content:
@@ -220,12 +226,6 @@ components:
             $ref: '#/components/schemas/Error'
     InternalServerError:
       description: Internal server error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Authentication required
       content:
         application/json:
           schema:

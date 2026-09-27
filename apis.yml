@@ -39,7 +39,7 @@ modified: '2026-05-19'
 tags:
   - Banking
   - Central Banking
-  - Financial-Services
+  - Financial Services
   - ISO 20022
   - Market Infrastructure
   - Messaging
@@ -56,6 +56,7 @@ tags_raw:
   - Payments
   - Real-Time Payments
   - SWIFT
+  - Financial-Services
 apis:
 - name: Montran Instant Payments System
   description: >-

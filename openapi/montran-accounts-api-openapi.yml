@@ -169,6 +169,36 @@ paths:
       description: Montran Global Payments Hub API Server
 components:
   schemas:
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+        pageSize:
+          type: integer
+        totalItems:
+          type: integer
+        totalPages:
+          type: integer
+    Error:
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
     BankAccount:
       type: object
       description: Bank account details
@@ -198,6 +228,13 @@ components:
         lastUpdated:
           type: string
           format: date-time
+    BankAccountList:
+      type: object
+      properties:
+        accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/BankAccount'
     TransactionList:
       type: object
       properties:
@@ -232,83 +269,6 @@ components:
                 type: string
         pagination:
           $ref: '#/components/schemas/Pagination'
-    Error:
-      type: object
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: string
-        message:
-          type: string
-        details:
-          type: array
-          items:
-            type: object
-            properties:
-              field:
-                type: string
-              message:
-                type: string
-    BankAccountList:
-      type: object
-      properties:
-        accounts:
-          type: array
-          items:
-            $ref: '#/components/schemas/BankAccount'
-    Pagination:
-      type: object
-      properties:
-        page:
-          type: integer
-        pageSize:
-          type: integer
-        totalItems:
-          type: integer
-        totalPages:
-          type: integer
-    AccountBalance:
-      type: object
-      description: Account balance information aligned with ISO 20022 camt.052 BankToCustomerAccountReport
-      properties:
-        accountId:
-          type: string
-          description: Account identifier
-        account:
-          $ref: '#/components/schemas/AccountIdentification'
-        balances:
-          type: array
-          items:
-            type: object
-            properties:
-              type:
-                type: string
-                description: Balance type
-                enum:
-                - CLBD
-                - ITBD
-                - OPBD
-                - PRCD
-                - XPCD
-                - ITAV
-              amount:
-                type: number
-                format: double
-                description: Balance amount
-              currency:
-                type: string
-                description: Currency code
-              creditDebitIndicator:
-                type: string
-                enum:
-                - CRDT
-                - DBIT
-              dateTime:
-                type: string
-                format: date-time
-                description: Balance date and time
     Error_2:
       type: object
       description: Standard error response
@@ -349,7 +309,53 @@ components:
           type: string
           description: Account currency (ISO 4217)
           pattern: ^[A-Z]{3}$
+    AccountBalance:
+      type: object
+      description: Account balance information aligned with ISO 20022 camt.052 BankToCustomerAccountReport
+      properties:
+        accountId:
+          type: string
+          description: Account identifier
+        account:
+          $ref: '#/components/schemas/AccountIdentification'
+        balances:
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+                description: Balance type
+                enum:
+                - CLBD
+                - ITBD
+                - OPBD
+                - PRCD
+                - XPCD
+                - ITAV
+              amount:
+                type: number
+                format: double
+                description: Balance amount
+              currency:
+                type: string
+                description: Currency code
+              creditDebitIndicator:
+                type: string
+                enum:
+                - CRDT
+                - DBIT
+              dateTime:
+                type: string
+                format: date-time
+                description: Balance date and time
   responses:
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
     NotFound:
       description: Resource not found
       content:
@@ -362,20 +368,14 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Authentication required
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound_2:
-      description: Requested resource not found
+    Unauthorized_2:
+      description: Authentication required or credentials invalid
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error_2'
-    Unauthorized_2:
-      description: Authentication required or credentials invalid
+    NotFound_2:
+      description: Requested resource not found
       content:
         application/json:
           schema:

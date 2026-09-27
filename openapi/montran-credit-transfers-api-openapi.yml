@@ -51,6 +51,31 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
+    Error:
+      type: object
+      description: Standard error response
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Human-readable error message
+        details:
+          type: array
+          description: Detailed error information
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+                description: Field that caused the error
+              message:
+                type: string
+                description: Error detail message
     FinancialInstitution:
       type: object
       description: Financial institution identification
@@ -65,6 +90,48 @@ components:
         clearingSystemMemberId:
           type: string
           description: Clearing system member identification
+    AccountIdentification:
+      type: object
+      description: Account identification using IBAN or proprietary account number
+      properties:
+        iban:
+          type: string
+          description: International Bank Account Number
+          pattern: ^[A-Z]{2}[0-9]{2}[A-Z0-9]{4,30}$
+        accountNumber:
+          type: string
+          description: Proprietary account number
+        currency:
+          type: string
+          description: Account currency (ISO 4217)
+          pattern: ^[A-Z]{3}$
+    PaymentResponse:
+      type: object
+      description: Response returned after successful payment initiation
+      properties:
+        paymentId:
+          type: string
+          description: Unique payment identifier assigned by the system
+        messageId:
+          type: string
+          description: Original message identification
+        endToEndId:
+          type: string
+          description: End-to-end identification
+        status:
+          type: string
+          description: Current payment status
+          enum:
+          - RECEIVED
+          - VALIDATED
+          - PENDING
+        clearingSystem:
+          type: string
+          description: Assigned clearing and settlement mechanism
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the payment was created
     CreditTransferInitiation:
       type: object
       description: Credit transfer initiation request aligned with ISO 20022 pain.001 CustomerCreditTransferInitiation
@@ -133,94 +200,27 @@ components:
         serviceLevel:
           type: string
           description: Service level code (e.g., SEPA for SEPA payments)
-    PaymentResponse:
-      type: object
-      description: Response returned after successful payment initiation
-      properties:
-        paymentId:
-          type: string
-          description: Unique payment identifier assigned by the system
-        messageId:
-          type: string
-          description: Original message identification
-        endToEndId:
-          type: string
-          description: End-to-end identification
-        status:
-          type: string
-          description: Current payment status
-          enum:
-          - RECEIVED
-          - VALIDATED
-          - PENDING
-        clearingSystem:
-          type: string
-          description: Assigned clearing and settlement mechanism
-        createdAt:
-          type: string
-          format: date-time
-          description: Timestamp when the payment was created
-    Error:
-      type: object
-      description: Standard error response
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: string
-          description: Error code
-        message:
-          type: string
-          description: Human-readable error message
-        details:
-          type: array
-          description: Detailed error information
-          items:
-            type: object
-            properties:
-              field:
-                type: string
-                description: Field that caused the error
-              message:
-                type: string
-                description: Error detail message
-    AccountIdentification:
-      type: object
-      description: Account identification using IBAN or proprietary account number
-      properties:
-        iban:
-          type: string
-          description: International Bank Account Number
-          pattern: ^[A-Z]{2}[0-9]{2}[A-Z0-9]{4,30}$
-        accountNumber:
-          type: string
-          description: Proprietary account number
-        currency:
-          type: string
-          description: Account currency (ISO 4217)
-          pattern: ^[A-Z]{3}$
   responses:
-    UnprocessableEntity:
-      description: Request validation failed
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    InternalServerError:
-      description: Internal server error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     BadRequest:
       description: Bad request - invalid parameters or malformed request
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+    UnprocessableEntity:
+      description: Request validation failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
     Unauthorized:
       description: Authentication required or credentials invalid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal server error
       content:
         application/json:
           schema:

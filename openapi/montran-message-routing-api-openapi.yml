@@ -167,37 +167,17 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
-    MessageList:
+    Pagination:
       type: object
       properties:
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/MessageDetail'
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-    MessageResponse:
-      type: object
-      description: Response after message submission
-      properties:
-        messageId:
-          type: string
-          description: Unique message identifier assigned by the system
-        status:
-          type: string
-          enum:
-          - RECEIVED
-          - VALIDATED
-          - QUEUED
-        channel:
-          type: string
-          description: Assigned routing channel
-        destinationSystem:
-          type: string
-          description: Resolved destination system
-        createdAt:
-          type: string
-          format: date-time
+        page:
+          type: integer
+        pageSize:
+          type: integer
+        totalItems:
+          type: integer
+        totalPages:
+          type: integer
     Error:
       type: object
       required:
@@ -217,6 +197,54 @@ components:
                 type: string
               message:
                 type: string
+    MessageSubmission:
+      type: object
+      description: Message submission for routing through the connectivity platform
+      required:
+      - format
+      - messageType
+      - content
+      properties:
+        format:
+          type: string
+          description: Message format
+          enum:
+          - SWIFT_FIN
+          - ISO20022
+          - PROPRIETARY
+        messageType:
+          type: string
+          description: Specific message type (e.g., MT103, MT202, pacs.008, pain.001, camt.053)
+        destinationSystem:
+          type: string
+          description: Target clearing or settlement system
+        destinationChannel:
+          type: string
+          description: Target communication channel identifier
+        priority:
+          type: string
+          description: Message priority
+          enum:
+          - NORMAL
+          - URGENT
+          - SYSTEM
+        content:
+          type: string
+          description: Message content in the specified format
+        metadata:
+          type: object
+          description: Additional routing metadata
+          additionalProperties:
+            type: string
+    MessageList:
+      type: object
+      properties:
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/MessageDetail'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
     MessageDetail:
       type: object
       description: Full message details including routing information
@@ -281,71 +309,31 @@ components:
         updatedAt:
           type: string
           format: date-time
-    MessageSubmission:
+    MessageResponse:
       type: object
-      description: Message submission for routing through the connectivity platform
-      required:
-      - format
-      - messageType
-      - content
+      description: Response after message submission
       properties:
-        format:
+        messageId:
           type: string
-          description: Message format
+          description: Unique message identifier assigned by the system
+        status:
+          type: string
           enum:
-          - SWIFT_FIN
-          - ISO20022
-          - PROPRIETARY
-        messageType:
+          - RECEIVED
+          - VALIDATED
+          - QUEUED
+        channel:
           type: string
-          description: Specific message type (e.g., MT103, MT202, pacs.008, pain.001, camt.053)
+          description: Assigned routing channel
         destinationSystem:
           type: string
-          description: Target clearing or settlement system
-        destinationChannel:
+          description: Resolved destination system
+        createdAt:
           type: string
-          description: Target communication channel identifier
-        priority:
-          type: string
-          description: Message priority
-          enum:
-          - NORMAL
-          - URGENT
-          - SYSTEM
-        content:
-          type: string
-          description: Message content in the specified format
-        metadata:
-          type: object
-          description: Additional routing metadata
-          additionalProperties:
-            type: string
-    Pagination:
-      type: object
-      properties:
-        page:
-          type: integer
-        pageSize:
-          type: integer
-        totalItems:
-          type: integer
-        totalPages:
-          type: integer
+          format: date-time
   responses:
     UnprocessableEntity:
       description: Validation failed
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    InternalServerError:
-      description: Internal server error
       content:
         application/json:
           schema:
@@ -358,6 +346,18 @@ components:
             $ref: '#/components/schemas/Error'
     Unauthorized:
       description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
       content:
         application/json:
           schema:

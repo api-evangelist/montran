@@ -147,210 +147,6 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
-    PaymentReturnRequest:
-      type: object
-      description: Payment return request using ISO 20022 pacs.004 PaymentReturn
-      required:
-      - reasonCode
-      properties:
-        reasonCode:
-          type: string
-          description: Return reason code
-          enum:
-          - AC01
-          - AC04
-          - AC06
-          - AG01
-          - AM05
-          - BE04
-          - DNOR
-          - FOCR
-          - MD01
-          - MS02
-          - RR01
-        additionalInformation:
-          type: string
-          description: Additional return reason information
-    FinancialInstitution:
-      type: object
-      description: Financial institution identification
-      properties:
-        bic:
-          type: string
-          description: Bank Identifier Code (SWIFT/BIC)
-          pattern: ^[A-Z]{4}[A-Z]{2}[A-Z0-9]{2}([A-Z0-9]{3})?$
-        name:
-          type: string
-          description: Name of the financial institution
-    InstantPaymentDetail:
-      type: object
-      description: Full instant payment details
-      properties:
-        paymentId:
-          type: string
-        messageId:
-          type: string
-        endToEndId:
-          type: string
-        transactionId:
-          type: string
-        status:
-          type: string
-          enum:
-          - ACCP
-          - ACSC
-          - ACSP
-          - RJCT
-          - CANC
-          - RTND
-        debtorName:
-          type: string
-        debtorAccount:
-          $ref: '#/components/schemas/AccountIdentification'
-        debtorAgent:
-          $ref: '#/components/schemas/FinancialInstitution'
-        creditorName:
-          type: string
-        creditorAccount:
-          $ref: '#/components/schemas/AccountIdentification'
-        creditorAgent:
-          $ref: '#/components/schemas/FinancialInstitution'
-        amount:
-          type: number
-          format: double
-        currency:
-          type: string
-        remittanceInformation:
-          type: string
-        reasonCode:
-          type: string
-        settlementDate:
-          type: string
-          format: date
-        acceptanceDateTime:
-          type: string
-          format: date-time
-        createdAt:
-          type: string
-          format: date-time
-    BulkPaymentRequest:
-      type: object
-      description: Bulk payment submission request
-      required:
-      - payments
-      properties:
-        batchId:
-          type: string
-          description: Client-assigned batch identifier
-        numberOfTransactions:
-          type: integer
-          description: Number of payments in the batch
-        controlSum:
-          type: number
-          format: double
-          description: Sum of all payment amounts for validation
-        payments:
-          type: array
-          description: List of instant payment requests
-          items:
-            $ref: '#/components/schemas/InstantPaymentRequest'
-          minItems: 1
-    InstantPaymentResponse:
-      type: object
-      description: Response for an instant payment including real-time status
-      properties:
-        paymentId:
-          type: string
-          description: Unique payment identifier
-        messageId:
-          type: string
-          description: Message identification
-        endToEndId:
-          type: string
-          description: End-to-end identification
-        transactionId:
-          type: string
-          description: Transaction identification
-        status:
-          type: string
-          description: Payment processing status (ISO 20022 status codes)
-          enum:
-          - ACCP
-          - ACSC
-          - ACSP
-          - RJCT
-        reasonCode:
-          type: string
-          description: Rejection reason code if status is RJCT
-        settlementDate:
-          type: string
-          format: date
-          description: Settlement date
-        acceptanceDateTime:
-          type: string
-          format: date-time
-          description: Timestamp of payment acceptance
-    BulkPaymentResponse:
-      type: object
-      description: Response for a bulk payment submission
-      properties:
-        bulkPaymentId:
-          type: string
-          description: Unique bulk payment identifier
-        batchId:
-          type: string
-          description: Client batch identifier
-        status:
-          type: string
-          enum:
-          - ACCEPTED
-          - PARTIALLY_ACCEPTED
-          - REJECTED
-        acceptedCount:
-          type: integer
-          description: Number of accepted payments
-        rejectedCount:
-          type: integer
-          description: Number of rejected payments
-        paymentResults:
-          type: array
-          items:
-            type: object
-            properties:
-              index:
-                type: integer
-                description: Index of the payment in the original batch
-              paymentId:
-                type: string
-              status:
-                type: string
-                enum:
-                - ACCP
-                - RJCT
-              reasonCode:
-                type: string
-    Error:
-      type: object
-      description: Standard error response
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: string
-          description: Error code
-        message:
-          type: string
-          description: Human-readable error message
-        details:
-          type: array
-          items:
-            type: object
-            properties:
-              field:
-                type: string
-              message:
-                type: string
     InstantPaymentRequest:
       type: object
       description: Instant payment initiation request using ISO 20022 pacs.008 FIToFICustomerCreditTransfer structure
@@ -402,6 +198,225 @@ components:
           type: string
           enum:
           - SLEV
+    Error:
+      type: object
+      description: Standard error response
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Human-readable error message
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
+    FinancialInstitution:
+      type: object
+      description: Financial institution identification
+      properties:
+        bic:
+          type: string
+          description: Bank Identifier Code (SWIFT/BIC)
+          pattern: ^[A-Z]{4}[A-Z]{2}[A-Z0-9]{2}([A-Z0-9]{3})?$
+        name:
+          type: string
+          description: Name of the financial institution
+    AccountIdentification:
+      type: object
+      description: Account identification using IBAN or proprietary identifier
+      properties:
+        iban:
+          type: string
+          description: International Bank Account Number
+          pattern: ^[A-Z]{2}[0-9]{2}[A-Z0-9]{4,30}$
+        accountNumber:
+          type: string
+          description: Proprietary account number
+        currency:
+          type: string
+          description: Account currency (ISO 4217)
+          pattern: ^[A-Z]{3}$
+    BulkPaymentRequest:
+      type: object
+      description: Bulk payment submission request
+      required:
+      - payments
+      properties:
+        batchId:
+          type: string
+          description: Client-assigned batch identifier
+        numberOfTransactions:
+          type: integer
+          description: Number of payments in the batch
+        controlSum:
+          type: number
+          format: double
+          description: Sum of all payment amounts for validation
+        payments:
+          type: array
+          description: List of instant payment requests
+          items:
+            $ref: '#/components/schemas/InstantPaymentRequest'
+          minItems: 1
+    BulkPaymentResponse:
+      type: object
+      description: Response for a bulk payment submission
+      properties:
+        bulkPaymentId:
+          type: string
+          description: Unique bulk payment identifier
+        batchId:
+          type: string
+          description: Client batch identifier
+        status:
+          type: string
+          enum:
+          - ACCEPTED
+          - PARTIALLY_ACCEPTED
+          - REJECTED
+        acceptedCount:
+          type: integer
+          description: Number of accepted payments
+        rejectedCount:
+          type: integer
+          description: Number of rejected payments
+        paymentResults:
+          type: array
+          items:
+            type: object
+            properties:
+              index:
+                type: integer
+                description: Index of the payment in the original batch
+              paymentId:
+                type: string
+              status:
+                type: string
+                enum:
+                - ACCP
+                - RJCT
+              reasonCode:
+                type: string
+    PaymentReturnRequest:
+      type: object
+      description: Payment return request using ISO 20022 pacs.004 PaymentReturn
+      required:
+      - reasonCode
+      properties:
+        reasonCode:
+          type: string
+          description: Return reason code
+          enum:
+          - AC01
+          - AC04
+          - AC06
+          - AG01
+          - AM05
+          - BE04
+          - DNOR
+          - FOCR
+          - MD01
+          - MS02
+          - RR01
+        additionalInformation:
+          type: string
+          description: Additional return reason information
+    InstantPaymentDetail:
+      type: object
+      description: Full instant payment details
+      properties:
+        paymentId:
+          type: string
+        messageId:
+          type: string
+        endToEndId:
+          type: string
+        transactionId:
+          type: string
+        status:
+          type: string
+          enum:
+          - ACCP
+          - ACSC
+          - ACSP
+          - RJCT
+          - CANC
+          - RTND
+        debtorName:
+          type: string
+        debtorAccount:
+          $ref: '#/components/schemas/AccountIdentification'
+        debtorAgent:
+          $ref: '#/components/schemas/FinancialInstitution'
+        creditorName:
+          type: string
+        creditorAccount:
+          $ref: '#/components/schemas/AccountIdentification'
+        creditorAgent:
+          $ref: '#/components/schemas/FinancialInstitution'
+        amount:
+          type: number
+          format: double
+        currency:
+          type: string
+        remittanceInformation:
+          type: string
+        reasonCode:
+          type: string
+        settlementDate:
+          type: string
+          format: date
+        acceptanceDateTime:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+    InstantPaymentResponse:
+      type: object
+      description: Response for an instant payment including real-time status
+      properties:
+        paymentId:
+          type: string
+          description: Unique payment identifier
+        messageId:
+          type: string
+          description: Message identification
+        endToEndId:
+          type: string
+          description: End-to-end identification
+        transactionId:
+          type: string
+          description: Transaction identification
+        status:
+          type: string
+          description: Payment processing status (ISO 20022 status codes)
+          enum:
+          - ACCP
+          - ACSC
+          - ACSP
+          - RJCT
+        reasonCode:
+          type: string
+          description: Rejection reason code if status is RJCT
+        settlementDate:
+          type: string
+          format: date
+          description: Settlement date
+        acceptanceDateTime:
+          type: string
+          format: date-time
+          description: Timestamp of payment acceptance
     PaymentReturnResponse:
       type: object
       description: Response for a payment return
@@ -420,24 +435,21 @@ components:
         processedAt:
           type: string
           format: date-time
-    AccountIdentification:
-      type: object
-      description: Account identification using IBAN or proprietary identifier
-      properties:
-        iban:
-          type: string
-          description: International Bank Account Number
-          pattern: ^[A-Z]{2}[0-9]{2}[A-Z0-9]{4,30}$
-        accountNumber:
-          type: string
-          description: Proprietary account number
-        currency:
-          type: string
-          description: Account currency (ISO 4217)
-          pattern: ^[A-Z]{3}$
   responses:
+    BadRequest:
+      description: Bad request - invalid parameters or malformed request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
     UnprocessableEntity:
       description: Request validation failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication required or credentials invalid
       content:
         application/json:
           schema:
@@ -456,18 +468,6 @@ components:
             $ref: '#/components/schemas/Error'
     InternalServerError:
       description: Internal server error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: Bad request - invalid parameters or malformed request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Authentication required or credentials invalid
       content:
         application/json:
           schema:

@@ -103,20 +103,181 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
-    BatchScreeningRequest:
+    ScreeningRequest:
       type: object
-      description: Batch screening request
+      description: Transaction screening request
       required:
       - channelId
-      - transactions
+      - transaction
       properties:
         channelId:
           type: string
-        transactions:
+          description: Screening channel identifier
+        messageFormat:
+          type: string
+          description: Format of the transaction message
+          enum:
+          - ISO20022
+          - SWIFT_FIN
+          - ISO8583
+          - NACHA
+          - PROPRIETARY
+        messageType:
+          type: string
+          description: Specific message type (e.g., pacs.008, MT103)
+        transaction:
+          $ref: '#/components/schemas/TransactionData'
+        rawMessage:
+          type: string
+          description: Raw message content for format-native screening
+    ScreeningResult:
+      type: object
+      description: Transaction screening result
+      properties:
+        screeningId:
+          type: string
+          description: Unique screening identifier
+        result:
+          type: string
+          description: Overall screening result
+          enum:
+          - PASS
+          - HIT
+          - POSSIBLE_HIT
+        matchCount:
+          type: integer
+          description: Number of matches found
+        matches:
           type: array
           items:
-            $ref: '#/components/schemas/TransactionData'
-          minItems: 1
+            $ref: '#/components/schemas/ScreeningMatch'
+        screenedAt:
+          type: string
+          format: date-time
+        latencyMs:
+          type: integer
+          description: Screening processing time in milliseconds
+    EntityScreeningRequest:
+      type: object
+      description: Entity screening request
+      required:
+      - entityType
+      - name
+      properties:
+        entityType:
+          type: string
+          enum:
+          - INDIVIDUAL
+          - ORGANIZATION
+        name:
+          type: string
+          description: Full name of the entity
+        aliases:
+          type: array
+          description: Known aliases
+          items:
+            type: string
+        dateOfBirth:
+          type: string
+          format: date
+          description: Date of birth (individuals only)
+        nationality:
+          type: string
+          description: Nationality (ISO 3166-1 alpha-2)
+        country:
+          type: string
+          description: Country of residence/registration
+        address:
+          type: string
+          description: Full address
+        identificationNumber:
+          type: string
+          description: National ID, passport, or registration number
+    Error:
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
+    TransactionData:
+      type: object
+      description: Structured transaction data for screening
+      properties:
+        transactionId:
+          type: string
+          description: Transaction reference
+        debtorName:
+          type: string
+          description: Name of the debtor/originator
+        debtorAddress:
+          type: string
+          description: Address of the debtor
+        debtorCountry:
+          type: string
+          description: Country of the debtor (ISO 3166-1 alpha-2)
+        debtorAccountIban:
+          type: string
+          description: Debtor IBAN
+        debtorAgentBic:
+          type: string
+          description: Debtor agent BIC
+        creditorName:
+          type: string
+          description: Name of the creditor/beneficiary
+        creditorAddress:
+          type: string
+          description: Address of the creditor
+        creditorCountry:
+          type: string
+          description: Country of the creditor (ISO 3166-1 alpha-2)
+        creditorAccountIban:
+          type: string
+          description: Creditor IBAN
+        creditorAgentBic:
+          type: string
+          description: Creditor agent BIC
+        amount:
+          type: number
+          format: double
+          description: Transaction amount
+        currency:
+          type: string
+          description: Currency code (ISO 4217)
+        remittanceInformation:
+          type: string
+          description: Remittance information / purpose
+    BatchScreeningResult:
+      type: object
+      description: Batch screening results
+      properties:
+        batchId:
+          type: string
+        totalScreened:
+          type: integer
+        passCount:
+          type: integer
+        hitCount:
+          type: integer
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ScreeningResult'
+        screenedAt:
+          type: string
+          format: date-time
     EntityScreeningResult:
       type: object
       description: Entity screening result
@@ -187,190 +348,23 @@ components:
           - high
           - medium
           - low
-    BatchScreeningResult:
+    BatchScreeningRequest:
       type: object
-      description: Batch screening results
-      properties:
-        batchId:
-          type: string
-        totalScreened:
-          type: integer
-        passCount:
-          type: integer
-        hitCount:
-          type: integer
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/ScreeningResult'
-        screenedAt:
-          type: string
-          format: date-time
-    ScreeningResult:
-      type: object
-      description: Transaction screening result
-      properties:
-        screeningId:
-          type: string
-          description: Unique screening identifier
-        result:
-          type: string
-          description: Overall screening result
-          enum:
-          - PASS
-          - HIT
-          - POSSIBLE_HIT
-        matchCount:
-          type: integer
-          description: Number of matches found
-        matches:
-          type: array
-          items:
-            $ref: '#/components/schemas/ScreeningMatch'
-        screenedAt:
-          type: string
-          format: date-time
-        latencyMs:
-          type: integer
-          description: Screening processing time in milliseconds
-    Error:
-      type: object
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: string
-        message:
-          type: string
-        details:
-          type: array
-          items:
-            type: object
-            properties:
-              field:
-                type: string
-              message:
-                type: string
-    ScreeningRequest:
-      type: object
-      description: Transaction screening request
+      description: Batch screening request
       required:
       - channelId
-      - transaction
+      - transactions
       properties:
         channelId:
           type: string
-          description: Screening channel identifier
-        messageFormat:
-          type: string
-          description: Format of the transaction message
-          enum:
-          - ISO20022
-          - SWIFT_FIN
-          - ISO8583
-          - NACHA
-          - PROPRIETARY
-        messageType:
-          type: string
-          description: Specific message type (e.g., pacs.008, MT103)
-        transaction:
-          $ref: '#/components/schemas/TransactionData'
-        rawMessage:
-          type: string
-          description: Raw message content for format-native screening
-    EntityScreeningRequest:
-      type: object
-      description: Entity screening request
-      required:
-      - entityType
-      - name
-      properties:
-        entityType:
-          type: string
-          enum:
-          - INDIVIDUAL
-          - ORGANIZATION
-        name:
-          type: string
-          description: Full name of the entity
-        aliases:
+        transactions:
           type: array
-          description: Known aliases
           items:
-            type: string
-        dateOfBirth:
-          type: string
-          format: date
-          description: Date of birth (individuals only)
-        nationality:
-          type: string
-          description: Nationality (ISO 3166-1 alpha-2)
-        country:
-          type: string
-          description: Country of residence/registration
-        address:
-          type: string
-          description: Full address
-        identificationNumber:
-          type: string
-          description: National ID, passport, or registration number
-    TransactionData:
-      type: object
-      description: Structured transaction data for screening
-      properties:
-        transactionId:
-          type: string
-          description: Transaction reference
-        debtorName:
-          type: string
-          description: Name of the debtor/originator
-        debtorAddress:
-          type: string
-          description: Address of the debtor
-        debtorCountry:
-          type: string
-          description: Country of the debtor (ISO 3166-1 alpha-2)
-        debtorAccountIban:
-          type: string
-          description: Debtor IBAN
-        debtorAgentBic:
-          type: string
-          description: Debtor agent BIC
-        creditorName:
-          type: string
-          description: Name of the creditor/beneficiary
-        creditorAddress:
-          type: string
-          description: Address of the creditor
-        creditorCountry:
-          type: string
-          description: Country of the creditor (ISO 3166-1 alpha-2)
-        creditorAccountIban:
-          type: string
-          description: Creditor IBAN
-        creditorAgentBic:
-          type: string
-          description: Creditor agent BIC
-        amount:
-          type: number
-          format: double
-          description: Transaction amount
-        currency:
-          type: string
-          description: Currency code (ISO 4217)
-        remittanceInformation:
-          type: string
-          description: Remittance information / purpose
+            $ref: '#/components/schemas/TransactionData'
+          minItems: 1
   responses:
     UnprocessableEntity:
       description: Validation failed
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    InternalServerError:
-      description: Internal server error
       content:
         application/json:
           schema:
@@ -383,6 +377,12 @@ components:
             $ref: '#/components/schemas/Error'
     Unauthorized:
       description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal server error
       content:
         application/json:
           schema:

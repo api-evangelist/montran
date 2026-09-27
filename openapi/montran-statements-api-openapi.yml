@@ -51,21 +51,6 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
-  parameters:
-    FromDateParam:
-      name: fromDate
-      in: query
-      description: Start date for filtering (ISO 8601 format)
-      schema:
-        type: string
-        format: date
-    ToDateParam:
-      name: toDate
-      in: query
-      description: End date for filtering (ISO 8601 format)
-      schema:
-        type: string
-        format: date
   schemas:
     Error:
       type: object
@@ -155,6 +140,12 @@ components:
                     remittanceInformation:
                       type: string
   responses:
+    Unauthorized:
+      description: Authentication required or credentials invalid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
     NotFound:
       description: Requested resource not found
       content:
@@ -167,12 +158,21 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Authentication required or credentials invalid
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
+  parameters:
+    ToDateParam:
+      name: toDate
+      in: query
+      description: End date for filtering (ISO 8601 format)
+      schema:
+        type: string
+        format: date
+    FromDateParam:
+      name: fromDate
+      in: query
+      description: Start date for filtering (ISO 8601 format)
+      schema:
+        type: string
+        format: date
   securitySchemes:
     bearerAuth:
       type: http

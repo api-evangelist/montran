@@ -106,6 +106,58 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+        pageSize:
+          type: integer
+        totalItems:
+          type: integer
+        totalPages:
+          type: integer
+    Error:
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
+    InternalTransferResponse:
+      type: object
+      properties:
+        transferId:
+          type: string
+        sourceAccountId:
+          type: string
+        destinationAccountId:
+          type: string
+        amount:
+          type: number
+          format: double
+        currency:
+          type: string
+        status:
+          type: string
+          enum:
+          - COMPLETED
+          - FAILED
+        processedAt:
+          type: string
+          format: date-time
     InternalTransfer:
       type: object
       description: Internal transfer between virtual accounts
@@ -131,25 +183,6 @@ components:
         reference:
           type: string
           description: Transfer reference
-    Error:
-      type: object
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: string
-        message:
-          type: string
-        details:
-          type: array
-          items:
-            type: object
-            properties:
-              field:
-                type: string
-              message:
-                type: string
     VirtualTransactionList:
       type: object
       properties:
@@ -194,54 +227,9 @@ components:
                 format: date-time
         pagination:
           $ref: '#/components/schemas/Pagination'
-    Pagination:
-      type: object
-      properties:
-        page:
-          type: integer
-        pageSize:
-          type: integer
-        totalItems:
-          type: integer
-        totalPages:
-          type: integer
-    InternalTransferResponse:
-      type: object
-      properties:
-        transferId:
-          type: string
-        sourceAccountId:
-          type: string
-        destinationAccountId:
-          type: string
-        amount:
-          type: number
-          format: double
-        currency:
-          type: string
-        status:
-          type: string
-          enum:
-          - COMPLETED
-          - FAILED
-        processedAt:
-          type: string
-          format: date-time
   responses:
     UnprocessableEntity:
       description: Validation failed
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    InternalServerError:
-      description: Internal server error
       content:
         application/json:
           schema:
@@ -254,6 +242,18 @@ components:
             $ref: '#/components/schemas/Error'
     Unauthorized:
       description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal server error
       content:
         application/json:
           schema:

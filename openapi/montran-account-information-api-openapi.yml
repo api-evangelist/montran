@@ -194,75 +194,19 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
-  parameters:
-    PageSizeParam:
-      name: pageSize
-      in: query
-      description: Number of items per page
-      schema:
-        type: integer
-        minimum: 1
-        maximum: 100
-        default: 20
-    PageParam:
-      name: page
-      in: query
-      description: Page number for pagination
-      schema:
-        type: integer
-        minimum: 1
-        default: 1
-    AccountIdParam:
-      name: accountId
-      in: path
-      required: true
-      description: Unique identifier of the payment account
-      schema:
-        type: string
   schemas:
-    TransactionList:
+    Pagination:
       type: object
-      description: Paginated list of account transactions
+      description: Pagination metadata
       properties:
-        accountId:
-          type: string
-        transactions:
-          type: object
-          properties:
-            booked:
-              type: array
-              items:
-                $ref: '#/components/schemas/Transaction'
-            pending:
-              type: array
-              items:
-                $ref: '#/components/schemas/Transaction'
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-    AccountList:
-      type: object
-      description: List of accessible payment accounts
-      properties:
-        accounts:
-          type: array
-          items:
-            $ref: '#/components/schemas/AccountDetail'
-    BalanceVerificationRequest:
-      type: object
-      description: Request to verify account balance sufficiency
-      required:
-      - amount
-      - currency
-      properties:
-        amount:
-          type: number
-          format: double
-          description: Amount to verify against the account balance
-          minimum: 0.01
-        currency:
-          type: string
-          description: Currency of the amount
-          pattern: ^[A-Z]{3}$
+        page:
+          type: integer
+        pageSize:
+          type: integer
+        totalItems:
+          type: integer
+        totalPages:
+          type: integer
     Error:
       type: object
       description: Standard error response
@@ -285,6 +229,56 @@ components:
                 type: string
               message:
                 type: string
+    AccountIdentification:
+      type: object
+      description: Account identification using IBAN or proprietary identifier
+      properties:
+        iban:
+          type: string
+          description: International Bank Account Number
+          pattern: ^[A-Z]{2}[0-9]{2}[A-Z0-9]{4,30}$
+        accountNumber:
+          type: string
+          description: Proprietary account number
+        currency:
+          type: string
+          description: Account currency (ISO 4217)
+          pattern: ^[A-Z]{3}$
+    AccountBalances:
+      type: object
+      description: Account balance information
+      properties:
+        accountId:
+          type: string
+        balances:
+          type: array
+          items:
+            type: object
+            properties:
+              balanceType:
+                type: string
+                enum:
+                - closingBooked
+                - expected
+                - interimAvailable
+                - interimBooked
+                - openingBooked
+              amount:
+                type: number
+                format: double
+              currency:
+                type: string
+              creditDebitIndicator:
+                type: string
+                enum:
+                - CRDT
+                - DBIT
+              referenceDate:
+                type: string
+                format: date
+              lastChangeDateTime:
+                type: string
+                format: date-time
     Transaction:
       type: object
       description: A single account transaction
@@ -322,16 +316,6 @@ components:
           type: string
         bankTransactionCode:
           type: string
-    BalanceVerificationResponse:
-      type: object
-      description: Result of account balance verification
-      properties:
-        sufficient:
-          type: boolean
-          description: Whether the account has sufficient funds
-        verifiedAt:
-          type: string
-          format: date-time
     AccountDetail:
       type: object
       description: Payment account details
@@ -360,69 +344,91 @@ components:
           - enabled
           - deleted
           - blocked
-    Pagination:
+    BalanceVerificationResponse:
       type: object
-      description: Pagination metadata
+      description: Result of account balance verification
       properties:
-        page:
-          type: integer
-        pageSize:
-          type: integer
-        totalItems:
-          type: integer
-        totalPages:
-          type: integer
-    AccountBalances:
+        sufficient:
+          type: boolean
+          description: Whether the account has sufficient funds
+        verifiedAt:
+          type: string
+          format: date-time
+    BalanceVerificationRequest:
       type: object
-      description: Account balance information
+      description: Request to verify account balance sufficiency
+      required:
+      - amount
+      - currency
+      properties:
+        amount:
+          type: number
+          format: double
+          description: Amount to verify against the account balance
+          minimum: 0.01
+        currency:
+          type: string
+          description: Currency of the amount
+          pattern: ^[A-Z]{3}$
+    TransactionList:
+      type: object
+      description: Paginated list of account transactions
       properties:
         accountId:
           type: string
-        balances:
+        transactions:
+          type: object
+          properties:
+            booked:
+              type: array
+              items:
+                $ref: '#/components/schemas/Transaction'
+            pending:
+              type: array
+              items:
+                $ref: '#/components/schemas/Transaction'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+    AccountList:
+      type: object
+      description: List of accessible payment accounts
+      properties:
+        accounts:
           type: array
           items:
-            type: object
-            properties:
-              balanceType:
-                type: string
-                enum:
-                - closingBooked
-                - expected
-                - interimAvailable
-                - interimBooked
-                - openingBooked
-              amount:
-                type: number
-                format: double
-              currency:
-                type: string
-              creditDebitIndicator:
-                type: string
-                enum:
-                - CRDT
-                - DBIT
-              referenceDate:
-                type: string
-                format: date
-              lastChangeDateTime:
-                type: string
-                format: date-time
-    AccountIdentification:
-      type: object
-      description: Account identification using IBAN or proprietary identifier
-      properties:
-        iban:
-          type: string
-          description: International Bank Account Number
-          pattern: ^[A-Z]{2}[0-9]{2}[A-Z0-9]{4,30}$
-        accountNumber:
-          type: string
-          description: Proprietary account number
-        currency:
-          type: string
-          description: Account currency (ISO 4217)
-          pattern: ^[A-Z]{3}$
+            $ref: '#/components/schemas/AccountDetail'
+  parameters:
+    AccountIdParam:
+      name: accountId
+      in: path
+      required: true
+      description: Unique identifier of the payment account
+      schema:
+        type: string
+    PageParam:
+      name: page
+      in: query
+      description: Page number for pagination
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+    PageSizeParam:
+      name: pageSize
+      in: query
+      description: Number of items per page
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 20
   responses:
+    Unauthorized:
+      description: Authentication required or credentials invalid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
     Forbidden:
       description: Insufficient permissions or invalid consent
       content:
@@ -437,12 +443,6 @@ components:
             $ref: '#/components/schemas/Error'
     InternalServerError:
       description: Internal server error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Authentication required or credentials invalid
       content:
         application/json:
           schema:

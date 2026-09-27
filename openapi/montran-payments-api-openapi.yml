@@ -197,67 +197,6 @@ paths:
     - url: https://api.montran.com/gph/v1
       description: Montran Global Payments Hub API Server
 components:
-  responses:
-    UnprocessableEntity:
-      description: Validation failed
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    InternalServerError:
-      description: Internal server error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Authentication required
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    UnprocessableEntity_2:
-      description: Request validation failed
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error_2'
-    NotFound_2:
-      description: Requested resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error_2'
-    Unauthorized_2:
-      description: Authentication required or credentials invalid
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error_2'
-    Forbidden:
-      description: Insufficient permissions for the requested operation
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error_2'
-    BadRequest_2:
-      description: Bad request - invalid parameters or malformed request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error_2'
   schemas:
     CorporatePayment:
       type: object
@@ -329,6 +268,17 @@ components:
         updatedAt:
           type: string
           format: date-time
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+        pageSize:
+          type: integer
+        totalItems:
+          type: integer
+        totalPages:
+          type: integer
     Error:
       type: object
       required:
@@ -348,6 +298,15 @@ components:
                 type: string
               message:
                 type: string
+    CorporatePaymentList:
+      type: object
+      properties:
+        payments:
+          type: array
+          items:
+            $ref: '#/components/schemas/CorporatePayment'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
     CorporatePaymentCreate:
       type: object
       description: Corporate payment creation request
@@ -414,26 +373,105 @@ components:
           enum:
           - NORMAL
           - URGENT
-    CorporatePaymentList:
+    Pagination_2:
       type: object
-      properties:
-        payments:
-          type: array
-          items:
-            $ref: '#/components/schemas/CorporatePayment'
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-    Pagination:
-      type: object
+      description: Pagination information for list responses
       properties:
         page:
           type: integer
+          description: Current page number
         pageSize:
           type: integer
+          description: Number of items per page
         totalItems:
           type: integer
+          description: Total number of items
         totalPages:
           type: integer
+          description: Total number of pages
+    PaymentResponse:
+      type: object
+      description: Response returned after successful payment initiation
+      properties:
+        paymentId:
+          type: string
+          description: Unique payment identifier assigned by the system
+        messageId:
+          type: string
+          description: Original message identification
+        endToEndId:
+          type: string
+          description: End-to-end identification
+        status:
+          type: string
+          description: Current payment status
+          enum:
+          - RECEIVED
+          - VALIDATED
+          - PENDING
+        clearingSystem:
+          type: string
+          description: Assigned clearing and settlement mechanism
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the payment was created
+    Error_2:
+      type: object
+      description: Standard error response
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Human-readable error message
+        details:
+          type: array
+          description: Detailed error information
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+                description: Field that caused the error
+              message:
+                type: string
+                description: Error detail message
+    FinancialInstitution:
+      type: object
+      description: Financial institution identification
+      properties:
+        bic:
+          type: string
+          description: Bank Identifier Code (SWIFT/BIC)
+          pattern: ^[A-Z]{4}[A-Z]{2}[A-Z0-9]{2}([A-Z0-9]{3})?$
+        name:
+          type: string
+          description: Name of the financial institution
+        clearingSystemMemberId:
+          type: string
+          description: Clearing system member identification
+    StatusHistoryEntry:
+      type: object
+      description: A single entry in the payment status history
+      properties:
+        status:
+          type: string
+          description: Payment status at this point
+        timestamp:
+          type: string
+          format: date-time
+          description: When the status changed
+        reasonCode:
+          type: string
+          description: Reason code if applicable
+        description:
+          type: string
+          description: Description of the status change
     PaymentList:
       type: object
       description: Paginated list of payments
@@ -464,81 +502,6 @@ components:
         processedAt:
           type: string
           format: date-time
-    AccountIdentification:
-      type: object
-      description: Account identification using IBAN or proprietary account number
-      properties:
-        iban:
-          type: string
-          description: International Bank Account Number
-          pattern: ^[A-Z]{2}[0-9]{2}[A-Z0-9]{4,30}$
-        accountNumber:
-          type: string
-          description: Proprietary account number
-        currency:
-          type: string
-          description: Account currency (ISO 4217)
-          pattern: ^[A-Z]{3}$
-    PaymentResponse:
-      type: object
-      description: Response returned after successful payment initiation
-      properties:
-        paymentId:
-          type: string
-          description: Unique payment identifier assigned by the system
-        messageId:
-          type: string
-          description: Original message identification
-        endToEndId:
-          type: string
-          description: End-to-end identification
-        status:
-          type: string
-          description: Current payment status
-          enum:
-          - RECEIVED
-          - VALIDATED
-          - PENDING
-        clearingSystem:
-          type: string
-          description: Assigned clearing and settlement mechanism
-        createdAt:
-          type: string
-          format: date-time
-          description: Timestamp when the payment was created
-    StatusHistoryEntry:
-      type: object
-      description: A single entry in the payment status history
-      properties:
-        status:
-          type: string
-          description: Payment status at this point
-        timestamp:
-          type: string
-          format: date-time
-          description: When the status changed
-        reasonCode:
-          type: string
-          description: Reason code if applicable
-        description:
-          type: string
-          description: Description of the status change
-    Pagination_2:
-      type: object
-      description: Pagination information for list responses
-      properties:
-        page:
-          type: integer
-          description: Current page number
-        pageSize:
-          type: integer
-          description: Number of items per page
-        totalItems:
-          type: integer
-          description: Total number of items
-        totalPages:
-          type: integer
-          description: Total number of pages
     PaymentCancellationRequest:
       type: object
       description: Payment cancellation request aligned with ISO 20022 camt.056 FIToFIPaymentCancellationRequest
@@ -559,45 +522,6 @@ components:
         additionalInformation:
           type: string
           description: Additional information about the cancellation request
-    FinancialInstitution:
-      type: object
-      description: Financial institution identification
-      properties:
-        bic:
-          type: string
-          description: Bank Identifier Code (SWIFT/BIC)
-          pattern: ^[A-Z]{4}[A-Z]{2}[A-Z0-9]{2}([A-Z0-9]{3})?$
-        name:
-          type: string
-          description: Name of the financial institution
-        clearingSystemMemberId:
-          type: string
-          description: Clearing system member identification
-    Error_2:
-      type: object
-      description: Standard error response
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: string
-          description: Error code
-        message:
-          type: string
-          description: Human-readable error message
-        details:
-          type: array
-          description: Detailed error information
-          items:
-            type: object
-            properties:
-              field:
-                type: string
-                description: Field that caused the error
-              message:
-                type: string
-                description: Error detail message
     PaymentDetail:
       type: object
       description: Detailed payment information including full processing history
@@ -719,6 +643,82 @@ components:
           - NORMAL
           - HIGH
           - EXPRESS
+    AccountIdentification:
+      type: object
+      description: Account identification using IBAN or proprietary account number
+      properties:
+        iban:
+          type: string
+          description: International Bank Account Number
+          pattern: ^[A-Z]{2}[0-9]{2}[A-Z0-9]{4,30}$
+        accountNumber:
+          type: string
+          description: Proprietary account number
+        currency:
+          type: string
+          description: Account currency (ISO 4217)
+          pattern: ^[A-Z]{3}$
+  responses:
+    UnprocessableEntity:
+      description: Validation failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    UnprocessableEntity_2:
+      description: Request validation failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error_2'
+    Forbidden:
+      description: Insufficient permissions for the requested operation
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error_2'
+    NotFound_2:
+      description: Requested resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error_2'
+    Unauthorized_2:
+      description: Authentication required or credentials invalid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error_2'
+    BadRequest_2:
+      description: Bad request - invalid parameters or malformed request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error_2'
   parameters:
     PaymentIdParam:
       name: paymentId
@@ -727,13 +727,48 @@ components:
       description: Unique payment identifier
       schema:
         type: string
-    CurrencyParam:
-      name: currency
+    PageSizeParam:
+      name: pageSize
       in: query
-      description: Filter by ISO 4217 currency code
+      description: Number of items per page
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 20
+    PaymentIdParam_2:
+      name: paymentId
+      in: path
+      required: true
+      description: Unique identifier of the payment
       schema:
         type: string
-        pattern: ^[A-Z]{3}$
+    PaymentTypeParam:
+      name: paymentType
+      in: query
+      description: Filter by payment type
+      schema:
+        type: string
+        enum:
+        - credit-transfer
+        - direct-debit
+        - cheque
+        - cross-border
+        - remittance
+    FromDateParam:
+      name: fromDate
+      in: query
+      description: Start date for filtering (ISO 8601 format)
+      schema:
+        type: string
+        format: date
+    ToDateParam:
+      name: toDate
+      in: query
+      description: End date for filtering (ISO 8601 format)
+      schema:
+        type: string
+        format: date
     ClearingSystemParam:
       name: clearingSystem
       in: query
@@ -751,25 +786,21 @@ components:
         - FASTER_PAYMENTS
         - TIPS
         - RT1
-    PaymentTypeParam:
-      name: paymentType
+    CurrencyParam:
+      name: currency
       in: query
-      description: Filter by payment type
+      description: Filter by ISO 4217 currency code
       schema:
         type: string
-        enum:
-        - credit-transfer
-        - direct-debit
-        - cheque
-        - cross-border
-        - remittance
-    PaymentIdParam_2:
-      name: paymentId
-      in: path
-      required: true
-      description: Unique identifier of the payment
+        pattern: ^[A-Z]{3}$
+    PageParam:
+      name: page
+      in: query
+      description: Page number for pagination
       schema:
-        type: string
+        type: integer
+        minimum: 1
+        default: 1
     PaymentStatusParam:
       name: status
       in: query
@@ -785,37 +816,6 @@ components:
         - settled
         - returned
         - cancelled
-    FromDateParam:
-      name: fromDate
-      in: query
-      description: Start date for filtering (ISO 8601 format)
-      schema:
-        type: string
-        format: date
-    PageSizeParam:
-      name: pageSize
-      in: query
-      description: Number of items per page
-      schema:
-        type: integer
-        minimum: 1
-        maximum: 100
-        default: 20
-    PageParam:
-      name: page
-      in: query
-      description: Page number for pagination
-      schema:
-        type: integer
-        minimum: 1
-        default: 1
-    ToDateParam:
-      name: toDate
-      in: query
-      description: End date for filtering (ISO 8601 format)
-      schema:
-        type: string
-        format: date
   securitySchemes:
     bearerAuth:
       type: http

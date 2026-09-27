@@ -82,28 +82,17 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
-    BeneficiaryCreate:
+    Pagination:
       type: object
-      required:
-      - name
-      - accountIban
       properties:
-        name:
-          type: string
-          description: Beneficiary name
-        accountIban:
-          type: string
-          description: Beneficiary IBAN
-        accountNumber:
-          type: string
-        bankBic:
-          type: string
-        bankName:
-          type: string
-        country:
-          type: string
-        address:
-          type: string
+        page:
+          type: integer
+        pageSize:
+          type: integer
+        totalItems:
+          type: integer
+        totalPages:
+          type: integer
     Error:
       type: object
       required:
@@ -123,26 +112,6 @@ components:
                 type: string
               message:
                 type: string
-    Pagination:
-      type: object
-      properties:
-        page:
-          type: integer
-        pageSize:
-          type: integer
-        totalItems:
-          type: integer
-        totalPages:
-          type: integer
-    BeneficiaryList:
-      type: object
-      properties:
-        beneficiaries:
-          type: array
-          items:
-            $ref: '#/components/schemas/Beneficiary'
-        pagination:
-          $ref: '#/components/schemas/Pagination'
     Beneficiary:
       type: object
       properties:
@@ -168,15 +137,40 @@ components:
         createdAt:
           type: string
           format: date-time
+    BeneficiaryList:
+      type: object
+      properties:
+        beneficiaries:
+          type: array
+          items:
+            $ref: '#/components/schemas/Beneficiary'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+    BeneficiaryCreate:
+      type: object
+      required:
+      - name
+      - accountIban
+      properties:
+        name:
+          type: string
+          description: Beneficiary name
+        accountIban:
+          type: string
+          description: Beneficiary IBAN
+        accountNumber:
+          type: string
+        bankBic:
+          type: string
+        bankName:
+          type: string
+        country:
+          type: string
+        address:
+          type: string
   responses:
     UnprocessableEntity:
       description: Validation failed
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    InternalServerError:
-      description: Internal server error
       content:
         application/json:
           schema:
@@ -189,6 +183,12 @@ components:
             $ref: '#/components/schemas/Error'
     Unauthorized:
       description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal server error
       content:
         application/json:
           schema:
