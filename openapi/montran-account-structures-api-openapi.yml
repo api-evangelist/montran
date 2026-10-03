@@ -68,25 +68,6 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
-    Error:
-      type: object
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: string
-        message:
-          type: string
-        details:
-          type: array
-          items:
-            type: object
-            properties:
-              field:
-                type: string
-              message:
-                type: string
     AccountStructureCreate:
       type: object
       description: Account structure creation request
@@ -110,6 +91,13 @@ components:
           - GENERAL
         description:
           type: string
+    AccountStructureList:
+      type: object
+      properties:
+        structures:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountStructure'
     VirtualAccount:
       type: object
       description: Virtual account details
@@ -154,13 +142,6 @@ components:
         updatedAt:
           type: string
           format: date-time
-    AccountStructureList:
-      type: object
-      properties:
-        structures:
-          type: array
-          items:
-            $ref: '#/components/schemas/AccountStructure'
     AccountStructure:
       type: object
       description: Account hierarchy structure
@@ -180,27 +161,46 @@ components:
         createdAt:
           type: string
           format: date-time
+    Error:
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
   responses:
-    UnprocessableEntity:
-      description: Validation failed
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     BadRequest:
       description: Bad request
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Authentication required
+    UnprocessableEntity:
+      description: Validation failed
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
     InternalServerError:
       description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication required
       content:
         application/json:
           schema:

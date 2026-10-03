@@ -195,55 +195,41 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
-    Pagination:
+    BalanceVerificationRequest:
       type: object
-      description: Pagination metadata
-      properties:
-        page:
-          type: integer
-        pageSize:
-          type: integer
-        totalItems:
-          type: integer
-        totalPages:
-          type: integer
-    Error:
-      type: object
-      description: Standard error response
+      description: Request to verify account balance sufficiency
       required:
-      - code
-      - message
+      - amount
+      - currency
       properties:
-        code:
-          type: string
-          description: Error code
-        message:
-          type: string
-          description: Human-readable error message
-        details:
-          type: array
-          items:
-            type: object
-            properties:
-              field:
-                type: string
-              message:
-                type: string
-    AccountIdentification:
-      type: object
-      description: Account identification using IBAN or proprietary identifier
-      properties:
-        iban:
-          type: string
-          description: International Bank Account Number
-          pattern: ^[A-Z]{2}[0-9]{2}[A-Z0-9]{4,30}$
-        accountNumber:
-          type: string
-          description: Proprietary account number
+        amount:
+          type: number
+          format: double
+          description: Amount to verify against the account balance
+          minimum: 0.01
         currency:
           type: string
-          description: Account currency (ISO 4217)
+          description: Currency of the amount
           pattern: ^[A-Z]{3}$
+    TransactionList:
+      type: object
+      description: Paginated list of account transactions
+      properties:
+        accountId:
+          type: string
+        transactions:
+          type: object
+          properties:
+            booked:
+              type: array
+              items:
+                $ref: '#/components/schemas/Transaction'
+            pending:
+              type: array
+              items:
+                $ref: '#/components/schemas/Transaction'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
     AccountBalances:
       type: object
       description: Account balance information
@@ -316,6 +302,18 @@ components:
           type: string
         bankTransactionCode:
           type: string
+    Pagination:
+      type: object
+      description: Pagination metadata
+      properties:
+        page:
+          type: integer
+        pageSize:
+          type: integer
+        totalItems:
+          type: integer
+        totalPages:
+          type: integer
     AccountDetail:
       type: object
       description: Payment account details
@@ -354,41 +352,43 @@ components:
         verifiedAt:
           type: string
           format: date-time
-    BalanceVerificationRequest:
+    Error:
       type: object
-      description: Request to verify account balance sufficiency
+      description: Standard error response
       required:
-      - amount
-      - currency
+      - code
+      - message
       properties:
-        amount:
-          type: number
-          format: double
-          description: Amount to verify against the account balance
-          minimum: 0.01
+        code:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Human-readable error message
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
+    AccountIdentification:
+      type: object
+      description: Account identification using IBAN or proprietary identifier
+      properties:
+        iban:
+          type: string
+          description: International Bank Account Number
+          pattern: ^[A-Z]{2}[0-9]{2}[A-Z0-9]{4,30}$
+        accountNumber:
+          type: string
+          description: Proprietary account number
         currency:
           type: string
-          description: Currency of the amount
+          description: Account currency (ISO 4217)
           pattern: ^[A-Z]{3}$
-    TransactionList:
-      type: object
-      description: Paginated list of account transactions
-      properties:
-        accountId:
-          type: string
-        transactions:
-          type: object
-          properties:
-            booked:
-              type: array
-              items:
-                $ref: '#/components/schemas/Transaction'
-            pending:
-              type: array
-              items:
-                $ref: '#/components/schemas/Transaction'
-        pagination:
-          $ref: '#/components/schemas/Pagination'
     AccountList:
       type: object
       description: List of accessible payment accounts
@@ -398,13 +398,6 @@ components:
           items:
             $ref: '#/components/schemas/AccountDetail'
   parameters:
-    AccountIdParam:
-      name: accountId
-      in: path
-      required: true
-      description: Unique identifier of the payment account
-      schema:
-        type: string
     PageParam:
       name: page
       in: query
@@ -413,6 +406,13 @@ components:
         type: integer
         minimum: 1
         default: 1
+    AccountIdParam:
+      name: accountId
+      in: path
+      required: true
+      description: Unique identifier of the payment account
+      schema:
+        type: string
     PageSizeParam:
       name: pageSize
       in: query
@@ -423,14 +423,8 @@ components:
         maximum: 100
         default: 20
   responses:
-    Unauthorized:
-      description: Authentication required or credentials invalid
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Forbidden:
-      description: Insufficient permissions or invalid consent
+    InternalServerError:
+      description: Internal server error
       content:
         application/json:
           schema:
@@ -441,8 +435,14 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    InternalServerError:
-      description: Internal server error
+    Forbidden:
+      description: Insufficient permissions or invalid consent
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication required or credentials invalid
       content:
         application/json:
           schema:

@@ -105,6 +105,37 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
+  responses:
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    UnprocessableEntity:
+      description: Validation failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
     Pagination:
       type: object
@@ -117,72 +148,6 @@ components:
           type: integer
         totalPages:
           type: integer
-    Error:
-      type: object
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: string
-        message:
-          type: string
-        details:
-          type: array
-          items:
-            type: object
-            properties:
-              field:
-                type: string
-              message:
-                type: string
-    InternalTransferResponse:
-      type: object
-      properties:
-        transferId:
-          type: string
-        sourceAccountId:
-          type: string
-        destinationAccountId:
-          type: string
-        amount:
-          type: number
-          format: double
-        currency:
-          type: string
-        status:
-          type: string
-          enum:
-          - COMPLETED
-          - FAILED
-        processedAt:
-          type: string
-          format: date-time
-    InternalTransfer:
-      type: object
-      description: Internal transfer between virtual accounts
-      required:
-      - sourceAccountId
-      - destinationAccountId
-      - amount
-      - currency
-      properties:
-        sourceAccountId:
-          type: string
-          description: Source virtual account ID
-        destinationAccountId:
-          type: string
-          description: Destination virtual account ID
-        amount:
-          type: number
-          format: double
-          minimum: 0.01
-        currency:
-          type: string
-          pattern: ^[A-Z]{3}$
-        reference:
-          type: string
-          description: Transfer reference
     VirtualTransactionList:
       type: object
       properties:
@@ -227,37 +192,72 @@ components:
                 format: date-time
         pagination:
           $ref: '#/components/schemas/Pagination'
-  responses:
-    UnprocessableEntity:
-      description: Validation failed
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Authentication required
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    InternalServerError:
-      description: Internal server error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
+    InternalTransfer:
+      type: object
+      description: Internal transfer between virtual accounts
+      required:
+      - sourceAccountId
+      - destinationAccountId
+      - amount
+      - currency
+      properties:
+        sourceAccountId:
+          type: string
+          description: Source virtual account ID
+        destinationAccountId:
+          type: string
+          description: Destination virtual account ID
+        amount:
+          type: number
+          format: double
+          minimum: 0.01
+        currency:
+          type: string
+          pattern: ^[A-Z]{3}$
+        reference:
+          type: string
+          description: Transfer reference
+    Error:
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
+    InternalTransferResponse:
+      type: object
+      properties:
+        transferId:
+          type: string
+        sourceAccountId:
+          type: string
+        destinationAccountId:
+          type: string
+        amount:
+          type: number
+          format: double
+        currency:
+          type: string
+        status:
+          type: string
+          enum:
+          - COMPLETED
+          - FAILED
+        processedAt:
+          type: string
+          format: date-time
   parameters:
     AccountIdParam:
       name: accountId

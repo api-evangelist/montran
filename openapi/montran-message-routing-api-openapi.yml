@@ -167,6 +167,28 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
+    MessageResponse:
+      type: object
+      description: Response after message submission
+      properties:
+        messageId:
+          type: string
+          description: Unique message identifier assigned by the system
+        status:
+          type: string
+          enum:
+          - RECEIVED
+          - VALIDATED
+          - QUEUED
+        channel:
+          type: string
+          description: Assigned routing channel
+        destinationSystem:
+          type: string
+          description: Resolved destination system
+        createdAt:
+          type: string
+          format: date-time
     Pagination:
       type: object
       properties:
@@ -178,73 +200,6 @@ components:
           type: integer
         totalPages:
           type: integer
-    Error:
-      type: object
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: string
-        message:
-          type: string
-        details:
-          type: array
-          items:
-            type: object
-            properties:
-              field:
-                type: string
-              message:
-                type: string
-    MessageSubmission:
-      type: object
-      description: Message submission for routing through the connectivity platform
-      required:
-      - format
-      - messageType
-      - content
-      properties:
-        format:
-          type: string
-          description: Message format
-          enum:
-          - SWIFT_FIN
-          - ISO20022
-          - PROPRIETARY
-        messageType:
-          type: string
-          description: Specific message type (e.g., MT103, MT202, pacs.008, pain.001, camt.053)
-        destinationSystem:
-          type: string
-          description: Target clearing or settlement system
-        destinationChannel:
-          type: string
-          description: Target communication channel identifier
-        priority:
-          type: string
-          description: Message priority
-          enum:
-          - NORMAL
-          - URGENT
-          - SYSTEM
-        content:
-          type: string
-          description: Message content in the specified format
-        metadata:
-          type: object
-          description: Additional routing metadata
-          additionalProperties:
-            type: string
-    MessageList:
-      type: object
-      properties:
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/MessageDetail'
-        pagination:
-          $ref: '#/components/schemas/Pagination'
     MessageDetail:
       type: object
       description: Full message details including routing information
@@ -309,43 +264,88 @@ components:
         updatedAt:
           type: string
           format: date-time
-    MessageResponse:
+    MessageList:
       type: object
-      description: Response after message submission
       properties:
-        messageId:
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/MessageDetail'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+    MessageSubmission:
+      type: object
+      description: Message submission for routing through the connectivity platform
+      required:
+      - format
+      - messageType
+      - content
+      properties:
+        format:
           type: string
-          description: Unique message identifier assigned by the system
-        status:
-          type: string
+          description: Message format
           enum:
-          - RECEIVED
-          - VALIDATED
-          - QUEUED
-        channel:
+          - SWIFT_FIN
+          - ISO20022
+          - PROPRIETARY
+        messageType:
           type: string
-          description: Assigned routing channel
+          description: Specific message type (e.g., MT103, MT202, pacs.008, pain.001, camt.053)
         destinationSystem:
           type: string
-          description: Resolved destination system
-        createdAt:
+          description: Target clearing or settlement system
+        destinationChannel:
           type: string
-          format: date-time
+          description: Target communication channel identifier
+        priority:
+          type: string
+          description: Message priority
+          enum:
+          - NORMAL
+          - URGENT
+          - SYSTEM
+        content:
+          type: string
+          description: Message content in the specified format
+        metadata:
+          type: object
+          description: Additional routing metadata
+          additionalProperties:
+            type: string
+    Error:
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
   responses:
-    UnprocessableEntity:
-      description: Validation failed
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     BadRequest:
       description: Bad request
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Authentication required
+    UnprocessableEntity:
+      description: Validation failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
       content:
         application/json:
           schema:
@@ -356,8 +356,8 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Resource not found
+    Unauthorized:
+      description: Authentication required
       content:
         application/json:
           schema:

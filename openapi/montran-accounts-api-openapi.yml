@@ -169,72 +169,6 @@ paths:
       description: Montran Global Payments Hub API Server
 components:
   schemas:
-    Pagination:
-      type: object
-      properties:
-        page:
-          type: integer
-        pageSize:
-          type: integer
-        totalItems:
-          type: integer
-        totalPages:
-          type: integer
-    Error:
-      type: object
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: string
-        message:
-          type: string
-        details:
-          type: array
-          items:
-            type: object
-            properties:
-              field:
-                type: string
-              message:
-                type: string
-    BankAccount:
-      type: object
-      description: Bank account details
-      properties:
-        accountId:
-          type: string
-        iban:
-          type: string
-        accountNumber:
-          type: string
-        currency:
-          type: string
-        bankId:
-          type: string
-        bankName:
-          type: string
-        bankBic:
-          type: string
-        accountName:
-          type: string
-        availableBalance:
-          type: number
-          format: double
-        bookedBalance:
-          type: number
-          format: double
-        lastUpdated:
-          type: string
-          format: date-time
-    BankAccountList:
-      type: object
-      properties:
-        accounts:
-          type: array
-          items:
-            $ref: '#/components/schemas/BankAccount'
     TransactionList:
       type: object
       properties:
@@ -269,46 +203,72 @@ components:
                 type: string
         pagination:
           $ref: '#/components/schemas/Pagination'
-    Error_2:
+    BankAccount:
       type: object
-      description: Standard error response
+      description: Bank account details
+      properties:
+        accountId:
+          type: string
+        iban:
+          type: string
+        accountNumber:
+          type: string
+        currency:
+          type: string
+        bankId:
+          type: string
+        bankName:
+          type: string
+        bankBic:
+          type: string
+        accountName:
+          type: string
+        availableBalance:
+          type: number
+          format: double
+        bookedBalance:
+          type: number
+          format: double
+        lastUpdated:
+          type: string
+          format: date-time
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+        pageSize:
+          type: integer
+        totalItems:
+          type: integer
+        totalPages:
+          type: integer
+    Error:
+      type: object
       required:
       - code
       - message
       properties:
         code:
           type: string
-          description: Error code
         message:
           type: string
-          description: Human-readable error message
         details:
           type: array
-          description: Detailed error information
           items:
             type: object
             properties:
               field:
                 type: string
-                description: Field that caused the error
               message:
                 type: string
-                description: Error detail message
-    AccountIdentification:
+    BankAccountList:
       type: object
-      description: Account identification using IBAN or proprietary account number
       properties:
-        iban:
-          type: string
-          description: International Bank Account Number
-          pattern: ^[A-Z]{2}[0-9]{2}[A-Z0-9]{4,30}$
-        accountNumber:
-          type: string
-          description: Proprietary account number
-        currency:
-          type: string
-          description: Account currency (ISO 4217)
-          pattern: ^[A-Z]{3}$
+        accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/BankAccount'
     AccountBalance:
       type: object
       description: Account balance information aligned with ISO 20022 camt.052 BankToCustomerAccountReport
@@ -349,9 +309,49 @@ components:
                 type: string
                 format: date-time
                 description: Balance date and time
+    Error_2:
+      type: object
+      description: Standard error response
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Human-readable error message
+        details:
+          type: array
+          description: Detailed error information
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+                description: Field that caused the error
+              message:
+                type: string
+                description: Error detail message
+    AccountIdentification:
+      type: object
+      description: Account identification using IBAN or proprietary account number
+      properties:
+        iban:
+          type: string
+          description: International Bank Account Number
+          pattern: ^[A-Z]{2}[0-9]{2}[A-Z0-9]{4,30}$
+        accountNumber:
+          type: string
+          description: Proprietary account number
+        currency:
+          type: string
+          description: Account currency (ISO 4217)
+          pattern: ^[A-Z]{3}$
   responses:
-    Unauthorized:
-      description: Authentication required
+    InternalServerError:
+      description: Internal server error
       content:
         application/json:
           schema:
@@ -362,20 +362,20 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    InternalServerError:
-      description: Internal server error
+    Unauthorized:
+      description: Authentication required
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    Unauthorized_2:
-      description: Authentication required or credentials invalid
+    NotFound_2:
+      description: Requested resource not found
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error_2'
-    NotFound_2:
-      description: Requested resource not found
+    Unauthorized_2:
+      description: Authentication required or credentials invalid
       content:
         application/json:
           schema:

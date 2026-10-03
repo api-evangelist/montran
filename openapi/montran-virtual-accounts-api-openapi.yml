@@ -199,36 +199,6 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
-    Pagination:
-      type: object
-      properties:
-        page:
-          type: integer
-        pageSize:
-          type: integer
-        totalItems:
-          type: integer
-        totalPages:
-          type: integer
-    Error:
-      type: object
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: string
-        message:
-          type: string
-        details:
-          type: array
-          items:
-            type: object
-            properties:
-              field:
-                type: string
-              message:
-                type: string
     VirtualAccount:
       type: object
       description: Virtual account details
@@ -273,6 +243,26 @@ components:
         updatedAt:
           type: string
           format: date-time
+    VirtualAccountList:
+      type: object
+      properties:
+        accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/VirtualAccount'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+        pageSize:
+          type: integer
+        totalItems:
+          type: integer
+        totalPages:
+          type: integer
     VirtualAccountCreate:
       type: object
       description: Virtual account creation request
@@ -319,15 +309,25 @@ components:
           type: object
           additionalProperties:
             type: string
-    VirtualAccountList:
+    Error:
       type: object
+      required:
+      - code
+      - message
       properties:
-        accounts:
+        code:
+          type: string
+        message:
+          type: string
+        details:
           type: array
           items:
-            $ref: '#/components/schemas/VirtualAccount'
-        pagination:
-          $ref: '#/components/schemas/Pagination'
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
     VirtualAccountUpdate:
       type: object
       description: Virtual account update request
@@ -343,20 +343,14 @@ components:
           additionalProperties:
             type: string
   responses:
-    UnprocessableEntity:
-      description: Validation failed
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     BadRequest:
       description: Bad request
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Authentication required
+    UnprocessableEntity:
+      description: Validation failed
       content:
         application/json:
           schema:
@@ -369,6 +363,12 @@ components:
             $ref: '#/components/schemas/Error'
     InternalServerError:
       description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication required
       content:
         application/json:
           schema:

@@ -81,7 +81,41 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
+  responses:
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    UnprocessableEntity:
+      description: Validation failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
+    BeneficiaryList:
+      type: object
+      properties:
+        beneficiaries:
+          type: array
+          items:
+            $ref: '#/components/schemas/Beneficiary'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
     Pagination:
       type: object
       properties:
@@ -93,25 +127,28 @@ components:
           type: integer
         totalPages:
           type: integer
-    Error:
+    BeneficiaryCreate:
       type: object
       required:
-      - code
-      - message
+      - name
+      - accountIban
       properties:
-        code:
+        name:
           type: string
-        message:
+          description: Beneficiary name
+        accountIban:
           type: string
-        details:
-          type: array
-          items:
-            type: object
-            properties:
-              field:
-                type: string
-              message:
-                type: string
+          description: Beneficiary IBAN
+        accountNumber:
+          type: string
+        bankBic:
+          type: string
+        bankName:
+          type: string
+        country:
+          type: string
+        address:
+          type: string
     Beneficiary:
       type: object
       properties:
@@ -137,62 +174,25 @@ components:
         createdAt:
           type: string
           format: date-time
-    BeneficiaryList:
-      type: object
-      properties:
-        beneficiaries:
-          type: array
-          items:
-            $ref: '#/components/schemas/Beneficiary'
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-    BeneficiaryCreate:
+    Error:
       type: object
       required:
-      - name
-      - accountIban
+      - code
+      - message
       properties:
-        name:
+        code:
           type: string
-          description: Beneficiary name
-        accountIban:
+        message:
           type: string
-          description: Beneficiary IBAN
-        accountNumber:
-          type: string
-        bankBic:
-          type: string
-        bankName:
-          type: string
-        country:
-          type: string
-        address:
-          type: string
-  responses:
-    UnprocessableEntity:
-      description: Validation failed
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Authentication required
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    InternalServerError:
-      description: Internal server error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
   securitySchemes:
     bearerAuth:
       type: http

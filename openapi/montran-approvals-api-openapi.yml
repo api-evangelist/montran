@@ -184,8 +184,8 @@ components:
               message:
                 type: string
   responses:
-    Unauthorized:
-      description: Authentication required
+    InternalServerError:
+      description: Internal server error
       content:
         application/json:
           schema:
@@ -196,8 +196,8 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    InternalServerError:
-      description: Internal server error
+    Unauthorized:
+      description: Authentication required
       content:
         application/json:
           schema:

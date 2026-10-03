@@ -155,7 +155,90 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
+  responses:
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
+    ScreeningMatch:
+      type: object
+      description: Individual screening match details
+      properties:
+        matchId:
+          type: string
+        matchedField:
+          type: string
+          description: Transaction field that triggered the match
+          enum:
+          - debtorName
+          - creditorName
+          - debtorAddress
+          - creditorAddress
+          - debtorCountry
+          - creditorCountry
+          - remittanceInformation
+        matchedValue:
+          type: string
+          description: Value from the transaction that matched
+        listName:
+          type: string
+          description: Name of the compliance list
+        listEntryId:
+          type: string
+          description: Entry identifier in the compliance list
+        listedName:
+          type: string
+          description: Name on the sanctions list
+        matchScore:
+          type: number
+          format: double
+          description: Match confidence score (0-100)
+          minimum: 0
+          maximum: 100
+        matchType:
+          type: string
+          description: Type of match
+          enum:
+          - EXACT
+          - FUZZY
+          - PHONETIC
+          - PARTIAL
+        severity:
+          type: string
+          enum:
+          - high
+          - medium
+          - low
+    AlertList:
+      type: object
+      properties:
+        alerts:
+          type: array
+          items:
+            $ref: '#/components/schemas/AlertDetail'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
     Pagination:
       type: object
       properties:
@@ -167,25 +250,6 @@ components:
           type: integer
         totalPages:
           type: integer
-    Error:
-      type: object
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: string
-        message:
-          type: string
-        details:
-          type: array
-          items:
-            type: object
-            properties:
-              field:
-                type: string
-              message:
-                type: string
     TransactionData:
       type: object
       description: Structured transaction data for screening
@@ -233,39 +297,25 @@ components:
         remittanceInformation:
           type: string
           description: Remittance information / purpose
-    AlertResolution:
+    Error:
       type: object
-      description: Alert resolution submission
       required:
-      - disposition
-      - justification
+      - code
+      - message
       properties:
-        disposition:
+        code:
           type: string
-          description: Resolution disposition
-          enum:
-          - false_positive
-          - true_match
-        justification:
+        message:
           type: string
-          description: Justification for the resolution decision
-        action:
-          type: string
-          description: Action taken (for true matches)
-          enum:
-          - BLOCK_TRANSACTION
-          - RELEASE_TRANSACTION
-          - ESCALATE
-          - FILE_SAR
-    AlertList:
-      type: object
-      properties:
-        alerts:
+        details:
           type: array
           items:
-            $ref: '#/components/schemas/AlertDetail'
-        pagination:
-          $ref: '#/components/schemas/Pagination'
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
     AlertDetail:
       type: object
       description: Screening alert full details
@@ -318,80 +368,30 @@ components:
         updatedAt:
           type: string
           format: date-time
-    ScreeningMatch:
+    AlertResolution:
       type: object
-      description: Individual screening match details
+      description: Alert resolution submission
+      required:
+      - disposition
+      - justification
       properties:
-        matchId:
+        disposition:
           type: string
-        matchedField:
-          type: string
-          description: Transaction field that triggered the match
+          description: Resolution disposition
           enum:
-          - debtorName
-          - creditorName
-          - debtorAddress
-          - creditorAddress
-          - debtorCountry
-          - creditorCountry
-          - remittanceInformation
-        matchedValue:
+          - false_positive
+          - true_match
+        justification:
           type: string
-          description: Value from the transaction that matched
-        listName:
+          description: Justification for the resolution decision
+        action:
           type: string
-          description: Name of the compliance list
-        listEntryId:
-          type: string
-          description: Entry identifier in the compliance list
-        listedName:
-          type: string
-          description: Name on the sanctions list
-        matchScore:
-          type: number
-          format: double
-          description: Match confidence score (0-100)
-          minimum: 0
-          maximum: 100
-        matchType:
-          type: string
-          description: Type of match
+          description: Action taken (for true matches)
           enum:
-          - EXACT
-          - FUZZY
-          - PHONETIC
-          - PARTIAL
-        severity:
-          type: string
-          enum:
-          - high
-          - medium
-          - low
-  responses:
-    BadRequest:
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Authentication required
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    InternalServerError:
-      description: Internal server error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
+          - BLOCK_TRANSACTION
+          - RELEASE_TRANSACTION
+          - ESCALATE
+          - FILE_SAR
   securitySchemes:
     bearerAuth:
       type: http

@@ -44,6 +44,33 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
+  responses:
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  parameters:
+    AccountIdParam:
+      name: accountId
+      in: path
+      required: true
+      description: Unique identifier of the virtual account
+      schema:
+        type: string
   schemas:
     Error:
       type: object
@@ -87,33 +114,6 @@ components:
         asOf:
           type: string
           format: date-time
-  parameters:
-    AccountIdParam:
-      name: accountId
-      in: path
-      required: true
-      description: Unique identifier of the virtual account
-      schema:
-        type: string
-  responses:
-    Unauthorized:
-      description: Authentication required
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    InternalServerError:
-      description: Internal server error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   securitySchemes:
     bearerAuth:
       type: http
