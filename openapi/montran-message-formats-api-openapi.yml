@@ -83,8 +83,8 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    InternalServerError:
-      description: Internal server error
+    Unauthorized:
+      description: Authentication required
       content:
         application/json:
           schema:
@@ -95,31 +95,13 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Authentication required
+    InternalServerError:
+      description: Internal server error
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
   schemas:
-    ValidateRequest:
-      type: object
-      description: Request to validate a message
-      required:
-      - format
-      - messageType
-      - content
-      properties:
-        format:
-          type: string
-          enum:
-          - SWIFT_FIN
-          - ISO20022
-          - PROPRIETARY
-        messageType:
-          type: string
-        content:
-          type: string
     ValidationResult:
       type: object
       description: Message validation result
@@ -162,6 +144,31 @@ components:
                 type: string
               message:
                 type: string
+    TransformResponse:
+      type: object
+      description: Result of message format transformation
+      properties:
+        sourceFormat:
+          type: string
+        targetFormat:
+          type: string
+        sourceMessageType:
+          type: string
+        targetMessageType:
+          type: string
+        transformedContent:
+          type: string
+          description: Transformed message content
+        warnings:
+          type: array
+          description: Transformation warnings (e.g., data truncation)
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
     TransformRequest:
       type: object
       description: Request to transform a message between formats
@@ -193,31 +200,24 @@ components:
         content:
           type: string
           description: Source message content
-    TransformResponse:
+    ValidateRequest:
       type: object
-      description: Result of message format transformation
+      description: Request to validate a message
+      required:
+      - format
+      - messageType
+      - content
       properties:
-        sourceFormat:
+        format:
           type: string
-        targetFormat:
+          enum:
+          - SWIFT_FIN
+          - ISO20022
+          - PROPRIETARY
+        messageType:
           type: string
-        sourceMessageType:
+        content:
           type: string
-        targetMessageType:
-          type: string
-        transformedContent:
-          type: string
-          description: Transformed message content
-        warnings:
-          type: array
-          description: Transformation warnings (e.g., data truncation)
-          items:
-            type: object
-            properties:
-              field:
-                type: string
-              message:
-                type: string
   securitySchemes:
     bearerAuth:
       type: http

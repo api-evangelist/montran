@@ -102,34 +102,32 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
+  responses:
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    UnprocessableEntity:
+      description: Validation failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
-    ScreeningResult:
-      type: object
-      description: Transaction screening result
-      properties:
-        screeningId:
-          type: string
-          description: Unique screening identifier
-        result:
-          type: string
-          description: Overall screening result
-          enum:
-          - PASS
-          - HIT
-          - POSSIBLE_HIT
-        matchCount:
-          type: integer
-          description: Number of matches found
-        matches:
-          type: array
-          items:
-            $ref: '#/components/schemas/ScreeningMatch'
-        screenedAt:
-          type: string
-          format: date-time
-        latencyMs:
-          type: integer
-          description: Screening processing time in milliseconds
     EntityScreeningResult:
       type: object
       description: Entity screening result
@@ -151,33 +149,6 @@ components:
         screenedAt:
           type: string
           format: date-time
-    ScreeningRequest:
-      type: object
-      description: Transaction screening request
-      required:
-      - channelId
-      - transaction
-      properties:
-        channelId:
-          type: string
-          description: Screening channel identifier
-        messageFormat:
-          type: string
-          description: Format of the transaction message
-          enum:
-          - ISO20022
-          - SWIFT_FIN
-          - ISO8583
-          - NACHA
-          - PROPRIETARY
-        messageType:
-          type: string
-          description: Specific message type (e.g., pacs.008, MT103)
-        transaction:
-          $ref: '#/components/schemas/TransactionData'
-        rawMessage:
-          type: string
-          description: Raw message content for format-native screening
     BatchScreeningResult:
       type: object
       description: Batch screening results
@@ -282,20 +253,52 @@ components:
         identificationNumber:
           type: string
           description: National ID, passport, or registration number
-    BatchScreeningRequest:
+    Error:
       type: object
-      description: Batch screening request
       required:
-      - channelId
-      - transactions
+      - code
+      - message
       properties:
-        channelId:
+        code:
           type: string
-        transactions:
+        message:
+          type: string
+        details:
           type: array
           items:
-            $ref: '#/components/schemas/TransactionData'
-          minItems: 1
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
+    ScreeningResult:
+      type: object
+      description: Transaction screening result
+      properties:
+        screeningId:
+          type: string
+          description: Unique screening identifier
+        result:
+          type: string
+          description: Overall screening result
+          enum:
+          - PASS
+          - HIT
+          - POSSIBLE_HIT
+        matchCount:
+          type: integer
+          description: Number of matches found
+        matches:
+          type: array
+          items:
+            $ref: '#/components/schemas/ScreeningMatch'
+        screenedAt:
+          type: string
+          format: date-time
+        latencyMs:
+          type: integer
+          description: Screening processing time in milliseconds
     TransactionData:
       type: object
       description: Structured transaction data for screening
@@ -343,50 +346,47 @@ components:
         remittanceInformation:
           type: string
           description: Remittance information / purpose
-    Error:
+    BatchScreeningRequest:
       type: object
+      description: Batch screening request
       required:
-      - code
-      - message
+      - channelId
+      - transactions
       properties:
-        code:
+        channelId:
           type: string
-        message:
-          type: string
-        details:
+        transactions:
           type: array
           items:
-            type: object
-            properties:
-              field:
-                type: string
-              message:
-                type: string
-  responses:
-    BadRequest:
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    InternalServerError:
-      description: Internal server error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    UnprocessableEntity:
-      description: Validation failed
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Authentication required
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
+            $ref: '#/components/schemas/TransactionData'
+          minItems: 1
+    ScreeningRequest:
+      type: object
+      description: Transaction screening request
+      required:
+      - channelId
+      - transaction
+      properties:
+        channelId:
+          type: string
+          description: Screening channel identifier
+        messageFormat:
+          type: string
+          description: Format of the transaction message
+          enum:
+          - ISO20022
+          - SWIFT_FIN
+          - ISO8583
+          - NACHA
+          - PROPRIETARY
+        messageType:
+          type: string
+          description: Specific message type (e.g., pacs.008, MT103)
+        transaction:
+          $ref: '#/components/schemas/TransactionData'
+        rawMessage:
+          type: string
+          description: Raw message content for format-native screening
   securitySchemes:
     bearerAuth:
       type: http

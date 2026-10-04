@@ -118,33 +118,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
-  responses:
-    InternalServerError:
-      description: Internal server error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Authentication required
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
-    ChannelList:
-      type: object
-      properties:
-        channels:
-          type: array
-          items:
-            $ref: '#/components/schemas/ChannelDetail'
     Error:
       type: object
       required:
@@ -164,34 +138,13 @@ components:
                 type: string
               message:
                 type: string
-    ChannelHealth:
+    ChannelList:
       type: object
-      description: Real-time channel health metrics
       properties:
-        channelId:
-          type: string
-        status:
-          type: string
-          enum:
-          - healthy
-          - degraded
-          - down
-        latencyMs:
-          type: integer
-          description: Current latency in milliseconds
-        errorRate:
-          type: number
-          format: double
-          description: Error rate percentage over the last hour
-        throughput:
-          type: integer
-          description: Messages processed in the last hour
-        lastActivityAt:
-          type: string
-          format: date-time
-        checkedAt:
-          type: string
-          format: date-time
+        channels:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChannelDetail'
     ChannelDetail:
       type: object
       description: Communication channel configuration and status
@@ -230,6 +183,53 @@ components:
           description: Channel-specific configuration
           additionalProperties:
             type: string
+    ChannelHealth:
+      type: object
+      description: Real-time channel health metrics
+      properties:
+        channelId:
+          type: string
+        status:
+          type: string
+          enum:
+          - healthy
+          - degraded
+          - down
+        latencyMs:
+          type: integer
+          description: Current latency in milliseconds
+        errorRate:
+          type: number
+          format: double
+          description: Error rate percentage over the last hour
+        throughput:
+          type: integer
+          description: Messages processed in the last hour
+        lastActivityAt:
+          type: string
+          format: date-time
+        checkedAt:
+          type: string
+          format: date-time
+  responses:
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     bearerAuth:
       type: http

@@ -189,17 +189,15 @@ components:
         createdAt:
           type: string
           format: date-time
-    Pagination:
+    MessageList:
       type: object
       properties:
-        page:
-          type: integer
-        pageSize:
-          type: integer
-        totalItems:
-          type: integer
-        totalPages:
-          type: integer
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/MessageDetail'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
     MessageDetail:
       type: object
       description: Full message details including routing information
@@ -264,15 +262,25 @@ components:
         updatedAt:
           type: string
           format: date-time
-    MessageList:
+    Error:
       type: object
+      required:
+      - code
+      - message
       properties:
-        messages:
+        code:
+          type: string
+        message:
+          type: string
+        details:
           type: array
           items:
-            $ref: '#/components/schemas/MessageDetail'
-        pagination:
-          $ref: '#/components/schemas/Pagination'
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
     MessageSubmission:
       type: object
       description: Message submission for routing through the connectivity platform
@@ -312,34 +320,20 @@ components:
           description: Additional routing metadata
           additionalProperties:
             type: string
-    Error:
+    Pagination:
       type: object
-      required:
-      - code
-      - message
       properties:
-        code:
-          type: string
-        message:
-          type: string
-        details:
-          type: array
-          items:
-            type: object
-            properties:
-              field:
-                type: string
-              message:
-                type: string
+        page:
+          type: integer
+        pageSize:
+          type: integer
+        totalItems:
+          type: integer
+        totalPages:
+          type: integer
   responses:
     BadRequest:
       description: Bad request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    UnprocessableEntity:
-      description: Validation failed
       content:
         application/json:
           schema:
@@ -350,14 +344,20 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    InternalServerError:
-      description: Internal server error
+    Unauthorized:
+      description: Authentication required
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Authentication required
+    UnprocessableEntity:
+      description: Validation failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal server error
       content:
         application/json:
           schema:

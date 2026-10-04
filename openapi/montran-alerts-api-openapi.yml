@@ -162,12 +162,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    InternalServerError:
-      description: Internal server error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     NotFound:
       description: Resource not found
       content:
@@ -176,6 +170,12 @@ components:
             $ref: '#/components/schemas/Error'
     Unauthorized:
       description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal server error
       content:
         application/json:
           schema:
@@ -230,15 +230,49 @@ components:
           - high
           - medium
           - low
-    AlertList:
+    AlertResolution:
       type: object
+      description: Alert resolution submission
+      required:
+      - disposition
+      - justification
       properties:
-        alerts:
+        disposition:
+          type: string
+          description: Resolution disposition
+          enum:
+          - false_positive
+          - true_match
+        justification:
+          type: string
+          description: Justification for the resolution decision
+        action:
+          type: string
+          description: Action taken (for true matches)
+          enum:
+          - BLOCK_TRANSACTION
+          - RELEASE_TRANSACTION
+          - ESCALATE
+          - FILE_SAR
+    Error:
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
           type: array
           items:
-            $ref: '#/components/schemas/AlertDetail'
-        pagination:
-          $ref: '#/components/schemas/Pagination'
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
     Pagination:
       type: object
       properties:
@@ -297,25 +331,15 @@ components:
         remittanceInformation:
           type: string
           description: Remittance information / purpose
-    Error:
+    AlertList:
       type: object
-      required:
-      - code
-      - message
       properties:
-        code:
-          type: string
-        message:
-          type: string
-        details:
+        alerts:
           type: array
           items:
-            type: object
-            properties:
-              field:
-                type: string
-              message:
-                type: string
+            $ref: '#/components/schemas/AlertDetail'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
     AlertDetail:
       type: object
       description: Screening alert full details
@@ -368,30 +392,6 @@ components:
         updatedAt:
           type: string
           format: date-time
-    AlertResolution:
-      type: object
-      description: Alert resolution submission
-      required:
-      - disposition
-      - justification
-      properties:
-        disposition:
-          type: string
-          description: Resolution disposition
-          enum:
-          - false_positive
-          - true_match
-        justification:
-          type: string
-          description: Justification for the resolution decision
-        action:
-          type: string
-          description: Action taken (for true matches)
-          enum:
-          - BLOCK_TRANSACTION
-          - RELEASE_TRANSACTION
-          - ESCALATE
-          - FILE_SAR
   securitySchemes:
     bearerAuth:
       type: http

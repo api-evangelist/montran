@@ -83,70 +83,32 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
+  responses:
+    BadRequest:
+      description: Bad request - invalid parameters or malformed request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Requested resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication required or credentials invalid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
-    StatusHistoryEntry:
-      type: object
-      description: A single entry in the payment status history
-      properties:
-        status:
-          type: string
-          description: Payment status at this point
-        timestamp:
-          type: string
-          format: date-time
-          description: When the status changed
-        reasonCode:
-          type: string
-          description: Reason code if applicable
-        description:
-          type: string
-          description: Description of the status change
-    ClearingBatch:
-      type: object
-      description: Clearing batch with settlement information
-      properties:
-        batchId:
-          type: string
-          description: Unique batch identifier
-        clearingSystem:
-          type: string
-          description: Clearing and settlement mechanism
-        direction:
-          type: string
-          description: Batch direction
-          enum:
-          - inbound
-          - outbound
-        status:
-          type: string
-          description: Batch processing status
-          enum:
-          - pending
-          - submitted
-          - accepted
-          - settled
-          - rejected
-        numberOfTransactions:
-          type: integer
-          description: Number of transactions in the batch
-        totalAmount:
-          type: number
-          format: double
-          description: Total amount of all transactions
-        currency:
-          type: string
-          description: Currency of the batch
-        settlementDate:
-          type: string
-          format: date
-          description: Settlement date
-        createdAt:
-          type: string
-          format: date-time
-        payments:
-          type: array
-          items:
-            $ref: '#/components/schemas/PaymentDetail'
     PaymentDetail:
       type: object
       description: Detailed payment information including full processing history
@@ -198,36 +160,21 @@ components:
           description: Complete status change history
           items:
             $ref: '#/components/schemas/StatusHistoryEntry'
-    Pagination:
+    AccountIdentification:
       type: object
-      description: Pagination information for list responses
+      description: Account identification using IBAN or proprietary account number
       properties:
-        page:
-          type: integer
-          description: Current page number
-        pageSize:
-          type: integer
-          description: Number of items per page
-        totalItems:
-          type: integer
-          description: Total number of items
-        totalPages:
-          type: integer
-          description: Total number of pages
-    FinancialInstitution:
-      type: object
-      description: Financial institution identification
-      properties:
-        bic:
+        iban:
           type: string
-          description: Bank Identifier Code (SWIFT/BIC)
-          pattern: ^[A-Z]{4}[A-Z]{2}[A-Z0-9]{2}([A-Z0-9]{3})?$
-        name:
+          description: International Bank Account Number
+          pattern: ^[A-Z]{2}[0-9]{2}[A-Z0-9]{4,30}$
+        accountNumber:
           type: string
-          description: Name of the financial institution
-        clearingSystemMemberId:
+          description: Proprietary account number
+        currency:
           type: string
-          description: Clearing system member identification
+          description: Account currency (ISO 4217)
+          pattern: ^[A-Z]{3}$
     ClearingBatchList:
       type: object
       description: Paginated list of clearing batches
@@ -263,55 +210,114 @@ components:
               message:
                 type: string
                 description: Error detail message
-    AccountIdentification:
+    Pagination:
       type: object
-      description: Account identification using IBAN or proprietary account number
+      description: Pagination information for list responses
       properties:
-        iban:
+        page:
+          type: integer
+          description: Current page number
+        pageSize:
+          type: integer
+          description: Number of items per page
+        totalItems:
+          type: integer
+          description: Total number of items
+        totalPages:
+          type: integer
+          description: Total number of pages
+    FinancialInstitution:
+      type: object
+      description: Financial institution identification
+      properties:
+        bic:
           type: string
-          description: International Bank Account Number
-          pattern: ^[A-Z]{2}[0-9]{2}[A-Z0-9]{4,30}$
-        accountNumber:
+          description: Bank Identifier Code (SWIFT/BIC)
+          pattern: ^[A-Z]{4}[A-Z]{2}[A-Z0-9]{2}([A-Z0-9]{3})?$
+        name:
           type: string
-          description: Proprietary account number
+          description: Name of the financial institution
+        clearingSystemMemberId:
+          type: string
+          description: Clearing system member identification
+    ClearingBatch:
+      type: object
+      description: Clearing batch with settlement information
+      properties:
+        batchId:
+          type: string
+          description: Unique batch identifier
+        clearingSystem:
+          type: string
+          description: Clearing and settlement mechanism
+        direction:
+          type: string
+          description: Batch direction
+          enum:
+          - inbound
+          - outbound
+        status:
+          type: string
+          description: Batch processing status
+          enum:
+          - pending
+          - submitted
+          - accepted
+          - settled
+          - rejected
+        numberOfTransactions:
+          type: integer
+          description: Number of transactions in the batch
+        totalAmount:
+          type: number
+          format: double
+          description: Total amount of all transactions
         currency:
           type: string
-          description: Account currency (ISO 4217)
-          pattern: ^[A-Z]{3}$
-  responses:
-    BadRequest:
-      description: Bad request - invalid parameters or malformed request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    InternalServerError:
-      description: Internal server error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Requested resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Authentication required or credentials invalid
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
+          description: Currency of the batch
+        settlementDate:
+          type: string
+          format: date
+          description: Settlement date
+        createdAt:
+          type: string
+          format: date-time
+        payments:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentDetail'
+    StatusHistoryEntry:
+      type: object
+      description: A single entry in the payment status history
+      properties:
+        status:
+          type: string
+          description: Payment status at this point
+        timestamp:
+          type: string
+          format: date-time
+          description: When the status changed
+        reasonCode:
+          type: string
+          description: Reason code if applicable
+        description:
+          type: string
+          description: Description of the status change
   parameters:
-    PageParam:
-      name: page
+    ToDateParam:
+      name: toDate
       in: query
-      description: Page number for pagination
+      description: End date for filtering (ISO 8601 format)
       schema:
-        type: integer
-        minimum: 1
-        default: 1
+        type: string
+        format: date
+    FromDateParam:
+      name: fromDate
+      in: query
+      description: Start date for filtering (ISO 8601 format)
+      schema:
+        type: string
+        format: date
     ClearingSystemParam:
       name: clearingSystem
       in: query
@@ -329,20 +335,14 @@ components:
         - FASTER_PAYMENTS
         - TIPS
         - RT1
-    ToDateParam:
-      name: toDate
+    PageParam:
+      name: page
       in: query
-      description: End date for filtering (ISO 8601 format)
+      description: Page number for pagination
       schema:
-        type: string
-        format: date
-    FromDateParam:
-      name: fromDate
-      in: query
-      description: Start date for filtering (ISO 8601 format)
-      schema:
-        type: string
-        format: date
+        type: integer
+        minimum: 1
+        default: 1
     PageSizeParam:
       name: pageSize
       in: query

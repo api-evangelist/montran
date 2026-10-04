@@ -67,37 +67,32 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
+  responses:
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    UnprocessableEntity:
+      description: Validation failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
-    AccountStructureCreate:
-      type: object
-      description: Account structure creation request
-      required:
-      - name
-      - physicalAccountId
-      properties:
-        name:
-          type: string
-          description: Structure name
-        physicalAccountId:
-          type: string
-          description: Root physical account
-        type:
-          type: string
-          enum:
-          - POBO
-          - COBO
-          - IN_HOUSE_BANK
-          - ESCROW
-          - GENERAL
-        description:
-          type: string
-    AccountStructureList:
-      type: object
-      properties:
-        structures:
-          type: array
-          items:
-            $ref: '#/components/schemas/AccountStructure'
     VirtualAccount:
       type: object
       description: Virtual account details
@@ -142,6 +137,29 @@ components:
         updatedAt:
           type: string
           format: date-time
+    AccountStructureCreate:
+      type: object
+      description: Account structure creation request
+      required:
+      - name
+      - physicalAccountId
+      properties:
+        name:
+          type: string
+          description: Structure name
+        physicalAccountId:
+          type: string
+          description: Root physical account
+        type:
+          type: string
+          enum:
+          - POBO
+          - COBO
+          - IN_HOUSE_BANK
+          - ESCROW
+          - GENERAL
+        description:
+          type: string
     AccountStructure:
       type: object
       description: Account hierarchy structure
@@ -180,31 +198,13 @@ components:
                 type: string
               message:
                 type: string
-  responses:
-    BadRequest:
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    UnprocessableEntity:
-      description: Validation failed
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    InternalServerError:
-      description: Internal server error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Authentication required
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
+    AccountStructureList:
+      type: object
+      properties:
+        structures:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountStructure'
   securitySchemes:
     bearerAuth:
       type: http

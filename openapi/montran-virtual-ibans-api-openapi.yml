@@ -147,33 +147,57 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
+  responses:
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    UnprocessableEntity:
+      description: Validation failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
-    VirtualIbanCreate:
+    Error:
       type: object
-      description: Virtual IBAN issuance request
       required:
-      - virtualAccountId
+      - code
+      - message
       properties:
-        virtualAccountId:
+        code:
           type: string
-          description: Virtual account to associate the VIBAN with
-        twoWay:
-          type: boolean
-          description: Whether the VIBAN supports both incoming and outgoing
-          default: false
-        countryCode:
+        message:
           type: string
-          description: Country code for IBAN generation
-          pattern: ^[A-Z]{2}$
-    VirtualIbanList:
-      type: object
-      properties:
-        virtualIbans:
+        details:
           type: array
           items:
-            $ref: '#/components/schemas/VirtualIban'
-        pagination:
-          $ref: '#/components/schemas/Pagination'
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
     VirtualIban:
       type: object
       description: Virtual IBAN details
@@ -208,56 +232,32 @@ components:
           type: integer
         totalPages:
           type: integer
-    Error:
+    VirtualIbanList:
       type: object
-      required:
-      - code
-      - message
       properties:
-        code:
-          type: string
-        message:
-          type: string
-        details:
+        virtualIbans:
           type: array
           items:
-            type: object
-            properties:
-              field:
-                type: string
-              message:
-                type: string
-  responses:
-    BadRequest:
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    UnprocessableEntity:
-      description: Validation failed
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    InternalServerError:
-      description: Internal server error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Authentication required
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
+            $ref: '#/components/schemas/VirtualIban'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+    VirtualIbanCreate:
+      type: object
+      description: Virtual IBAN issuance request
+      required:
+      - virtualAccountId
+      properties:
+        virtualAccountId:
+          type: string
+          description: Virtual account to associate the VIBAN with
+        twoWay:
+          type: boolean
+          description: Whether the VIBAN supports both incoming and outgoing
+          default: false
+        countryCode:
+          type: string
+          description: Country code for IBAN generation
+          pattern: ^[A-Z]{2}$
   securitySchemes:
     bearerAuth:
       type: http
