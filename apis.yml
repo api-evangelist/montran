@@ -1245,6 +1245,12 @@ apis:
   - type: JSONSchema
     url: json-schema/montran-screening-result-schema.json
 common:
+  - type: Plans
+    url: plans/montran-plans-pricing.yml
+  - type: RateLimits
+    url: rate-limits/montran-rate-limits.yml
+  - type: FinOps
+    url: finops/montran-finops.yml
   - type: CapabilityMap
     url: capabilities/montran-capability-edges.yml
     name: Montran Business Capability Map
