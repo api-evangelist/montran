@@ -147,57 +147,24 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
-  responses:
-    BadRequest:
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Authentication required
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    UnprocessableEntity:
-      description: Validation failed
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    InternalServerError:
-      description: Internal server error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
-    Error:
+    VirtualIbanCreate:
       type: object
+      description: Virtual IBAN issuance request
       required:
-      - code
-      - message
+      - virtualAccountId
       properties:
-        code:
+        virtualAccountId:
           type: string
-        message:
+          description: Virtual account to associate the VIBAN with
+        twoWay:
+          type: boolean
+          description: Whether the VIBAN supports both incoming and outgoing
+          default: false
+        countryCode:
           type: string
-        details:
-          type: array
-          items:
-            type: object
-            properties:
-              field:
-                type: string
-              message:
-                type: string
+          description: Country code for IBAN generation
+          pattern: ^[A-Z]{2}$
     VirtualIban:
       type: object
       description: Virtual IBAN details
@@ -232,6 +199,25 @@ components:
           type: integer
         totalPages:
           type: integer
+    Error:
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
     VirtualIbanList:
       type: object
       properties:
@@ -241,23 +227,37 @@ components:
             $ref: '#/components/schemas/VirtualIban'
         pagination:
           $ref: '#/components/schemas/Pagination'
-    VirtualIbanCreate:
-      type: object
-      description: Virtual IBAN issuance request
-      required:
-      - virtualAccountId
-      properties:
-        virtualAccountId:
-          type: string
-          description: Virtual account to associate the VIBAN with
-        twoWay:
-          type: boolean
-          description: Whether the VIBAN supports both incoming and outgoing
-          default: false
-        countryCode:
-          type: string
-          description: Country code for IBAN generation
-          pattern: ^[A-Z]{2}$
+  responses:
+    UnprocessableEntity:
+      description: Validation failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     bearerAuth:
       type: http

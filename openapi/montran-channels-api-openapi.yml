@@ -119,32 +119,34 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
-    Error:
+    ChannelHealth:
       type: object
-      required:
-      - code
-      - message
+      description: Real-time channel health metrics
       properties:
-        code:
+        channelId:
           type: string
-        message:
+        status:
           type: string
-        details:
-          type: array
-          items:
-            type: object
-            properties:
-              field:
-                type: string
-              message:
-                type: string
-    ChannelList:
-      type: object
-      properties:
-        channels:
-          type: array
-          items:
-            $ref: '#/components/schemas/ChannelDetail'
+          enum:
+          - healthy
+          - degraded
+          - down
+        latencyMs:
+          type: integer
+          description: Current latency in milliseconds
+        errorRate:
+          type: number
+          format: double
+          description: Error rate percentage over the last hour
+        throughput:
+          type: integer
+          description: Messages processed in the last hour
+        lastActivityAt:
+          type: string
+          format: date-time
+        checkedAt:
+          type: string
+          format: date-time
     ChannelDetail:
       type: object
       description: Communication channel configuration and status
@@ -183,43 +185,41 @@ components:
           description: Channel-specific configuration
           additionalProperties:
             type: string
-    ChannelHealth:
+    Error:
       type: object
-      description: Real-time channel health metrics
+      required:
+      - code
+      - message
       properties:
-        channelId:
+        code:
           type: string
-        status:
+        message:
           type: string
-          enum:
-          - healthy
-          - degraded
-          - down
-        latencyMs:
-          type: integer
-          description: Current latency in milliseconds
-        errorRate:
-          type: number
-          format: double
-          description: Error rate percentage over the last hour
-        throughput:
-          type: integer
-          description: Messages processed in the last hour
-        lastActivityAt:
-          type: string
-          format: date-time
-        checkedAt:
-          type: string
-          format: date-time
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
+    ChannelList:
+      type: object
+      properties:
+        channels:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChannelDetail'
   responses:
-    NotFound:
-      description: Resource not found
+    InternalServerError:
+      description: Internal server error
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    InternalServerError:
-      description: Internal server error
+    NotFound:
+      description: Resource not found
       content:
         application/json:
           schema:

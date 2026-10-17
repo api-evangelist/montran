@@ -79,38 +79,49 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
-  responses:
-    BadRequest:
-      description: Bad request - invalid parameters or malformed request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Requested resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Authentication required or credentials invalid
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    UnprocessableEntity:
-      description: Request validation failed
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    InternalServerError:
-      description: Internal server error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
+    RequestToPayDetail:
+      type: object
+      description: Full request-to-pay details with status
+      properties:
+        requestId:
+          type: string
+        messageId:
+          type: string
+        status:
+          type: string
+          enum:
+          - CREATED
+          - SENT
+          - ACCEPTED
+          - REJECTED
+          - EXPIRED
+          - CANCELLED
+        creditorName:
+          type: string
+        creditorAccount:
+          $ref: '#/components/schemas/AccountIdentification'
+        debtorName:
+          type: string
+        debtorAccount:
+          $ref: '#/components/schemas/AccountIdentification'
+        amount:
+          type: number
+          format: double
+        currency:
+          type: string
+        expiryDate:
+          type: string
+          format: date-time
+        resultingPaymentId:
+          type: string
+          description: Payment ID if the request was accepted and payment initiated
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
     AccountIdentification:
       type: object
       description: Account identification using IBAN or proprietary identifier
@@ -126,6 +137,22 @@ components:
           type: string
           description: Account currency (ISO 4217)
           pattern: ^[A-Z]{3}$
+    RequestToPayResponse:
+      type: object
+      description: Response for a request-to-pay initiation
+      properties:
+        requestId:
+          type: string
+          description: Unique request-to-pay identifier
+        status:
+          type: string
+          enum:
+          - CREATED
+          - SENT
+          - REJECTED
+        createdAt:
+          type: string
+          format: date-time
     RequestToPayRequest:
       type: object
       description: Request-to-pay initiation using ISO 20022 pain.013 CreditorPaymentActivationRequest
@@ -189,64 +216,37 @@ components:
                 type: string
               message:
                 type: string
-    RequestToPayDetail:
-      type: object
-      description: Full request-to-pay details with status
-      properties:
-        requestId:
-          type: string
-        messageId:
-          type: string
-        status:
-          type: string
-          enum:
-          - CREATED
-          - SENT
-          - ACCEPTED
-          - REJECTED
-          - EXPIRED
-          - CANCELLED
-        creditorName:
-          type: string
-        creditorAccount:
-          $ref: '#/components/schemas/AccountIdentification'
-        debtorName:
-          type: string
-        debtorAccount:
-          $ref: '#/components/schemas/AccountIdentification'
-        amount:
-          type: number
-          format: double
-        currency:
-          type: string
-        expiryDate:
-          type: string
-          format: date-time
-        resultingPaymentId:
-          type: string
-          description: Payment ID if the request was accepted and payment initiated
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-    RequestToPayResponse:
-      type: object
-      description: Response for a request-to-pay initiation
-      properties:
-        requestId:
-          type: string
-          description: Unique request-to-pay identifier
-        status:
-          type: string
-          enum:
-          - CREATED
-          - SENT
-          - REJECTED
-        createdAt:
-          type: string
-          format: date-time
+  responses:
+    UnprocessableEntity:
+      description: Request validation failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Bad request - invalid parameters or malformed request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Requested resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication required or credentials invalid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     oauth2:
       type: oauth2

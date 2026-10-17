@@ -198,38 +198,95 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
-  responses:
-    BadRequest:
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Authentication required
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    UnprocessableEntity:
-      description: Validation failed
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    InternalServerError:
-      description: Internal server error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
+  parameters:
+    AccountIdParam:
+      name: accountId
+      in: path
+      required: true
+      description: Unique identifier of the virtual account
+      schema:
+        type: string
   schemas:
+    VirtualAccountCreate:
+      type: object
+      description: Virtual account creation request
+      required:
+      - name
+      - physicalAccountId
+      - currency
+      properties:
+        name:
+          type: string
+          description: Account name or label
+        physicalAccountId:
+          type: string
+          description: ID of the underlying physical bank account
+        currency:
+          type: string
+          description: ISO 4217 currency code
+          pattern: ^[A-Z]{3}$
+        accountHolder:
+          type: string
+          description: Name of the virtual account holder
+        purpose:
+          type: string
+          description: Purpose of the virtual account
+          enum:
+          - GENERAL
+          - POBO
+          - COBO
+          - ESCROW
+          - IN_HOUSE_BANK
+          - TREASURY
+        parentVirtualAccountId:
+          type: string
+          description: Parent virtual account for hierarchical structures
+        autoAllocate:
+          type: boolean
+          description: Whether incoming payments should be auto-allocated
+          default: true
+        issueViban:
+          type: boolean
+          description: Whether to automatically issue a virtual IBAN
+          default: false
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+    VirtualAccountUpdate:
+      type: object
+      description: Virtual account update request
+      properties:
+        name:
+          type: string
+        accountHolder:
+          type: string
+        autoAllocate:
+          type: boolean
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+    VirtualAccountList:
+      type: object
+      properties:
+        accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/VirtualAccount'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+        pageSize:
+          type: integer
+        totalItems:
+          type: integer
+        totalPages:
+          type: integer
     VirtualAccount:
       type: object
       description: Virtual account details
@@ -293,94 +350,37 @@ components:
                 type: string
               message:
                 type: string
-    VirtualAccountCreate:
-      type: object
-      description: Virtual account creation request
-      required:
-      - name
-      - physicalAccountId
-      - currency
-      properties:
-        name:
-          type: string
-          description: Account name or label
-        physicalAccountId:
-          type: string
-          description: ID of the underlying physical bank account
-        currency:
-          type: string
-          description: ISO 4217 currency code
-          pattern: ^[A-Z]{3}$
-        accountHolder:
-          type: string
-          description: Name of the virtual account holder
-        purpose:
-          type: string
-          description: Purpose of the virtual account
-          enum:
-          - GENERAL
-          - POBO
-          - COBO
-          - ESCROW
-          - IN_HOUSE_BANK
-          - TREASURY
-        parentVirtualAccountId:
-          type: string
-          description: Parent virtual account for hierarchical structures
-        autoAllocate:
-          type: boolean
-          description: Whether incoming payments should be auto-allocated
-          default: true
-        issueViban:
-          type: boolean
-          description: Whether to automatically issue a virtual IBAN
-          default: false
-        metadata:
-          type: object
-          additionalProperties:
-            type: string
-    Pagination:
-      type: object
-      properties:
-        page:
-          type: integer
-        pageSize:
-          type: integer
-        totalItems:
-          type: integer
-        totalPages:
-          type: integer
-    VirtualAccountUpdate:
-      type: object
-      description: Virtual account update request
-      properties:
-        name:
-          type: string
-        accountHolder:
-          type: string
-        autoAllocate:
-          type: boolean
-        metadata:
-          type: object
-          additionalProperties:
-            type: string
-    VirtualAccountList:
-      type: object
-      properties:
-        accounts:
-          type: array
-          items:
-            $ref: '#/components/schemas/VirtualAccount'
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-  parameters:
-    AccountIdParam:
-      name: accountId
-      in: path
-      required: true
-      description: Unique identifier of the virtual account
-      schema:
-        type: string
+  responses:
+    UnprocessableEntity:
+      description: Validation failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     bearerAuth:
       type: http

@@ -155,81 +155,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
-  responses:
-    BadRequest:
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Authentication required
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    InternalServerError:
-      description: Internal server error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
-    ScreeningMatch:
-      type: object
-      description: Individual screening match details
-      properties:
-        matchId:
-          type: string
-        matchedField:
-          type: string
-          description: Transaction field that triggered the match
-          enum:
-          - debtorName
-          - creditorName
-          - debtorAddress
-          - creditorAddress
-          - debtorCountry
-          - creditorCountry
-          - remittanceInformation
-        matchedValue:
-          type: string
-          description: Value from the transaction that matched
-        listName:
-          type: string
-          description: Name of the compliance list
-        listEntryId:
-          type: string
-          description: Entry identifier in the compliance list
-        listedName:
-          type: string
-          description: Name on the sanctions list
-        matchScore:
-          type: number
-          format: double
-          description: Match confidence score (0-100)
-          minimum: 0
-          maximum: 100
-        matchType:
-          type: string
-          description: Type of match
-          enum:
-          - EXACT
-          - FUZZY
-          - PHONETIC
-          - PARTIAL
-        severity:
-          type: string
-          enum:
-          - high
-          - medium
-          - low
     AlertResolution:
       type: object
       description: Alert resolution submission
@@ -254,36 +180,6 @@ components:
           - RELEASE_TRANSACTION
           - ESCALATE
           - FILE_SAR
-    Error:
-      type: object
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: string
-        message:
-          type: string
-        details:
-          type: array
-          items:
-            type: object
-            properties:
-              field:
-                type: string
-              message:
-                type: string
-    Pagination:
-      type: object
-      properties:
-        page:
-          type: integer
-        pageSize:
-          type: integer
-        totalItems:
-          type: integer
-        totalPages:
-          type: integer
     TransactionData:
       type: object
       description: Structured transaction data for screening
@@ -331,6 +227,17 @@ components:
         remittanceInformation:
           type: string
           description: Remittance information / purpose
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+        pageSize:
+          type: integer
+        totalItems:
+          type: integer
+        totalPages:
+          type: integer
     AlertList:
       type: object
       properties:
@@ -392,6 +299,99 @@ components:
         updatedAt:
           type: string
           format: date-time
+    Error:
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
+    ScreeningMatch:
+      type: object
+      description: Individual screening match details
+      properties:
+        matchId:
+          type: string
+        matchedField:
+          type: string
+          description: Transaction field that triggered the match
+          enum:
+          - debtorName
+          - creditorName
+          - debtorAddress
+          - creditorAddress
+          - debtorCountry
+          - creditorCountry
+          - remittanceInformation
+        matchedValue:
+          type: string
+          description: Value from the transaction that matched
+        listName:
+          type: string
+          description: Name of the compliance list
+        listEntryId:
+          type: string
+          description: Entry identifier in the compliance list
+        listedName:
+          type: string
+          description: Name on the sanctions list
+        matchScore:
+          type: number
+          format: double
+          description: Match confidence score (0-100)
+          minimum: 0
+          maximum: 100
+        matchType:
+          type: string
+          description: Type of match
+          enum:
+          - EXACT
+          - FUZZY
+          - PHONETIC
+          - PARTIAL
+        severity:
+          type: string
+          enum:
+          - high
+          - medium
+          - low
+  responses:
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     bearerAuth:
       type: http
